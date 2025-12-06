@@ -1,4 +1,3 @@
-import '../../../../core/supabase_client.dart';
 import '../../../../core/permissions_helper.dart';
 import '../../../../core/services/api_service.dart';
 import 'services/cart_service.dart';
@@ -33,13 +32,14 @@ class OrderService {
       throw Exception('السلة فارغة');
     }
 
-    // جلب السلة النشطة
-    final cart = await supabaseClient
-        .from('carts')
-        .select('id')
-        .eq('user_id', userId)
-        .single();
+    // جلب السلة النشطة عبر Worker API
+    final cartResponse = await ApiService.get('/secure/carts/active');
+    
+    if (cartResponse['ok'] != true || cartResponse['data'] == null) {
+      throw Exception('لا توجد سلة نشطة');
+    }
 
+    final cart = cartResponse['data'] as Map<String, dynamic>;
     final cartId = cart['id'] as String;
 
     // حساب المجموع الكلي باستخدام calculateTotal

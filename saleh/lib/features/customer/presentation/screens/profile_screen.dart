@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/supabase_client.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../../core/services/api_service.dart';
 import '../../../../shared/widgets/skeleton/skeleton_loader.dart';
 import '../../../auth/data/auth_service.dart';
 import '../../../auth/data/auth_repository.dart';
@@ -47,16 +47,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final userId = await AuthRepository.getUserId();
       if (userId == null) return;
 
-      final response = await supabaseClient
-          .from('user_profiles')
-          .select()
-          .eq('id', userId)
-          .maybeSingle();
-
-      setState(() {
-        _userProfile = response;
-        _isLoading = false;
-      });
+      final response = await ApiService.get('/secure/users/me');
+      
+      if (response['ok'] == true && response['data'] != null) {
+        setState(() {
+          _userProfile = response['data'] as Map<String, dynamic>;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('خطأ في جلب البيانات: ${response['message'] ?? 'خطأ غير معروف'}'),
+              backgroundColor: MbuyColors.alertRed,
+            ),
+          );
+        }
+      }
     } catch (e) {
       setState(() {
         _isLoading = false;
@@ -109,6 +119,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (confirmed == true) {
       try {
         await AuthService.signOut();
+        
+        // إعادة توجيه المستخدم إلى شاشة تسجيل الدخول
+        if (mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/',
+            (route) => false,
+          );
+        }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(

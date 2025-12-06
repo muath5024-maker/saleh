@@ -191,6 +191,12 @@ class ApiService {
     bool requireAuth = true,
   }) async {
     try {
+      logger.debug(
+        'POST $endpoint',
+        tag: 'API',
+        data: data != null ? 'Body: ${json.encode(data)}' : 'No body',
+      );
+
       final response = await _makeAuthRequest(
         'POST',
         endpoint,
@@ -200,6 +206,14 @@ class ApiService {
       );
 
       final responseData = json.decode(response.body) as Map<String, dynamic>;
+
+      logger.debug(
+        'POST $endpoint → ${response.statusCode}',
+        tag: 'API',
+        data: responseData.toString().length > 200
+            ? '${responseData.toString().substring(0, 200)}...'
+            : responseData.toString(),
+      );
 
       // Handle error responses
       if (response.statusCode >= 400) {
@@ -266,11 +280,84 @@ class ApiService {
         ? errorCodeValue 
         : (errorCodeValue is int ? errorCodeValue.toString() : null);
     
+    // Get error message from API response (prioritize message over error)
+    final errorMessage = data['message']?.toString() ?? data['error']?.toString();
+    
+    // Handle specific error codes from Worker API
+    if (errorCode == 'INVALID_CREDENTIALS') {
+      throw AppException(
+        errorCode: AppErrorCode.validationError,
+        message: errorMessage ?? 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
+        details: data,
+      );
+    }
+    
+    if (errorCode == 'ACCOUNT_DISABLED') {
+      throw AppException(
+        errorCode: AppErrorCode.forbidden,
+        message: errorMessage ?? 'تم تعطيل حسابك. يرجى التواصل مع الدعم',
+        details: data,
+      );
+    }
+    
+    if (errorCode == 'EMAIL_EXISTS') {
+      throw AppException(
+        errorCode: AppErrorCode.validationError,
+        message: errorMessage ?? 'البريد الإلكتروني مسجل مسبقاً',
+        details: data,
+      );
+    }
+    
     // Handle STORE_NOT_FOUND specifically
     if (errorCode == 'STORE_NOT_FOUND') {
       throw AppException(
-        errorCode: AppErrorCode.notFound,
-        message: 'لم يتم العثور على متجر لهذا الحساب، يرجى إنشاء متجر من إعداد المتجر.',
+        errorCode: AppErrorCode.storeNotFound,
+        message: errorMessage ?? 'لم يتم العثور على متجر لهذا الحساب، يرجى إنشاء متجر من إعداد المتجر.',
+        details: data,
+      );
+    }
+    
+    // Handle ORDER_NOT_FOUND
+    if (errorCode == 'ORDER_NOT_FOUND') {
+      throw AppException(
+        errorCode: AppErrorCode.orderNotFound,
+        message: errorMessage ?? 'الطلب غير موجود',
+        details: data,
+      );
+    }
+    
+    // Handle PRODUCT_NOT_FOUND
+    if (errorCode == 'PRODUCT_NOT_FOUND') {
+      throw AppException(
+        errorCode: AppErrorCode.productNotFound,
+        message: errorMessage ?? 'المنتج غير موجود',
+        details: data,
+      );
+    }
+    
+    // Handle BAD_REQUEST
+    if (errorCode == 'BAD_REQUEST') {
+      throw AppException(
+        errorCode: AppErrorCode.validationError,
+        message: errorMessage ?? 'بيانات غير صحيحة',
+        details: data,
+      );
+    }
+    
+    // Handle FORBIDDEN
+    if (errorCode == 'FORBIDDEN' || errorCode == 'UNAUTHORIZED') {
+      throw AppException(
+        errorCode: AppErrorCode.forbidden,
+        message: errorMessage ?? 'ليس لديك صلاحية الوصول',
+        details: data,
+      );
+    }
+    
+    // Handle INTERNAL_ERROR
+    if (errorCode == 'INTERNAL_ERROR' || errorCode == 'SERVER_ERROR') {
+      throw AppException(
+        errorCode: AppErrorCode.serverError,
+        message: errorMessage ?? 'خطأ في الخادم',
         details: data,
       );
     }
@@ -285,23 +372,27 @@ class ApiService {
       case 400:
         throw AppException(
           errorCode: AppErrorCode.validationError,
-          message: data['message']?.toString() ?? data['error']?.toString() ?? 'بيانات غير صحيحة',
+          message: errorMessage ?? 'بيانات غير صحيحة',
           details: data['details'],
         );
       case 401:
+        // For 401, use the message from API if available, otherwise generic message
         throw AppException(
           errorCode: AppErrorCode.unauthorized,
-          message: 'يجب تسجيل الدخول',
+          message: errorMessage ?? 'يجب تسجيل الدخول',
+          details: data,
         );
       case 403:
         throw AppException(
           errorCode: AppErrorCode.forbidden,
-          message: 'ليس لديك صلاحية الوصول',
+          message: errorMessage ?? 'ليس لديك صلاحية الوصول',
+          details: data,
         );
       case 404:
         throw AppException(
           errorCode: AppErrorCode.notFound,
-          message: data['message']?.toString() ?? data['error']?.toString() ?? 'العنصر غير موجود',
+          message: errorMessage ?? 'العنصر غير موجود',
+          details: data,
         );
       case 429:
         throw AppException(
@@ -310,7 +401,7 @@ class ApiService {
           details: data,
         );
       default:
-        throw AppException.server(data['message']?.toString() ?? data['error']?.toString());
+        throw AppException.server(errorMessage ?? 'خطأ في الخادم');
     }
   }
 

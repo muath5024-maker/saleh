@@ -52,12 +52,16 @@ class AuthRepository {
 
   /// Login with email and password
   /// POST /auth/login
+  /// After successful login, token is saved and user data is returned
   static Future<Map<String, dynamic>> login({
     required String email,
     required String password,
   }) async {
     try {
-      debugPrint('[AuthRepository] Logging in: $email');
+      debugPrint('LOGIN_REQUEST_START');
+      debugPrint('[AuthRepository] 🔐 Logging in: $email');
+      debugPrint('[AuthRepository] 📡 Endpoint: POST /auth/login');
+      debugPrint('[AuthRepository] 📦 Data: email=${email.trim().toLowerCase()}, password=***');
 
       final response = await ApiService.post(
         '/auth/login',
@@ -68,20 +72,34 @@ class AuthRepository {
         requireAuth: false, // Login doesn't need auth
       );
 
+      debugPrint('LOGIN_RESPONSE: statusCode=200, body=${response.toString()}');
+      debugPrint('[AuthRepository] 📥 Response: ${response.toString()}');
+
       if (response['ok'] == true) {
         // Save token and user info
-        final token = response['token'] as String;
-        final user = response['user'] as Map<String, dynamic>;
+        final token = response['token'] as String?;
+        final user = response['user'] as Map<String, dynamic>?;
 
+        if (token == null || user == null) {
+          debugPrint('[AuthRepository] ⚠️ Missing token or user in response');
+          throw Exception('استجابة غير صحيحة من الخادم');
+        }
+
+        // Save token to secure storage (using auth_token key)
         await SecureStorageService.saveToken(token);
         await SecureStorageService.saveUserId(user['id'] as String);
         await SecureStorageService.saveUserEmail(user['email'] as String);
 
-        debugPrint('[AuthRepository] ✅ Login successful');
+        debugPrint('[AuthRepository] ✅ Login successful - Token saved to secure storage');
+        debugPrint('[AuthRepository] ✅ User ID: ${user['id']}');
+        debugPrint('[AuthRepository] ✅ User Email: ${user['email']}');
+        
         return response;
       } else {
         final errorCode = response['code'] ?? response['error_code'];
         final errorMessage = response['message'] ?? response['error'] ?? 'Login failed';
+
+        debugPrint('[AuthRepository] ❌ Login failed: code=$errorCode, message=$errorMessage');
 
         // Handle specific error codes
         if (errorCode == 'INVALID_CREDENTIALS') {
@@ -94,6 +112,63 @@ class AuthRepository {
       }
     } catch (e) {
       debugPrint('[AuthRepository] ❌ Login error: $e');
+      debugPrint('[AuthRepository] ❌ Error type: ${e.runtimeType}');
+      if (e is Exception) {
+        debugPrint('[AuthRepository] ❌ Exception message: ${e.toString()}');
+      }
+      rethrow;
+    }
+  }
+
+  /// Verify token and load user data after login
+  /// Calls /auth/me to verify token and get user data
+  /// Returns user data if successful, throws exception if failed
+  static Future<Map<String, dynamic>> verifyAndLoadUser() async {
+    try {
+      debugPrint('[AuthRepository] 🔍 Verifying token and loading user...');
+      
+      final token = await SecureStorageService.getToken();
+      if (token == null) {
+        debugPrint('[AuthRepository] ⚠️ No token found in secure storage');
+        throw Exception('Not authenticated');
+      }
+
+      debugPrint('[AuthRepository] 📡 Calling GET /auth/me with Authorization header');
+      
+      final response = await ApiService.get(
+        '/auth/me',
+        requireAuth: true, // This endpoint requires auth
+      );
+
+      debugPrint('AUTH_ME_RESPONSE: statusCode=200, body=${response.toString()}');
+      debugPrint('[AuthRepository] 📥 /auth/me Response: ${response.toString()}');
+
+      if (response['ok'] == true) {
+        final user = response['user'] as Map<String, dynamic>;
+        debugPrint('[AuthRepository] ✅ User verified and loaded successfully');
+        debugPrint('[AuthRepository] ✅ User ID: ${user['id']}');
+        debugPrint('[AuthRepository] ✅ User Email: ${user['email']}');
+        return user;
+      } else {
+        final errorMessage = response['message'] ?? response['error'] ?? 'Failed to get user';
+        debugPrint('[AuthRepository] ❌ /auth/me failed: $errorMessage');
+        
+        // Clear invalid token
+        await SecureStorageService.clearAll();
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      debugPrint('[AuthRepository] ❌ Verify and load user error: $e');
+      
+      // If error is 401 or 500, clear token
+      if (e.toString().contains('401') || 
+          e.toString().contains('UNAUTHORIZED') ||
+          e.toString().contains('500') ||
+          e.toString().contains('INTERNAL_ERROR')) {
+        debugPrint('[AuthRepository] 🗑️ Clearing invalid token due to error');
+        await SecureStorageService.clearAll();
+      }
+      
       rethrow;
     }
   }
@@ -107,10 +182,14 @@ class AuthRepository {
         throw Exception('Not authenticated');
       }
 
+      debugPrint('[AuthRepository] 📡 Calling GET /auth/me');
+      
       final response = await ApiService.get(
         '/auth/me',
         requireAuth: true, // This endpoint requires auth
       );
+
+      debugPrint('AUTH_ME_RESPONSE: statusCode=200, body=${response.toString()}');
 
       if (response['ok'] == true) {
         return response['user'] as Map<String, dynamic>;

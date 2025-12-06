@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/app_config.dart';
-import '../../../../core/supabase_client.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/services/api_service.dart';
 import '../../../auth/data/auth_service.dart';
 import '../../../auth/data/auth_repository.dart';
 import '../screens/merchant_store_setup_screen.dart';
@@ -35,16 +35,26 @@ class _MerchantProfileTabState extends State<MerchantProfileTab> {
       final userId = await AuthRepository.getUserId();
       if (userId == null) return;
 
-      final response = await supabaseClient
-          .from('user_profiles')
-          .select()
-          .eq('id', userId)
-          .maybeSingle();
-
-      setState(() {
-        _userProfile = response;
-        _isLoading = false;
-      });
+      final response = await ApiService.get('/secure/users/me');
+      
+      if (response['ok'] == true && response['data'] != null) {
+        setState(() {
+          _userProfile = response['data'] as Map<String, dynamic>;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('خطأ في جلب البيانات: ${response['message'] ?? 'خطأ غير معروف'}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     } catch (e) {
       setState(() {
         _isLoading = false;
@@ -83,6 +93,14 @@ class _MerchantProfileTabState extends State<MerchantProfileTab> {
     if (confirmed == true) {
       try {
         await AuthService.signOut();
+        
+        // إعادة توجيه المستخدم إلى شاشة تسجيل الدخول
+        if (mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/',
+            (route) => false,
+          );
+        }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(

@@ -12,7 +12,7 @@ class SecureStorageService {
   );
 
   // Keys
-  static const String _keyJwtToken = 'mbuy_jwt_token';
+  static const String _keyJwtToken = 'auth_token'; // Changed to auth_token as requested
   static const String _keyUserId = 'mbuy_user_id';
   static const String _keyUserEmail = 'mbuy_user_email';
 

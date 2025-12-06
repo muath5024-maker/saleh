@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../features/auth/presentation/screens/auth_screen.dart';
-import '../core/supabase_client.dart';
 import '../core/app_config.dart';
 import '../core/theme/theme_provider.dart';
 import '../core/firebase_service.dart';
@@ -57,11 +56,14 @@ class _RootWidgetState extends State<RootWidget> {
     });
 
     // جلب المستخدم الحالي من MBUY Auth فقط
+    // No Supabase Auth - only check for token in secure storage
     try {
+      debugPrint('🔍 [RootWidget] Checking auth state...');
+      
       final isLoggedIn = await AuthRepository.isLoggedIn();
       
       if (!isLoggedIn) {
-        debugPrint('🔍 [MBUY Auth] User is not logged in');
+        debugPrint('🔍 [RootWidget] No token found in secure storage - User not logged in');
         setState(() {
           _user = null;
           _userRole = null;
@@ -70,48 +72,35 @@ class _RootWidgetState extends State<RootWidget> {
         return;
       }
 
-      // Verify token by calling /auth/me
-      final isValid = await AuthRepository.verifyToken();
-      if (!isValid) {
-        debugPrint('⚠️ [MBUY Auth] Token is invalid, clearing...');
-        setState(() {
-          _user = null;
-          _userRole = null;
-          _isLoading = false;
-        });
-        return;
-      }
+      debugPrint('🔍 [RootWidget] Token found, verifying with /auth/me...');
 
-      // Get user info
-      final userData = await AuthRepository.getCurrentUser();
-      final userId = await AuthRepository.getUserId();
-      final userEmail = await AuthRepository.getUserEmail();
+      // Verify token by calling /auth/me and get user data
+      try {
+        final userData = await AuthRepository.verifyAndLoadUser();
+        final userId = userData['id'] as String?;
+        final userEmail = userData['email'] as String?;
 
-      debugPrint('🔍 [MBUY Auth] User ID: $userId, Email: $userEmail');
+        debugPrint('✅ [RootWidget] Token verified successfully');
+        debugPrint('🔍 [RootWidget] User ID: $userId, Email: $userEmail');
 
-      if (userId != null) {
-        // تعيين User ID في Analytics
-        await FirebaseService.setUserId(userId);
+        if (userId != null) {
+          // تعيين User ID في Analytics
+          await FirebaseService.setUserId(userId);
 
-        // جلب role من user_profiles
-        try {
-          final response = await supabaseClient
-              .from('user_profiles')
-              .select('role, display_name')
-              .eq('id', userId)
-              .maybeSingle();
+          // جلب role من user_profiles عبر Worker API
+          try {
+            final profileResponse = await ApiService.get('/secure/users/me');
+            
+            if (profileResponse['ok'] == true && profileResponse['data'] != null) {
+              final profile = profileResponse['data'] as Map<String, dynamic>;
+              final role = profile['role'] as String? ?? 'customer';
+              final displayName = profile['display_name'] as String?;
 
-          if (response != null) {
-            final role = response['role'] as String? ?? 'customer';
+              debugPrint('✅ تم جلب role: $role');
+              debugPrint('✅ User ID: $userId');
+              debugPrint('✅ Display Name: $displayName');
 
-            debugPrint('✅ تم جلب role: $role');
-            debugPrint('✅ User ID: $userId');
-            debugPrint('✅ Display Name: ${response['display_name']}');
-
-            setState(() {
-              _user = userData;
-              _userRole = role;
-              // تحديد AppMode بناءً على role
+              // تحديد AppMode بناءً على role قبل setState
               if (role == 'merchant') {
                 debugPrint('🛒 تم تفعيل وضع التاجر');
                 _appModeProvider.setMerchantMode();
@@ -121,47 +110,65 @@ class _RootWidgetState extends State<RootWidget> {
                 debugPrint('🛍️ تم تفعيل وضع العميل');
                 _appModeProvider.setCustomerMode();
               }
-            });
-          } else {
-            // إذا لم يوجد سجل في user_profiles، أنشئه عبر Worker API
-            try {
-              final email = await AuthRepository.getUserEmail();
-              
-              await ApiService.post(
-                '/secure/auth/initialize-user',
-                data: {
-                  'role': 'customer',
-                  'display_name': email?.split('@')[0] ?? 'مستخدم',
-                },
-              );
-              debugPrint('✅ تم إنشاء user_profile + wallet عبر Worker API');
-            } catch (e) {
-              debugPrint('⚠️ فشل إنشاء user_profile/wallet: $e');
-            }
 
+              setState(() {
+                _user = userData;
+                _userRole = role;
+              });
+            } else {
+              // إذا لم يوجد سجل في user_profiles، أنشئه عبر Worker API
+              try {
+                final email = await AuthRepository.getUserEmail();
+                
+                await ApiService.post(
+                  '/secure/auth/initialize-user',
+                  data: {
+                    'role': 'customer',
+                    'display_name': email?.split('@')[0] ?? 'مستخدم',
+                  },
+                );
+                debugPrint('✅ تم إنشاء user_profile + wallet عبر Worker API');
+              } catch (e) {
+                debugPrint('⚠️ فشل إنشاء user_profile/wallet: $e');
+              }
+
+              setState(() {
+                _user = userData;
+                _userRole = 'customer';
+                _appModeProvider.setCustomerMode();
+              });
+            }
+          } catch (e) {
+            debugPrint('⚠️ خطأ في جلب بيانات المستخدم: $e');
+            // في حالة الخطأ، افترض customer
             setState(() {
               _user = userData;
               _userRole = 'customer';
               _appModeProvider.setCustomerMode();
             });
           }
-        } catch (e) {
-          debugPrint('⚠️ خطأ في جلب بيانات المستخدم: $e');
-          // في حالة الخطأ، افترض customer
+        } else {
+          debugPrint('⚠️ [RootWidget] User ID is null after verification');
           setState(() {
-            _user = userData;
-            _userRole = 'customer';
-            _appModeProvider.setCustomerMode();
+            _user = null;
+            _userRole = null;
           });
         }
-      } else {
+      } catch (e) {
+        // Token verification failed - clear token and show login screen
+        debugPrint('⚠️ [RootWidget] Token verification failed: $e');
+        debugPrint('⚠️ [RootWidget] Clearing token and showing login screen');
+        
+        // Token already cleared in verifyAndLoadUser, but ensure it's cleared
+        await AuthRepository.logout();
+        
         setState(() {
           _user = null;
           _userRole = null;
         });
       }
     } catch (e) {
-      debugPrint('⚠️ [MBUY Auth] Error checking auth state: $e');
+      debugPrint('⚠️ [RootWidget] Error checking auth state: $e');
       setState(() {
         _user = null;
         _userRole = null;
@@ -270,6 +277,8 @@ class _RootWidgetState extends State<RootWidget> {
                   ),
                   child: TextButton.icon(
                     onPressed: () {
+                      // Skip auth - enter guest mode without any Supabase Auth
+                      debugPrint('⏭️ [RootWidget] Skipping auth - entering guest mode');
                       setState(() {
                         _isGuestMode = true;
                         _appModeProvider.setCustomerMode();
@@ -298,7 +307,8 @@ class _RootWidgetState extends State<RootWidget> {
 
     // إذا المستخدم مسجل أو في وضع الضيف → عرض الشاشة المناسبة بناءً على AppMode
     // يمكن للتاجر التبديل إلى وضع العميل (كمشاهد)
-    if (_appModeProvider.mode == AppMode.merchant && _user != null) {
+    // التحقق من role مباشرة بدلاً من الاعتماد على AppMode فقط
+    if (_userRole == 'merchant' && _user != null && _appModeProvider.mode == AppMode.merchant) {
       return MerchantHomeScreen(appModeProvider: _appModeProvider);
     } else {
       return CustomerShell(

@@ -95,31 +95,61 @@ class _AuthScreenState extends State<AuthScreen> {
 
         debugPrint('🔐 محاولة تسجيل الدخول: $email');
 
+        // Step 1: Login and save token
         final result = await AuthService.signIn(
           email: email,
           password: password,
         );
 
-        if (mounted) {
-          final user = result['user'] as Map<String, dynamic>;
-          debugPrint('✅ تم تسجيل الدخول: ${user['email']}');
+        if (!mounted) return;
 
-          // التحقق من أن Token محفوظ
-          final isLoggedIn = await AuthRepository.isLoggedIn();
-          if (mounted && isLoggedIn) {
-            debugPrint('✅ Token محفوظ بنجاح');
+        final user = result['user'] as Map<String, dynamic>;
+        debugPrint('✅ تم تسجيل الدخول: ${user['email']}');
+        debugPrint('✅ Token محفوظ في secure storage');
+
+        // Step 2: Verify token by calling /auth/me
+        try {
+          debugPrint('📡 استدعاء /auth/me للتحقق من Token...');
+          final verifiedUser = await AuthRepository.verifyAndLoadUser();
+          
+          if (mounted) {
+            debugPrint('✅ تم التحقق من Token بنجاح');
+            debugPrint('✅ User ID: ${verifiedUser['id']}');
+            debugPrint('✅ User Email: ${verifiedUser['email']}');
+            
+            // Success - Navigate to root which will check auth and show appropriate screen
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('تم تسجيل الدخول بنجاح! جاري تحميل التطبيق...'),
                 backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
+                duration: Duration(seconds: 1),
               ),
             );
-            // الانتظار قليلاً ثم إعادة بناء
-            await Future.delayed(const Duration(milliseconds: 1000));
-          } else {
-            debugPrint('⚠️ Token غير محفوظ - إعادة المحاولة...');
-            throw Exception('فشل حفظ الجلسة. يرجى المحاولة مرة أخرى.');
+            
+            // Navigate to root - RootWidget will check auth state and show home
+            await Future.delayed(const Duration(milliseconds: 500));
+            if (mounted) {
+              Navigator.of(context).pushReplacementNamed('/');
+            }
+          }
+        } catch (e) {
+          // Step 3: If /auth/me fails, clear token and show error
+          debugPrint('❌ فشل التحقق من Token: $e');
+          
+          // Clear token (already done in verifyAndLoadUser, but ensure it's cleared)
+          await AuthRepository.logout();
+          
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('خطأ في التحقق من الجلسة: ${e.toString()}'),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+            
+            // Stay on login screen (don't navigate)
+            // Don't throw exception here, just show error and stay on screen
           }
         }
       }
