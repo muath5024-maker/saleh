@@ -36,45 +36,60 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
       const MerchantMessagesScreen(),
       const MerchantProfileScreen(),
     ];
-    // جلب store_id بعد تحميل الشاشة
-    _loadStoreId();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // جلب store_id بعد أن يصبح context متاحاً
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadStoreId();
+    });
   }
 
   /// جلب store_id من API وحفظه في StoreSession
   Future<void> _loadStoreId() async {
     try {
       final storeSession = context.read<StoreSession>();
-      
+
       // جلب معلومات المستخدم الحالي من MBUY Auth
       final userId = await AuthRepository.getUserId();
       final userEmail = await AuthRepository.getUserEmail();
-      
+
       debugPrint('🔍 [MerchantHome] بدء جلب معلومات المتجر...');
       debugPrint('🔍 [MerchantHome] User ID من Flutter: $userId');
       debugPrint('🔍 [MerchantHome] User Email: ${userEmail ?? "N/A"}');
-      debugPrint('🔍 [MerchantHome] Timestamp: ${DateTime.now().toIso8601String()}');
-      
+      debugPrint(
+        '🔍 [MerchantHome] Timestamp: ${DateTime.now().toIso8601String()}',
+      );
+
       // إذا كان store_id محفوظاً بالفعل، لا حاجة لإعادة الجلب
       if (storeSession.hasStore) {
-        debugPrint('✅ [MerchantHome] Store ID موجود بالفعل: ${storeSession.storeId}');
+        debugPrint(
+          '✅ [MerchantHome] Store ID موجود بالفعل: ${storeSession.storeId}',
+        );
         return;
       }
 
       debugPrint('🔄 [MerchantHome] جاري جلب معلومات المتجر عبر Worker API...');
-      
+
       // جلب المتجر عبر Worker API
       final result = await ApiService.get('/secure/merchant/store');
-      
-      debugPrint('📥 [MerchantHome] استجابة API: ok=${result['ok']}, hasData=${result['data'] != null}, error=${result['error']}');
+
+      debugPrint(
+        '📥 [MerchantHome] استجابة API: ok=${result['ok']}, hasData=${result['data'] != null}, error=${result['error']}',
+      );
 
       if (result['ok'] == true && result['data'] != null) {
         final store = result['data'] as Map<String, dynamic>;
         final storeId = store['id'] as String?;
         final ownerId = store['owner_id'] as String?;
         final storeName = store['name'] as String?;
-        
-        debugPrint('📦 [MerchantHome] بيانات المتجر: storeId=$storeId, storeName=$storeName, ownerId=$ownerId, userId=$userId, userIdMatches=${ownerId == userId}');
-        
+
+        debugPrint(
+          '📦 [MerchantHome] بيانات المتجر: storeId=$storeId, storeName=$storeName, ownerId=$ownerId, userId=$userId, userIdMatches=${ownerId == userId}',
+        );
+
         if (storeId != null && storeId.isNotEmpty) {
           storeSession.setStoreId(storeId);
           debugPrint('✅ [MerchantHome] تم حفظ Store ID: $storeId');
@@ -82,7 +97,9 @@ class _MerchantHomeScreenState extends State<MerchantHomeScreen> {
           debugPrint('✅ [MerchantHome] Owner ID من DB: $ownerId');
           debugPrint('✅ [MerchantHome] User ID من Flutter: $userId');
           if (ownerId != null && userId != null) {
-            debugPrint('${ownerId == userId ? "✅" : "⚠️"} [MerchantHome] تطابق User ID: ${ownerId == userId}');
+            debugPrint(
+              '${ownerId == userId ? "✅" : "⚠️"} [MerchantHome] تطابق User ID: ${ownerId == userId}',
+            );
           }
         } else {
           debugPrint('⚠️ [MerchantHome] المتجر موجود لكن بدون ID');
