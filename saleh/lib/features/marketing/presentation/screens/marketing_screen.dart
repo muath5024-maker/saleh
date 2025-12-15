@@ -27,16 +27,23 @@ class _MarketingScreenState extends State<MarketingScreen> {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        backgroundColor: AppTheme.surfaceColor,
+        foregroundColor: AppTheme.textPrimaryColor,
         elevation: 0,
+        scrolledUnderElevation: 1,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: AppTheme.primaryColor, size: 24),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios, color: AppTheme.primaryColor),
           onPressed: () => context.pop(),
         ),
         title: const Text(
           'التسويق',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: AppTheme.textPrimaryColor,
+          ),
         ),
         centerTitle: true,
       ),

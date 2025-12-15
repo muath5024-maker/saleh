@@ -10,9 +10,19 @@ class SalesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('المبيعات'),
-        backgroundColor: AppTheme.primaryColor,
-        foregroundColor: Colors.white,
+        title: const Text(
+          'المبيعات',
+          style: TextStyle(
+            color: AppTheme.textPrimaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: AppTheme.surfaceColor,
+        foregroundColor: AppTheme.textPrimaryColor,
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: AppTheme.primaryColor, size: 24),
       ),
       body: Center(
         child: Column(

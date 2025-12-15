@@ -99,20 +99,19 @@ class _DashboardShellState extends State<DashboardShell> {
         child: Container(
           height: AppDimensions.bottomNavHeight + 20, // Extra height for FAB
           decoration: BoxDecoration(
-            color: Colors.white.withValues(
-              alpha: 0.95,
-            ), // Increased opacity for better visibility
+            color: Colors.white, // Full opacity for better visibility
             border: const Border(
               top: BorderSide(
                 color: AppTheme.slate300,
-                width: 1.5,
-              ), // Thicker border
+                width: 2,
+              ), // Thicker border for better visibility
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 10,
-                offset: const Offset(0, -2),
+                color: Colors.black.withValues(alpha: 0.15),
+                blurRadius: 15,
+                offset: const Offset(0, -4),
+                spreadRadius: 2,
               ),
             ],
           ),
@@ -173,25 +172,31 @@ class _DashboardShellState extends State<DashboardShell> {
                     decoration: BoxDecoration(
                       gradient: AppTheme.metallicGradient,
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 4),
+                      border: Border.all(color: Colors.white, width: 5),
                       boxShadow: [
                         BoxShadow(
                           color: AppTheme.primaryColor.withValues(
-                            alpha: 0.6,
-                          ), // Stronger shadow
-                          blurRadius: 25,
-                          offset: const Offset(0, 8),
-                          spreadRadius: 4,
+                            alpha: 0.7,
+                          ), // Stronger shadow for better visibility
+                          blurRadius: 30,
+                          offset: const Offset(0, 10),
+                          spreadRadius: 6,
                         ),
                         BoxShadow(
-                          color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                          color: AppTheme.primaryColor.withValues(alpha: 0.4),
+                          blurRadius: 20,
+                          offset: const Offset(0, 6),
+                          spreadRadius: 3,
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.2),
                           blurRadius: 15,
                           offset: const Offset(0, 4),
                           spreadRadius: 2,
                         ),
                       ],
                     ),
-                    child: const Icon(Icons.add, color: Colors.white, size: 28),
+                    child: const Icon(Icons.add, color: Colors.white, size: 30),
                   ),
                 ),
               ),

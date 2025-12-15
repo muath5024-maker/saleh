@@ -363,12 +363,20 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           elevation: 0,
           scrolledUnderElevation: 1,
           surfaceTintColor: Colors.transparent,
+          iconTheme: const IconThemeData(
+            color: AppTheme.primaryColor,
+            size: 24,
+          ),
           title: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 'الإشعارات',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: AppTheme.textPrimaryColor,
+                ),
               ),
               if (_unreadCount > 0) ...[
                 const SizedBox(width: 8),

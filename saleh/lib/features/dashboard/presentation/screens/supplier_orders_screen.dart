@@ -343,14 +343,18 @@ class _SupplierOrdersScreenState extends ConsumerState<SupplierOrdersScreen> {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        backgroundColor: AppTheme.surfaceColor,
+        foregroundColor: AppTheme.textPrimaryColor,
         elevation: 0,
+        scrolledUnderElevation: 1,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: AppTheme.primaryColor, size: 24),
         title: const Text(
           'طلبات التوريد',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: AppDimensions.fontHeadline,
+            color: AppTheme.textPrimaryColor,
           ),
         ),
         centerTitle: true,

@@ -34,20 +34,31 @@ class _OrdersTabState extends State<OrdersTab> {
       child: Scaffold(
         backgroundColor: AppTheme.backgroundColor,
         appBar: AppBar(
-          backgroundColor: AppTheme.primaryColor,
-          foregroundColor: Colors.white,
+          backgroundColor: AppTheme.surfaceColor,
+          foregroundColor: AppTheme.textPrimaryColor,
+          elevation: 0,
+          scrolledUnderElevation: 1,
+          surfaceTintColor: Colors.transparent,
           title: const Text(
             'الطلبات',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: AppDimensions.fontHeadline,
+              color: AppTheme.textPrimaryColor,
             ),
           ),
           centerTitle: true,
-          elevation: 0,
+          iconTheme: const IconThemeData(
+            color: AppTheme.primaryColor,
+            size: AppDimensions.iconM,
+          ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.filter_list, size: AppDimensions.iconM),
+              icon: const Icon(
+                Icons.filter_list,
+                size: AppDimensions.iconM,
+                color: AppTheme.primaryColor,
+              ),
               onPressed: () {
                 _showFilterBottomSheet(context);
               },
@@ -55,9 +66,9 @@ class _OrdersTabState extends State<OrdersTab> {
           ],
           bottom: const TabBar(
             isScrollable: true,
-            indicatorColor: Colors.white,
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.white70,
+            indicatorColor: AppTheme.primaryColor,
+            labelColor: AppTheme.primaryColor,
+            unselectedLabelColor: AppTheme.textSecondaryColor,
             labelStyle: TextStyle(fontWeight: FontWeight.bold),
             tabs: [
               Tab(text: 'إدارة الطلبات'),

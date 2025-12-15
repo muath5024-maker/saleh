@@ -170,7 +170,6 @@ class _PromotionsScreenState extends ConsumerState<PromotionsScreen>
     }
   }
 
-
   Future<void> _endPromotion(Promotion promotion) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -236,12 +235,21 @@ class _PromotionsScreenState extends ConsumerState<PromotionsScreen>
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const Text('ضاعف ظهورك'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        title: const Text(
+          'ضاعف ظهورك',
+          style: TextStyle(
+            color: AppTheme.textPrimaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: AppTheme.surfaceColor,
+        foregroundColor: AppTheme.textPrimaryColor,
         elevation: 0,
+        scrolledUnderElevation: 1,
+        surfaceTintColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: AppTheme.primaryColor, size: 24),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios, color: AppTheme.primaryColor),
           onPressed: () => context.pop(),
         ),
         bottom: TabBar(
@@ -459,7 +467,9 @@ class _PromotionsScreenState extends ConsumerState<PromotionsScreen>
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: promotion.statusColor.withValues(alpha: 0.1),
+                              color: promotion.statusColor.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -640,11 +650,11 @@ class _CampaignDurationCardState extends State<_CampaignDurationCard> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
         ],
       ),
       child: Column(

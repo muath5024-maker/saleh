@@ -67,20 +67,31 @@ class ProductsTab extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: AppTheme.backgroundColor,
         appBar: AppBar(
-          backgroundColor: AppTheme.primaryColor,
-          foregroundColor: Colors.white,
+          backgroundColor: AppTheme.surfaceColor,
+          foregroundColor: AppTheme.textPrimaryColor,
+          elevation: 0,
+          scrolledUnderElevation: 1,
+          surfaceTintColor: Colors.transparent,
           title: const Text(
             'المنتجات',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: AppDimensions.fontHeadline,
+              color: AppTheme.textPrimaryColor,
             ),
           ),
           centerTitle: true,
-          elevation: 0,
+          iconTheme: const IconThemeData(
+            color: AppTheme.primaryColor,
+            size: AppDimensions.iconM,
+          ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.search, size: AppDimensions.iconM),
+              icon: const Icon(
+                Icons.search,
+                size: AppDimensions.iconM,
+                color: AppTheme.primaryColor,
+              ),
               onPressed: () {
                 _showSearchDialog(context);
               },
@@ -88,9 +99,9 @@ class ProductsTab extends ConsumerWidget {
           ],
           bottom: const TabBar(
             isScrollable: true,
-            indicatorColor: Colors.white,
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.white70,
+            indicatorColor: AppTheme.primaryColor,
+            labelColor: AppTheme.primaryColor,
+            unselectedLabelColor: AppTheme.textSecondaryColor,
             tabs: [
               Tab(text: 'المنتجات'),
               Tab(text: 'إعدادات المنتجات'),

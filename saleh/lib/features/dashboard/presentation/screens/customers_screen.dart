@@ -142,12 +142,21 @@ class _CustomersScreenState extends ConsumerState<CustomersScreen>
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        backgroundColor: AppTheme.surfaceColor,
+        foregroundColor: AppTheme.textPrimaryColor,
         elevation: 0,
-        title: const Text('العملاء'),
+        scrolledUnderElevation: 1,
+        surfaceTintColor: Colors.transparent,
+        title: const Text(
+          'العملاء',
+          style: TextStyle(
+            color: AppTheme.textPrimaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: AppTheme.primaryColor, size: 24),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios, color: AppTheme.primaryColor),
           onPressed: () => context.pop(),
         ),
         bottom: PreferredSize(
