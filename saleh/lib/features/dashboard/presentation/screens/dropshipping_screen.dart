@@ -307,6 +307,10 @@ class _DropshippingScreenState extends ConsumerState<DropshippingScreen>
           backgroundColor: Colors.white,
           foregroundColor: Colors.black87,
           elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () => context.pop(),
+          ),
           title: const Text(
             'دروب شوبينقنا',
             style: TextStyle(

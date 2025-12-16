@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_dimensions.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 
 // ============================================================================
 // Models
@@ -313,6 +315,10 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
       child: Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () => context.pop(),
+          ),
           title: const Text('التقارير التلقائية'),
           centerTitle: true,
           actions: [
@@ -346,15 +352,15 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
         // Filter Chips
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.all(16),
+          padding: AppDimensions.paddingM,
           child: Row(
             children: [
               _buildFilterChip('all', 'الكل'),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppDimensions.spacing8),
               _buildFilterChip('daily', 'يومي'),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppDimensions.spacing8),
               _buildFilterChip('weekly', 'أسبوعي'),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppDimensions.spacing8),
               _buildFilterChip('monthly', 'شهري'),
             ],
           ),
@@ -400,7 +406,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
     final theme = Theme.of(context);
     return InkWell(
       onTap: () {},
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: AppDimensions.borderRadiusS,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
@@ -411,7 +417,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                   : Icons.radio_button_unchecked,
               color: isSelected ? theme.colorScheme.primary : theme.hintColor,
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppDimensions.spacing12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -438,12 +444,12 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: AppDimensions.borderRadiusL),
       child: InkWell(
         onTap: () => _showReportDetails(report),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppDimensions.borderRadiusL,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: AppDimensions.paddingM,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -462,7 +468,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                       size: 24,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.spacing12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -490,7 +496,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                       ),
                       decoration: BoxDecoration(
                         color: Colors.green.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: AppDimensions.borderRadiusM,
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -514,7 +520,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                 ],
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
 
               // Stats Row
               Row(
@@ -524,13 +530,13 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                     '${report.totalRevenue.toStringAsFixed(0)} ر.س',
                     report.revenueChange,
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: AppDimensions.spacing16),
                   _buildMiniStat(
                     'الطلبات',
                     report.totalOrders.toString(),
                     report.ordersChange,
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: AppDimensions.spacing16),
                   _buildMiniStat(
                     'العملاء',
                     report.totalCustomers.toString(),
@@ -540,12 +546,12 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
               ),
 
               if (report.executiveSummary != null) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: AppDimensions.spacing12),
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: AppDimensions.paddingS,
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: AppDimensions.borderRadiusS,
                   ),
                   child: Row(
                     children: [
@@ -554,7 +560,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                         size: 16,
                         color: theme.hintColor,
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppDimensions.spacing8),
                       Expanded(
                         child: Text(
                           report.executiveSummary!,
@@ -625,14 +631,14 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
     final theme = Theme.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: AppDimensions.paddingM,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Master Toggle
           Card(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: AppDimensions.borderRadiusL,
             ),
             child: SwitchListTile(
               value: _settings!.isEnabled,
@@ -654,7 +660,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppDimensions.spacing12),
 
           _buildScheduleCard(
             'التقرير اليومي',
@@ -687,11 +693,11 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppDimensions.spacing12),
 
           Card(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: AppDimensions.borderRadiusL,
             ),
             child: Column(
               children: [
@@ -713,14 +719,14 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
           ),
 
           if (_settings!.sendEmail) ...[
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.spacing16),
             TextField(
               decoration: InputDecoration(
                 labelText: 'البريد الإلكتروني للتقارير',
                 hintText: 'example@email.com',
                 prefixIcon: const Icon(CupertinoIcons.mail),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: AppDimensions.borderRadiusM,
                 ),
               ),
               controller: TextEditingController(text: _settings!.reportEmail),
@@ -736,14 +742,14 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppDimensions.spacing12),
 
           Card(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: AppDimensions.borderRadiusL,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: AppDimensions.paddingM,
               child: Column(
                 children: [
                   _buildFormatOption(
@@ -776,7 +782,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
           // Options
           Card(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: AppDimensions.borderRadiusL,
             ),
             child: Column(
               children: [
@@ -812,17 +818,17 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
   ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: AppDimensions.borderRadiusM),
       child: SwitchListTile(
         value: enabled,
         onChanged: (v) {},
         title: Text(title),
         subtitle: Text(subtitle),
         secondary: Container(
-          padding: const EdgeInsets.all(8),
+          padding: AppDimensions.paddingXS,
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: AppDimensions.borderRadiusS,
           ),
           child: Icon(icon, color: color, size: 20),
         ),
@@ -853,7 +859,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
             size: 64,
             color: Theme.of(context).hintColor,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.spacing16),
           Text(
             'لا توجد تقارير',
             style: TextStyle(
@@ -862,7 +868,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
               color: Theme.of(context).hintColor,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppDimensions.spacing8),
           Text(
             'قم بإنشاء تقرير جديد أو انتظر التقرير التلقائي',
             style: TextStyle(color: Theme.of(context).hintColor),
@@ -890,7 +896,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
         builder: (context, setSheetState) => Directionality(
           textDirection: TextDirection.rtl,
           child: Container(
-            padding: const EdgeInsets.all(24),
+            padding: AppDimensions.paddingXL,
             decoration: BoxDecoration(
               color: theme.scaffoldBackgroundColor,
               borderRadius: const BorderRadius.vertical(
@@ -957,7 +963,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                     child: const Text('إنشاء التقرير'),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppDimensions.spacing8),
               ],
             ),
           ),
@@ -981,7 +987,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppDimensions.borderRadiusM,
         side: BorderSide(
           color: isSelected ? color : Colors.transparent,
           width: 2,
@@ -989,9 +995,9 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
       ),
       child: InkWell(
         onTap: () => onSelect(value),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppDimensions.borderRadiusM,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: AppDimensions.paddingM,
           child: Row(
             children: [
               Container(
@@ -1002,7 +1008,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                 ),
                 child: Icon(icon, color: color),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppDimensions.spacing12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1063,7 +1069,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
             children: [
               // Header
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: AppDimensions.paddingL,
                 decoration: BoxDecoration(
                   color: report.reportTypeColor.withValues(alpha: 0.1),
                   borderRadius: const BorderRadius.vertical(
@@ -1082,7 +1088,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppDimensions.spacing16),
                     Row(
                       children: [
                         Icon(
@@ -1090,7 +1096,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                           color: report.reportTypeColor,
                           size: 32,
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: AppDimensions.spacing12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1118,7 +1124,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
               // Content
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
+                  padding: AppDimensions.paddingL,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1131,7 +1137,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                             report.revenueChange,
                             Colors.green,
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppDimensions.spacing12),
                           _buildStatBox(
                             'الطلبات',
                             report.totalOrders.toString(),
@@ -1140,7 +1146,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppDimensions.spacing12),
                       Row(
                         children: [
                           _buildStatBox(
@@ -1149,7 +1155,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                             null,
                             Colors.purple,
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppDimensions.spacing12),
                           _buildStatBox(
                             'متوسط الطلب',
                             '${report.avgOrderValue.toStringAsFixed(0)} ر.س',
@@ -1168,12 +1174,12 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: AppDimensions.spacing8),
                         Container(
-                          padding: const EdgeInsets.all(16),
+                          padding: AppDimensions.paddingM,
                           decoration: BoxDecoration(
                             color: theme.colorScheme.surfaceContainerHighest,
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: AppDimensions.borderRadiusM,
                           ),
                           child: Text(report.executiveSummary!),
                         ),
@@ -1188,7 +1194,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: AppDimensions.spacing12),
                         ...report.topProducts.map((p) => _buildProductItem(p)),
                       ],
 
@@ -1200,7 +1206,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
 
               // Actions
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: AppDimensions.paddingL,
                 decoration: BoxDecoration(
                   color: theme.cardColor,
                   boxShadow: [
@@ -1222,7 +1228,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
                         label: const Text('مشاركة'),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: AppDimensions.spacing12),
                     Expanded(
                       child: FilledButton.icon(
                         onPressed: () {
@@ -1251,10 +1257,10 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
   ) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: AppDimensions.paddingM,
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppDimensions.borderRadiusM,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1300,7 +1306,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: AppDimensions.paddingS,
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: theme.cardColor,
@@ -1314,7 +1320,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
             height: 40,
             decoration: BoxDecoration(
               color: theme.colorScheme.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppDimensions.borderRadiusS,
             ),
             child: Icon(
               CupertinoIcons.cube_box,
@@ -1322,7 +1328,7 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
               size: 20,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppDimensions.spacing12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

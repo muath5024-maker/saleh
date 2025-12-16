@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/go_router_refresh_stream.dart';
+import '../../../core/constants/app_icons.dart';
 import '../../../features/auth/data/auth_controller.dart';
 import '../../../features/dashboard/presentation/screens/dashboard_shell.dart';
 import '../../../features/dashboard/presentation/screens/home_tab.dart';
 import '../../../features/dashboard/presentation/screens/orders_tab.dart';
 import '../../../features/dashboard/presentation/screens/products_tab.dart';
 import '../../../features/dashboard/presentation/screens/store_tab.dart';
-import '../../../features/dashboard/presentation/screens/placeholder_screen.dart';
+import '../../../shared/widgets/base_screen.dart';
 import '../../../features/dashboard/presentation/screens/merchant_services_screen.dart';
 import '../../../features/dashboard/presentation/screens/mbuy_tools_screen.dart';
 import '../../../features/dashboard/presentation/screens/store_on_jock_screen.dart';
@@ -302,7 +304,7 @@ class MerchantRouter {
                     } catch (e) {
                       decodedName = name;
                     }
-                    return PlaceholderScreen(title: decodedName);
+                    return ComingSoonScreen(title: decodedName);
                   },
                 ),
               ],
@@ -366,7 +368,15 @@ class MerchantRouter {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              SvgPicture.asset(
+                AppIcons.error,
+                width: 64,
+                height: 64,
+                colorFilter: const ColorFilter.mode(
+                  Colors.red,
+                  BlendMode.srcIn,
+                ),
+              ),
               const SizedBox(height: 16),
               Text(
                 'الصفحة غير موجودة',

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_dimensions.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 // ============================================================================
@@ -273,6 +275,10 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
       child: Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () => context.pop(),
+          ),
           title: const Text('لوحة التحكم الذكية'),
           centerTitle: true,
           actions: [
@@ -315,7 +321,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
             : RefreshIndicator(
                 onRefresh: _loadData,
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
+                  padding: AppDimensions.paddingM,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -367,7 +373,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                 _stats!.revenueChange,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppDimensions.spacing12),
             Expanded(
               child: _buildStatCard(
                 'الطلبات',
@@ -379,7 +385,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppDimensions.spacing12),
         Row(
           children: [
             Expanded(
@@ -391,7 +397,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                 _stats!.customersChange,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppDimensions.spacing12),
             Expanded(
               child: _buildStatCard(
                 'متوسط الطلب',
@@ -417,9 +423,9 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
     final theme = Theme.of(context);
 
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: AppDimensions.borderRadiusL),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: AppDimensions.paddingM,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -437,7 +443,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                       color: change >= 0
                           ? Colors.green.withValues(alpha: 0.1)
                           : Colors.red.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: AppDimensions.borderRadiusM,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -463,7 +469,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                   ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppDimensions.spacing12),
             Text(
               value,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -480,9 +486,9 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
     final theme = Theme.of(context);
 
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: AppDimensions.borderRadiusL),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: AppDimensions.paddingL,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -496,7 +502,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                 Row(
                   children: [
                     _buildLegendItem('الإيرادات', theme.colorScheme.primary),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: AppDimensions.spacing16),
                     _buildLegendItem('الطلبات', Colors.orange),
                   ],
                 ),
@@ -613,7 +619,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
             TextButton(onPressed: () {}, child: const Text('عرض الكل')),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppDimensions.spacing12),
         ..._insights.map((insight) => _buildInsightCard(insight)),
       ],
     );
@@ -624,12 +630,12 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: AppDimensions.borderRadiusM),
       child: InkWell(
         onTap: () => _showInsightDetails(insight),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppDimensions.borderRadiusM,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: AppDimensions.paddingM,
           child: Row(
             children: [
               Container(
@@ -644,7 +650,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppDimensions.spacing12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -710,7 +716,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppDimensions.spacing12),
         ..._goals.map((goal) => _buildGoalCard(goal)),
       ],
     );
@@ -726,16 +732,16 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: AppDimensions.borderRadiusM),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: AppDimensions.paddingM,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Icon(goal.goalIcon, color: theme.colorScheme.primary),
-                const SizedBox(width: 8),
+                const SizedBox(width: AppDimensions.spacing8),
                 Text(
                   goal.goalTypeText,
                   style: const TextStyle(fontWeight: FontWeight.bold),
@@ -750,7 +756,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppDimensions.spacing12),
             ClipRRect(
               borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
@@ -760,7 +766,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                 minHeight: 8,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppDimensions.spacing8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -793,9 +799,9 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
     };
 
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: AppDimensions.borderRadiusL),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: AppDimensions.paddingL,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -803,7 +809,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
               'تصنيف العملاء',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.spacing16),
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -817,7 +823,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                   ),
                   decoration: BoxDecoration(
                     color: (info['color'] as Color).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: AppDimensions.borderRadiusXL,
                     border: Border.all(
                       color: (info['color'] as Color).withValues(alpha: 0.3),
                     ),
@@ -872,7 +878,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
       builder: (context) => Directionality(
         textDirection: TextDirection.rtl,
         child: Container(
-          padding: const EdgeInsets.all(24),
+          padding: AppDimensions.paddingXL,
           decoration: BoxDecoration(
             color: theme.scaffoldBackgroundColor,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -895,14 +901,14 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: AppDimensions.paddingS,
                     decoration: BoxDecoration(
                       color: insight.priorityColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: AppDimensions.borderRadiusM,
                     ),
                     child: Icon(insight.icon, color: insight.priorityColor),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.spacing12),
                   Expanded(
                     child: Text(
                       insight.title,
@@ -915,19 +921,19 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                 ],
               ),
               if (insight.description != null) ...[
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.spacing16),
                 Text(
                   insight.description!,
                   style: TextStyle(color: theme.hintColor),
                 ),
               ],
               if (insight.recommendation != null) ...[
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.spacing16),
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: AppDimensions.paddingS,
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: AppDimensions.borderRadiusM,
                   ),
                   child: Row(
                     children: [
@@ -935,7 +941,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                         CupertinoIcons.lightbulb,
                         color: theme.colorScheme.primary,
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppDimensions.spacing8),
                       Expanded(
                         child: Text(
                           insight.recommendation!,
@@ -955,7 +961,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                       child: const Text('إغلاق'),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.spacing12),
                   Expanded(
                     child: FilledButton(
                       onPressed: () {
@@ -967,7 +973,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppDimensions.spacing8),
             ],
           ),
         ),
@@ -1024,7 +1030,7 @@ class _SmartAnalyticsScreenState extends State<SmartAnalyticsScreen> {
                   'نوع الهدف',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppDimensions.spacing8),
                 Wrap(
                   spacing: 8,
                   children: [

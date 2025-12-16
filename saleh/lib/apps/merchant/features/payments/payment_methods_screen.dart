@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../core/constants/app_dimensions.dart';
 
 class PaymentMethodsScreen extends StatefulWidget {
   const PaymentMethodsScreen({super.key});
@@ -29,6 +32,10 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () => context.pop(),
+          ),
           title: const Text('طرق الدفع'),
           bottom: TabBar(
             controller: _tabController,
@@ -53,7 +60,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
 
   Widget _buildOverviewTab() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: AppDimensions.paddingM,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -89,7 +96,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
             'طرق الدفع المتاحة',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: AppDimensions.spacing12),
           _buildPaymentMethodCard(
             'مدى',
             'mada.png',
@@ -159,12 +166,12 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
   ) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: AppDimensions.paddingM,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: color, size: 32),
-            const SizedBox(height: 8),
+            SizedBox(height: AppDimensions.spacing8),
             Text(
               value,
               style: TextStyle(
@@ -192,14 +199,14 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
     Color color,
   ) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: AppDimensions.spacing12),
       child: ListTile(
         leading: Container(
           width: 48,
           height: 48,
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: AppDimensions.borderRadiusS,
           ),
           child: Icon(Icons.payment, color: color),
         ),
@@ -254,7 +261,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.receipt_long_outlined, size: 64, color: Colors.grey[400]),
-          const SizedBox(height: 16),
+          SizedBox(height: AppDimensions.spacing16),
           Text(
             'لا توجد معاملات',
             style: TextStyle(color: Colors.grey[600], fontSize: 18),
@@ -266,13 +273,13 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
 
   Widget _buildSettingsTab() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: AppDimensions.paddingM,
       child: Column(
         children: [
           // Currency Settings
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: AppDimensions.paddingM,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -280,7 +287,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                     'إعدادات العملة',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: AppDimensions.spacing16),
                   DropdownButtonFormField<String>(
                     decoration: const InputDecoration(
                       labelText: 'العملة الرئيسية',
@@ -303,7 +310,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                     ],
                     onChanged: (v) {},
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: AppDimensions.spacing12),
                   SwitchListTile(
                     title: const Text('دعم عملات متعددة'),
                     subtitle: const Text('السماح بالدفع بعملات مختلفة'),
@@ -314,12 +321,12 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: AppDimensions.spacing16),
 
           // Capture Settings
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: AppDimensions.paddingM,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -327,7 +334,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                     'إعدادات الخصم',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: AppDimensions.spacing16),
                   SwitchListTile(
                     title: const Text('خصم تلقائي'),
                     subtitle: const Text('خصم المبلغ تلقائياً عند الدفع'),
@@ -345,12 +352,12 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: AppDimensions.spacing16),
 
           // Partial Payment
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: AppDimensions.paddingM,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -358,7 +365,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                     'الدفع الجزئي',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: AppDimensions.spacing16),
                   SwitchListTile(
                     title: const Text('تفعيل الدفع الجزئي'),
                     subtitle: const Text('السماح للعميل بدفع جزء من المبلغ'),
@@ -376,12 +383,12 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: AppDimensions.spacing16),
 
           // Notifications
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: AppDimensions.paddingM,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -389,7 +396,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                     'الإشعارات',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: AppDimensions.spacing16),
                   SwitchListTile(
                     title: const Text('إيصال بالبريد الإلكتروني'),
                     subtitle: const Text('إرسال إيصال الدفع للعميل'),
@@ -406,12 +413,12 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: AppDimensions.spacing16),
 
           // Refund Policy
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: AppDimensions.paddingM,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -419,7 +426,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                     'سياسة الاسترداد',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: AppDimensions.spacing16),
                   SwitchListTile(
                     title: const Text('استرداد تلقائي'),
                     subtitle: const Text(
@@ -439,12 +446,12 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: AppDimensions.spacing16),
 
           // Bank Accounts
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: AppDimensions.paddingM,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -465,7 +472,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: AppDimensions.spacing12),
                   ListTile(
                     leading: const CircleAvatar(child: Text('🏦')),
                     title: const Text('البنك الأهلي'),
@@ -490,7 +497,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: AppDimensions.spacing16),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -512,7 +519,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
         child: Container(
-          padding: const EdgeInsets.all(24),
+          padding: AppDimensions.paddingXL,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -524,21 +531,21 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: AppDimensions.spacing16),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Merchant ID',
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: AppDimensions.spacing12),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'API Key',
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: AppDimensions.spacing12),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'API Secret',
@@ -546,13 +553,13 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                 ),
                 obscureText: true,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: AppDimensions.spacing12),
               SwitchListTile(
                 title: const Text('وضع الاختبار'),
                 value: true,
                 onChanged: (v) {},
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: AppDimensions.spacing12),
               Row(
                 children: [
                   Expanded(
@@ -564,7 +571,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: AppDimensions.spacing12),
                   Expanded(
                     child: TextFormField(
                       decoration: const InputDecoration(
@@ -576,7 +583,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: AppDimensions.spacing16),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -606,28 +613,28 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen>
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: AppDimensions.spacing12),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'اسم صاحب الحساب',
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: AppDimensions.spacing12),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'رقم الحساب',
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: AppDimensions.spacing12),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'رقم IBAN',
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: AppDimensions.spacing12),
               SwitchListTile(
                 title: const Text('حساب رئيسي'),
                 value: false,
