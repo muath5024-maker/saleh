@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/studio_package.dart';
+import '../providers/studio_provider.dart';
+import '../services/studio_api_service.dart';
 import '../widgets/credit_balance.dart';
 
 /// صفحة حزم التوفير
@@ -613,17 +615,136 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
     }
   }
 
-  void _orderPackage() {
+  void _orderPackage() async {
     setState(() => _isOrdering = true);
 
-    // TODO: Navigate to package order flow
-    Navigator.pop(context);
+    try {
+      final api = ref.read(studioApiServiceProvider);
+      final package = widget.package;
 
-    // Show coming soon
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('سيتم إضافة هذه الميزة قريباً'),
-        duration: Duration(seconds: 2),
+      // عرض نافذة إدخال بيانات المنتج
+      final productData = await _showProductInputDialog();
+      if (productData == null) {
+        setState(() => _isOrdering = false);
+        return;
+      }
+
+      // طلب الباقة
+      final result = await api.orderPackage(
+        packageType: package.id.name,
+        productData: productData,
+      );
+
+      // تحديث الرصيد
+      ref.read(userCreditsProvider.notifier).deductCredits(result.creditsUsed);
+
+      if (mounted) {
+        Navigator.pop(context);
+
+        // عرض رسالة النجاح
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('تم طلب الحزمة بنجاح! رقم الطلب: ${result.orderId}'),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+
+        // الانتقال لمتابعة الطلب (يمكن إضافتها لاحقاً)
+      }
+    } on InsufficientCreditsException catch (e) {
+      _showErrorDialog(
+        'رصيد غير كافي',
+        'تحتاج ${e.required} رصيد، المتوفر لديك ${e.balance}',
+      );
+    } on ApiException catch (e) {
+      _showErrorDialog('خطأ', e.message);
+    } catch (e) {
+      _showErrorDialog('خطأ', 'حدث خطأ غير متوقع');
+    } finally {
+      if (mounted) {
+        setState(() => _isOrdering = false);
+      }
+    }
+  }
+
+  Future<Map<String, dynamic>?> _showProductInputDialog() async {
+    final nameController = TextEditingController();
+    final descriptionController = TextEditingController();
+
+    return showDialog<Map<String, dynamic>>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('بيانات المنتج'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'اسم المنتج *',
+                  hintText: 'أدخل اسم المنتج',
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: descriptionController,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                  labelText: 'وصف المنتج *',
+                  hintText: 'أدخل وصفاً تفصيلياً للمنتج',
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('إلغاء'),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (nameController.text.isEmpty ||
+                  descriptionController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('يرجى ملء جميع الحقول المطلوبة'),
+                  ),
+                );
+                return;
+              }
+              Navigator.pop(context, {
+                'name': nameController.text,
+                'description': descriptionController.text,
+              });
+            },
+            child: const Text('متابعة'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            const Icon(Icons.error, color: Colors.red),
+            const SizedBox(width: 8),
+            Text(title),
+          ],
+        ),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('حسناً'),
+          ),
+        ],
       ),
     );
   }

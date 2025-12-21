@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/models.dart';
@@ -7,6 +8,12 @@ class StudioApiService {
   final String baseUrl;
   final String Function() getAuthToken;
 
+  /// مدة الـ timeout الافتراضية للطلبات
+  static const Duration _defaultTimeout = Duration(seconds: 30);
+
+  /// مدة الـ timeout للطلبات الطويلة (مثل توليد الفيديو)
+  static const Duration _longTimeout = Duration(seconds: 120);
+
   StudioApiService({required this.baseUrl, required this.getAuthToken});
 
   /// الحصول على headers
@@ -15,16 +22,64 @@ class StudioApiService {
     'Authorization': 'Bearer ${getAuthToken()}',
   };
 
+  /// تنفيذ طلب GET مع timeout
+  Future<http.Response> _getWithTimeout(String url, {Duration? timeout}) async {
+    return http
+        .get(Uri.parse(url), headers: _headers)
+        .timeout(
+          timeout ?? _defaultTimeout,
+          onTimeout: () => throw TimeoutException('انتهت مهلة الاتصال'),
+        );
+  }
+
+  /// تنفيذ طلب POST مع timeout
+  Future<http.Response> _postWithTimeout(
+    String url, {
+    Object? body,
+    Duration? timeout,
+  }) async {
+    return http
+        .post(Uri.parse(url), headers: _headers, body: body)
+        .timeout(
+          timeout ?? _defaultTimeout,
+          onTimeout: () => throw TimeoutException('انتهت مهلة الاتصال'),
+        );
+  }
+
+  /// تنفيذ طلب PATCH مع timeout
+  Future<http.Response> _patchWithTimeout(
+    String url, {
+    Object? body,
+    Duration? timeout,
+  }) async {
+    return http
+        .patch(Uri.parse(url), headers: _headers, body: body)
+        .timeout(
+          timeout ?? _defaultTimeout,
+          onTimeout: () => throw TimeoutException('انتهت مهلة الاتصال'),
+        );
+  }
+
+  /// تنفيذ طلب DELETE مع timeout
+  Future<http.Response> _deleteWithTimeout(
+    String url, {
+    Duration? timeout,
+  }) async {
+    return http
+        .delete(Uri.parse(url), headers: _headers)
+        .timeout(
+          timeout ?? _defaultTimeout,
+          onTimeout: () => throw TimeoutException('انتهت مهلة الاتصال'),
+        );
+  }
+
   // =====================================================
   // Credits
   // =====================================================
 
   /// الحصول على رصيد المستخدم
   Future<UserCredits> getCredits() async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/studio/credits'),
-      headers: _headers,
-    );
+    final response = await _getWithTimeout('$baseUrl/studio/credits');
 
     if (response.statusCode != 200) {
       throw ApiException('فشل في جلب الرصيد', response.statusCode);
@@ -53,7 +108,7 @@ class StudioApiService {
       url += '?category=$category';
     }
 
-    final response = await http.get(Uri.parse(url), headers: _headers);
+    final response = await _getWithTimeout(url);
 
     if (response.statusCode != 200) {
       throw ApiException('فشل في جلب القوالب', response.statusCode);
@@ -69,10 +124,7 @@ class StudioApiService {
 
   /// الحصول على قالب محدد
   Future<StudioTemplate> getTemplate(String id) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/studio/templates/$id'),
-      headers: _headers,
-    );
+    final response = await _getWithTimeout('$baseUrl/studio/templates/$id');
 
     if (response.statusCode != 200) {
       throw ApiException('القالب غير موجود', response.statusCode);
@@ -93,9 +145,8 @@ class StudioApiService {
     String? productId,
     ProductData? productData,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/studio/projects'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/studio/projects',
       body: jsonEncode({
         'name': name,
         'template_id': templateId,
@@ -119,7 +170,7 @@ class StudioApiService {
       url += '?status=$status';
     }
 
-    final response = await http.get(Uri.parse(url), headers: _headers);
+    final response = await _getWithTimeout(url);
 
     if (response.statusCode != 200) {
       throw ApiException('فشل في جلب المشاريع', response.statusCode);
@@ -135,10 +186,7 @@ class StudioApiService {
   Future<({StudioProject project, List<Scene> scenes})> getProject(
     String id,
   ) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/studio/projects/$id'),
-      headers: _headers,
-    );
+    final response = await _getWithTimeout('$baseUrl/studio/projects/$id');
 
     if (response.statusCode != 200) {
       throw ApiException('المشروع غير موجود', response.statusCode);
@@ -160,9 +208,8 @@ class StudioApiService {
     ProjectSettings? settings,
     ScriptData? scriptData,
   }) async {
-    final response = await http.patch(
-      Uri.parse('$baseUrl/studio/projects/$id'),
-      headers: _headers,
+    final response = await _patchWithTimeout(
+      '$baseUrl/studio/projects/$id',
       body: jsonEncode({
         if (name != null) 'name': name,
         if (settings != null) 'settings': settings.toJson(),
@@ -180,10 +227,7 @@ class StudioApiService {
 
   /// حذف مشروع
   Future<void> deleteProject(String id) async {
-    final response = await http.delete(
-      Uri.parse('$baseUrl/studio/projects/$id'),
-      headers: _headers,
-    );
+    final response = await _deleteWithTimeout('$baseUrl/studio/projects/$id');
 
     if (response.statusCode != 200) {
       throw ApiException('فشل في حذف المشروع', response.statusCode);
@@ -202,9 +246,8 @@ class StudioApiService {
     String tone = 'professional',
     int durationSeconds = 30,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/studio/generate/script'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/studio/generate/script',
       body: jsonEncode({
         'product_data': productData.toJson(),
         'template_id': templateId,
@@ -212,6 +255,7 @@ class StudioApiService {
         'tone': tone,
         'duration_seconds': durationSeconds,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
@@ -240,19 +284,23 @@ class StudioApiService {
     String aspectRatio = '9:16',
     String? projectId,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/studio/generate/image'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/studio/generate/image',
       body: jsonEncode({
         'prompt': prompt,
         'style': style,
         'aspect_ratio': aspectRatio,
         'project_id': projectId,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(2, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 2,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -273,19 +321,23 @@ class StudioApiService {
     String language = 'ar',
     String? projectId,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/studio/generate/voice'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/studio/generate/voice',
       body: jsonEncode({
         'text': text,
         'voice_id': voiceId,
         'language': language,
         'project_id': projectId,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(1, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 1,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -306,18 +358,22 @@ class StudioApiService {
     String? avatarId,
     String? voiceId,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/studio/generate/ugc'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/studio/generate/ugc',
       body: jsonEncode({
         'script': script,
         'avatar_id': avatarId,
         'voice_id': voiceId,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(10, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 10,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -335,9 +391,8 @@ class StudioApiService {
   Future<({String status, String? resultUrl})> getUGCStatus(
     String talkId,
   ) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/studio/generate/ugc/$talkId'),
-      headers: _headers,
+    final response = await _getWithTimeout(
+      '$baseUrl/studio/generate/ugc/$talkId',
     );
 
     if (response.statusCode != 200) {
@@ -357,9 +412,8 @@ class StudioApiService {
 
   /// إضافة مشاهد للمشروع
   Future<List<Scene>> addScenes(String projectId, List<Scene> scenes) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/studio/projects/$projectId/scenes'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/studio/projects/$projectId/scenes',
       body: jsonEncode(scenes.map((s) => s.toJson()).toList()),
     );
 
@@ -378,9 +432,8 @@ class StudioApiService {
     String sceneId,
     Map<String, dynamic> updates,
   ) async {
-    final response = await http.patch(
-      Uri.parse('$baseUrl/studio/scenes/$sceneId'),
-      headers: _headers,
+    final response = await _patchWithTimeout(
+      '$baseUrl/studio/scenes/$sceneId',
       body: jsonEncode(updates),
     );
 
@@ -403,14 +456,14 @@ class StudioApiService {
     String quality = 'medium',
     String format = 'mp4',
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/studio/render'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/studio/render',
       body: jsonEncode({
         'project_id': projectId,
         'quality': quality,
         'format': format,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
@@ -441,9 +494,8 @@ class StudioApiService {
     int? outputSizeBytes,
     String? errorMessage,
   }) async {
-    await http.patch(
-      Uri.parse('$baseUrl/studio/render/$renderId/complete'),
-      headers: _headers,
+    await _patchWithTimeout(
+      '$baseUrl/studio/render/$renderId/complete',
       body: jsonEncode({
         'status': status,
         'output_url': outputUrl,
@@ -459,32 +511,34 @@ class StudioApiService {
 
   /// الحصول على الأصوات المتاحة
   Future<List<Map<String, dynamic>>> getVoices() async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/studio/voices'),
-      headers: _headers,
-    );
+    try {
+      final response = await _getWithTimeout('$baseUrl/studio/voices');
 
-    if (response.statusCode != 200) {
+      if (response.statusCode != 200) {
+        return [];
+      }
+
+      final data = jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(data['recommended'] ?? []);
+    } catch (_) {
       return [];
     }
-
-    final data = jsonDecode(response.body);
-    return List<Map<String, dynamic>>.from(data['recommended'] ?? []);
   }
 
   /// الحصول على الأفاتارات
   Future<List<Map<String, dynamic>>> getAvatars() async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/studio/avatars'),
-      headers: _headers,
-    );
+    try {
+      final response = await _getWithTimeout('$baseUrl/studio/avatars');
 
-    if (response.statusCode != 200) {
+      if (response.statusCode != 200) {
+        return [];
+      }
+
+      final data = jsonDecode(response.body);
+      return List<Map<String, dynamic>>.from(data['avatars'] ?? []);
+    } catch (_) {
       return [];
     }
-
-    final data = jsonDecode(response.body);
-    return List<Map<String, dynamic>>.from(data['avatars'] ?? []);
   }
 
   // =====================================================
@@ -569,14 +623,18 @@ class StudioApiService {
   Future<({String resultUrl, int creditsUsed})> removeBackground({
     required String imageUrl,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/edit/remove-background'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/edit/remove-background',
       body: jsonEncode({'imageUrl': imageUrl}),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(3, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 3,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -595,14 +653,18 @@ class StudioApiService {
     required String imageUrl,
     String enhanceType = 'general',
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/edit/enhance-quality'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/edit/enhance-quality',
       body: jsonEncode({'imageUrl': imageUrl, 'enhanceType': enhanceType}),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(2, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 2,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -622,9 +684,8 @@ class StudioApiService {
     required int width,
     required int height,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/edit/resize'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/edit/resize',
       body: jsonEncode({
         'imageUrl': imageUrl,
         'width': width,
@@ -649,14 +710,14 @@ class StudioApiService {
     required int startMs,
     required int endMs,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/edit/trim-video'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/edit/trim-video',
       body: jsonEncode({
         'videoUrl': videoUrl,
         'startMs': startMs,
         'endMs': endMs,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode != 200) {
@@ -674,10 +735,10 @@ class StudioApiService {
   Future<({String jobId, int creditsUsed})> mergeVideos({
     required List<String> videoUrls,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/edit/merge-videos'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/edit/merge-videos',
       body: jsonEncode({'videoUrls': videoUrls}),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode != 200) {
@@ -697,14 +758,14 @@ class StudioApiService {
     required String audioUrl,
     double volume = 0.5,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/edit/add-music'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/edit/add-music',
       body: jsonEncode({
         'videoUrl': videoUrl,
         'audioUrl': audioUrl,
         'volume': volume,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode != 200) {
@@ -725,15 +786,15 @@ class StudioApiService {
     String fontColor = '#FFFFFF',
     int fontSize = 24,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/edit/add-subtitles'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/edit/add-subtitles',
       body: jsonEncode({
         'videoUrl': videoUrl,
         'subtitlesText': subtitlesText,
         'fontColor': fontColor,
         'fontSize': fontSize,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode != 200) {
@@ -753,9 +814,8 @@ class StudioApiService {
     int fps = 15,
     int width = 480,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/edit/video-to-gif'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/edit/video-to-gif',
       body: jsonEncode({'videoUrl': videoUrl, 'fps': fps, 'width': width}),
     );
 
@@ -781,19 +841,23 @@ class StudioApiService {
     String style = 'modern',
     int count = 4,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/generate/product-images'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/generate/product-images',
       body: jsonEncode({
         'productName': productName,
         'productDescription': productDescription,
         'style': style,
         'count': count,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(8, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 8,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -814,19 +878,23 @@ class StudioApiService {
     String style = 'modern',
     String size = '1200x628',
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/generate/banner'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/generate/banner',
       body: jsonEncode({
         'title': title,
         'subtitle': subtitle,
         'style': style,
         'size': size,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(3, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 3,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -846,18 +914,22 @@ class StudioApiService {
     String? brandDescription,
     String style = 'modern',
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/generate/logo'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/generate/logo',
       body: jsonEncode({
         'brandName': brandName,
         'brandDescription': brandDescription,
         'style': style,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(10, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 10,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -877,18 +949,22 @@ class StudioApiService {
     String motionType = 'zoom',
     int durationMs = 3000,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/generate/animated-image'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/generate/animated-image',
       body: jsonEncode({
         'imageUrl': imageUrl,
         'motionType': motionType,
         'durationMs': durationMs,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(5, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 5,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -908,18 +984,22 @@ class StudioApiService {
     int durationSeconds = 5,
     String aspectRatio = '9:16',
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/generate/short-video'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/generate/short-video',
       body: jsonEncode({
         'prompt': prompt,
         'durationSeconds': durationSeconds,
         'aspectRatio': aspectRatio,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(15, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 15,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -941,19 +1021,23 @@ class StudioApiService {
     String? productImageUrl,
     String template = 'modern',
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/tools/generate/landing-page'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/tools/generate/landing-page',
       body: jsonEncode({
         'productName': productName,
         'productDescription': productDescription,
         'productImageUrl': productImageUrl,
         'template': template,
       }),
+      timeout: _longTimeout,
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(20, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 20,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 200) {
@@ -974,9 +1058,8 @@ class StudioApiService {
 
   /// الحصول على تعريفات الباقات
   Future<List<Map<String, dynamic>>> getPackageDefinitions() async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/secure/studio/packages/definitions'),
-      headers: _headers,
+    final response = await _getWithTimeout(
+      '$baseUrl/secure/studio/packages/definitions',
     );
 
     if (response.statusCode != 200) {
@@ -994,9 +1077,8 @@ class StudioApiService {
     Map<String, dynamic>? brandData,
     Map<String, dynamic>? preferences,
   }) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/packages/orders'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/packages/orders',
       body: jsonEncode({
         'packageType': packageType,
         'productData': productData,
@@ -1006,7 +1088,11 @@ class StudioApiService {
     );
 
     if (response.statusCode == 402) {
-      throw InsufficientCreditsException(50, 0);
+      final data = jsonDecode(response.body);
+      throw InsufficientCreditsException(
+        data['required'] ?? 50,
+        data['balance'] ?? 0,
+      );
     }
 
     if (response.statusCode != 201) {
@@ -1022,9 +1108,8 @@ class StudioApiService {
 
   /// الحصول على حالة طلب باقة
   Future<Map<String, dynamic>> getPackageOrderStatus(String orderId) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/secure/studio/packages/orders/$orderId'),
-      headers: _headers,
+    final response = await _getWithTimeout(
+      '$baseUrl/secure/studio/packages/orders/$orderId',
     );
 
     if (response.statusCode != 200) {
@@ -1036,9 +1121,8 @@ class StudioApiService {
 
   /// الحصول على طلبات الباقات
   Future<List<Map<String, dynamic>>> getPackageOrders() async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/secure/studio/packages/orders'),
-      headers: _headers,
+    final response = await _getWithTimeout(
+      '$baseUrl/secure/studio/packages/orders',
     );
 
     if (response.statusCode != 200) {
@@ -1051,9 +1135,9 @@ class StudioApiService {
 
   /// تطبيق مخرجات الباقة على المتجر
   Future<void> applyPackageToStore(String orderId) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/secure/studio/packages/orders/$orderId/apply'),
-      headers: _headers,
+    final response = await _postWithTimeout(
+      '$baseUrl/secure/studio/packages/orders/$orderId/apply',
+      body: jsonEncode({}),
     );
 
     if (response.statusCode != 200) {
@@ -1069,9 +1153,8 @@ class StudioApiService {
   Future<({String status, String? resultUrl, String? error})> getJobStatus(
     String jobId,
   ) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/secure/studio/jobs/$jobId'),
-      headers: _headers,
+    final response = await _getWithTimeout(
+      '$baseUrl/secure/studio/jobs/$jobId',
     );
 
     if (response.statusCode != 200) {

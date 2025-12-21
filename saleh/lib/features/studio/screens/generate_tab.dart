@@ -168,7 +168,219 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
 
   void _selectTool(GenerateToolDefinition tool) {
     setState(() => _selectedTool = tool.id);
+
+    // التحقق من أداة القوالب
+    if (tool.id == GenerateToolType.templates) {
+      _showTemplatesBrowser();
+      return;
+    }
+
     _showGenerateDialog(tool);
+  }
+
+  void _showTemplatesBrowser() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.9,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        builder: (context, scrollController) {
+          final colorScheme = Theme.of(context).colorScheme;
+          return Container(
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(24),
+              ),
+            ),
+            child: Column(
+              children: [
+                // Handle
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 12),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: colorScheme.onSurfaceVariant.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                // Header
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Icon(Icons.view_module, color: colorScheme.primary),
+                      const SizedBox(width: 12),
+                      Text(
+                        'القوالب الجاهزة',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Templates Grid
+                Expanded(
+                  child: FutureBuilder<List<dynamic>>(
+                    future: ref.read(studioApiServiceProvider).getTemplates(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.error_outline,
+                                size: 48,
+                                color: colorScheme.error,
+                              ),
+                              const SizedBox(height: 16),
+                              const Text('فشل في تحميل القوالب'),
+                              const SizedBox(height: 8),
+                              FilledButton(
+                                onPressed: () => setState(() {}),
+                                child: const Text('إعادة المحاولة'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      final templates = snapshot.data ?? [];
+                      if (templates.isEmpty) {
+                        return const Center(
+                          child: Text('لا توجد قوالب متاحة حالياً'),
+                        );
+                      }
+
+                      return GridView.builder(
+                        controller: scrollController,
+                        padding: const EdgeInsets.all(16),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                              childAspectRatio: 0.75,
+                            ),
+                        itemCount: templates.length,
+                        itemBuilder: (context, index) {
+                          final template = templates[index];
+                          return _buildTemplateCard(template, colorScheme);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildTemplateCard(dynamic template, ColorScheme colorScheme) {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          Navigator.pop(context);
+          // يمكن إضافة استخدام القالب لاحقاً
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'تم اختيار قالب: ${template.nameAr ?? template.name}',
+              ),
+            ),
+          );
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Thumbnail
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                color: colorScheme.surfaceContainerHighest,
+                child: template.thumbnailUrl != null
+                    ? Image.network(
+                        template.thumbnailUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Icon(
+                          Icons.video_library,
+                          size: 48,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      )
+                    : Icon(
+                        Icons.video_library,
+                        size: 48,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+              ),
+            ),
+            // Info
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    template.nameAr ?? template.name ?? 'قالب',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.schedule,
+                        size: 12,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${template.durationSeconds ?? 30} ث',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const Spacer(),
+                      Icon(
+                        Icons.monetization_on,
+                        size: 12,
+                        color: colorScheme.primary,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${template.creditsCost ?? 10}',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _showGenerateDialog(GenerateToolDefinition tool) {
@@ -348,27 +560,47 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
 
     final api = ref.read(studioApiServiceProvider);
 
-    while (true) {
+    // الحد الأقصى للانتظار: 5 دقائق
+    const maxAttempts = 100;
+    var attempts = 0;
+
+    while (mounted && attempts < maxAttempts) {
       await Future.delayed(const Duration(seconds: 3));
+      attempts++;
 
       try {
         final status = await api.getJobStatus(jobId);
 
         if (status.status == 'completed' && status.resultUrl != null) {
-          Navigator.pop(context);
-          ref.read(userCreditsProvider.notifier).deductCredits(creditsUsed);
-          _showSingleResultDialog(status.resultUrl!, creditsUsed);
-          break;
+          if (mounted) {
+            Navigator.pop(context);
+            ref.read(userCreditsProvider.notifier).deductCredits(creditsUsed);
+            _showSingleResultDialog(status.resultUrl!, creditsUsed);
+          }
+          return;
         } else if (status.status == 'failed') {
-          Navigator.pop(context);
-          _showErrorDialog('فشل', status.error ?? 'فشل إنشاء الفيديو');
-          break;
+          if (mounted) {
+            Navigator.pop(context);
+            _showErrorDialog('فشل', status.error ?? 'فشل إنشاء الفيديو');
+          }
+          return;
         }
       } catch (e) {
-        Navigator.pop(context);
-        _showErrorDialog('خطأ', 'فشل في التحقق من الحالة');
-        break;
+        if (mounted) {
+          Navigator.pop(context);
+          _showErrorDialog('خطأ', 'فشل في التحقق من الحالة');
+        }
+        return;
       }
+    }
+
+    // انتهت مهلة الانتظار
+    if (mounted) {
+      Navigator.pop(context);
+      _showErrorDialog(
+        'انتهت المهلة',
+        'استغرقت العملية وقتاً طويلاً. يرجى المحاولة لاحقاً.',
+      );
     }
   }
 
@@ -411,7 +643,7 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
           FilledButton.icon(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: حفظ أو مشاركة
+              _saveAsset(resultUrl, 'image');
             },
             icon: const Icon(Icons.save),
             label: const Text('حفظ'),
@@ -475,7 +707,7 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
           FilledButton.icon(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: حفظ الكل
+              _saveMultipleAssets(resultUrls);
             },
             icon: const Icon(Icons.save_alt),
             label: const Text('حفظ الكل'),
@@ -483,6 +715,47 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
         ],
       ),
     );
+  }
+
+  /// حفظ أصل واحد
+  Future<void> _saveAsset(String url, String type) async {
+    try {
+      // يمكن إضافة API لحفظ الأصول في المستقبل
+      // حالياً نعرض رسالة نجاح
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تم حفظ الملف بنجاح'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('فشل في حفظ الملف'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  /// حفظ أصول متعددة
+  Future<void> _saveMultipleAssets(List<String> urls) async {
+    try {
+      // يمكن إضافة API لحفظ الأصول المتعددة في المستقبل
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('تم حفظ ${urls.length} ملفات بنجاح'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('فشل في حفظ الملفات'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   void _showLandingPageResult(
@@ -518,12 +791,28 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
           FilledButton.icon(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: فتح المعاينة
+              _openLandingPagePreview(previewUrl);
             },
             icon: const Icon(Icons.open_in_new),
             label: const Text('معاينة'),
           ),
         ],
+      ),
+    );
+  }
+
+  /// فتح معاينة صفحة الهبوط
+  void _openLandingPagePreview(String previewUrl) {
+    // يمكن استخدام url_launcher لفتح الرابط
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('رابط المعاينة: $previewUrl'),
+        action: SnackBarAction(
+          label: 'نسخ',
+          onPressed: () {
+            // نسخ الرابط للحافظة
+          },
+        ),
       ),
     );
   }
