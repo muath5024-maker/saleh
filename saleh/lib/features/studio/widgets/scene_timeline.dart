@@ -47,13 +47,13 @@ class _SceneTimelineState extends State<SceneTimeline> {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         border: Border(
-          top: BorderSide(color: colorScheme.outline.withOpacity(0.2)),
+          top: BorderSide(color: colorScheme.outline.withValues(alpha: 0.2)),
         ),
       ),
       child: Row(
         children: [
           // مقبض سحب للتمرير
-          Container(width: 4, color: colorScheme.primary.withOpacity(0.3)),
+          Container(width: 4, color: colorScheme.primary.withValues(alpha: 0.3)),
 
           // قائمة المشاهد
           Expanded(
@@ -135,7 +135,7 @@ class SceneThumbnail extends StatelessWidget {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: colorScheme.primary.withOpacity(0.3),
+                    color: colorScheme.primary.withValues(alpha: 0.3),
                     blurRadius: 8,
                   ),
                 ]
@@ -151,7 +151,7 @@ class SceneThumbnail extends StatelessWidget {
                 Image.network(
                   scene.generatedImageUrl!,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => _buildPlaceholder(),
+                  errorBuilder: (_, e, s) => _buildPlaceholder(),
                 )
               else
                 _buildPlaceholder(),
@@ -169,7 +169,7 @@ class SceneThumbnail extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent,
-                        Colors.black.withOpacity(0.7),
+                        Colors.black.withValues(alpha: 0.7),
                       ],
                     ),
                   ),
@@ -187,7 +187,7 @@ class SceneThumbnail extends StatelessWidget {
                       Text(
                         '${scene.duration}ث',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                           fontSize: 9,
                         ),
                       ),
@@ -296,7 +296,7 @@ class AddSceneButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: colorScheme.outline.withOpacity(0.3),
+            color: colorScheme.outline.withValues(alpha: 0.3),
             style: BorderStyle.solid,
           ),
           color: colorScheme.surface,
@@ -314,7 +314,7 @@ class AddSceneButton extends StatelessWidget {
               'إضافة',
               style: TextStyle(
                 fontSize: 10,
-                color: colorScheme.onSurface.withOpacity(0.7),
+                color: colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
           ],

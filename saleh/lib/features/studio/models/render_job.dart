@@ -77,10 +77,10 @@ abstract class RenderJob with _$RenderJob {
   /// وقت الرندر بصيغة مقروءة
   String get formattedRenderTime {
     if (renderTimeSeconds == null) return '';
-    if (renderTimeSeconds! < 60) return '${renderTimeSeconds}ث';
+    if (renderTimeSeconds! < 60) return '$renderTimeSecondsث';
     final minutes = renderTimeSeconds! ~/ 60;
     final seconds = renderTimeSeconds! % 60;
-    return '${minutes}د ${seconds}ث';
+    return '$minutesد $secondsث';
   }
 }
 

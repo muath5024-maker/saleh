@@ -32,8 +32,8 @@ class TemplateCard extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: isSelected
-                  ? colorScheme.primary.withOpacity(0.3)
-                  : Colors.black.withOpacity(0.1),
+                  ? colorScheme.primary.withValues(alpha: 0.3)
+                  : Colors.black.withValues(alpha: 0.1),
               blurRadius: isSelected ? 12 : 8,
               offset: const Offset(0, 4),
             ),
@@ -49,7 +49,7 @@ class TemplateCard extends StatelessWidget {
                     ? Image.network(
                         template.thumbnailUrl!,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => _buildPlaceholder(),
+                        errorBuilder: (_, e, s) => _buildPlaceholder(),
                       )
                     : _buildPlaceholder(),
               ),
@@ -63,7 +63,7 @@ class TemplateCard extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent,
-                        Colors.black.withOpacity(0.7),
+                        Colors.black.withValues(alpha: 0.7),
                       ],
                       stops: const [0.5, 1.0],
                     ),
@@ -132,13 +132,13 @@ class TemplateCard extends StatelessWidget {
                           Icon(
                             Icons.timer_outlined,
                             size: 12,
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(alpha: 0.8),
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${template.durationSeconds}ث',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
+                              color: Colors.white.withValues(alpha: 0.8),
                               fontSize: 11,
                             ),
                           ),
@@ -146,13 +146,13 @@ class TemplateCard extends StatelessWidget {
                           Icon(
                             Icons.layers_outlined,
                             size: 12,
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(alpha: 0.8),
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${template.scenesCount} مشاهد',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
+                              color: Colors.white.withValues(alpha: 0.8),
                               fontSize: 11,
                             ),
                           ),

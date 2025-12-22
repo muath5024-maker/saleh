@@ -110,7 +110,7 @@ class _ScriptGeneratorScreenState extends ConsumerState<ScriptGeneratorScreen> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: DropdownButtonFormField<String>(
-                        value: 'SAR',
+                        initialValue: 'SAR',
                         decoration: const InputDecoration(
                           labelText: 'العملة',
                           prefixIcon: Icon(Icons.currency_exchange),
@@ -237,7 +237,7 @@ class _ScriptGeneratorScreenState extends ConsumerState<ScriptGeneratorScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+        color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -379,7 +379,7 @@ class _ScriptGeneratorScreenState extends ConsumerState<ScriptGeneratorScreen> {
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -490,9 +490,11 @@ class _ScriptGeneratorScreenState extends ConsumerState<ScriptGeneratorScreen> {
 
       setState(() => _generatedScript = script);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطأ: $e'), backgroundColor: Colors.red),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('خطأ: $e'), backgroundColor: Colors.red),
+        );
+      }
     }
   }
 
@@ -522,15 +524,19 @@ class _ScriptGeneratorScreenState extends ConsumerState<ScriptGeneratorScreen> {
           .read(currentProjectProvider.notifier)
           .setScriptData(_generatedScript!);
 
-      Navigator.pushReplacementNamed(
-        context,
-        '/studio/editor',
-        arguments: {'projectId': project.id, 'script': _generatedScript},
-      );
+      if (mounted) {
+        Navigator.pushReplacementNamed(
+          context,
+          '/studio/editor',
+          arguments: {'projectId': project.id, 'script': _generatedScript},
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+      }
     }
   }
 }

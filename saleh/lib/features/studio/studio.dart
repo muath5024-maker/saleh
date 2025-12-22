@@ -2,7 +2,7 @@
 ///
 /// هذه المكتبة توفر جميع المكونات اللازمة لإنشاء محتوى فيديو
 /// باستخدام الذكاء الاصطناعي
-library studio;
+library;
 
 // Models
 export 'models/models.dart';

@@ -223,7 +223,7 @@ class AIGenerationProgress extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -242,7 +242,7 @@ class AIGenerationProgress extends StatelessWidget {
                   CircularProgressIndicator(
                     strokeWidth: 3,
                     valueColor: AlwaysStoppedAnimation(
-                      colorScheme.primary.withOpacity(0.3),
+                      colorScheme.primary.withValues(alpha: 0.3),
                     ),
                   ),
                   Positioned.fill(
@@ -329,9 +329,9 @@ class ProcessStatusBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: colorScheme.primaryContainer.withOpacity(0.5),
+        color: colorScheme.primaryContainer.withValues(alpha: 0.5),
         border: Border(
-          top: BorderSide(color: colorScheme.primary.withOpacity(0.3)),
+          top: BorderSide(color: colorScheme.primary.withValues(alpha: 0.3)),
         ),
       ),
       child: Row(
@@ -364,7 +364,7 @@ class ProcessStatusBar extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: progress,
                     minHeight: 3,
-                    backgroundColor: colorScheme.primary.withOpacity(0.2),
+                    backgroundColor: colorScheme.primary.withValues(alpha: 0.2),
                     valueColor: AlwaysStoppedAnimation(colorScheme.primary),
                   ),
                 ),

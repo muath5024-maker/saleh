@@ -31,8 +31,8 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  colorScheme.primaryContainer.withOpacity(0.5),
-                  colorScheme.secondaryContainer.withOpacity(0.5),
+                  colorScheme.primaryContainer.withValues(alpha: 0.5),
+                  colorScheme.secondaryContainer.withValues(alpha: 0.5),
                 ],
               ),
               borderRadius: BorderRadius.circular(16),
@@ -112,7 +112,7 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
+              color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -204,7 +204,7 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: colorScheme.onSurfaceVariant.withOpacity(0.3),
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -316,7 +316,7 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
                     ? Image.network(
                         template.thumbnailUrl!,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Icon(
+                        errorBuilder: (_, e, s) => Icon(
                           Icons.video_library,
                           size: 48,
                           color: colorScheme.onSurfaceVariant,
@@ -480,7 +480,7 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
             aspectRatio: params['size'] ?? '9:16',
           );
           // Poll للحصول على النتيجة
-          Navigator.pop(context); // إغلاق مؤشر التحميل
+          if (mounted) Navigator.pop(context); // إغلاق مؤشر التحميل
           _pollAndShowResult(result.jobId, result.creditsUsed);
           return;
 
@@ -490,7 +490,7 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
             productDescription: params['description'] ?? '',
             template: params['style'] ?? 'modern',
           );
-          Navigator.pop(context); // إغلاق مؤشر التحميل
+          if (mounted) Navigator.pop(context); // إغلاق مؤشر التحميل
           _showLandingPageResult(
             result.htmlContent,
             result.previewUrl,
@@ -510,7 +510,7 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
           break;
       }
 
-      Navigator.pop(context); // إغلاق مؤشر التحميل
+      if (mounted) Navigator.pop(context); // إغلاق مؤشر التحميل
 
       // تحديث الرصيد
       ref.read(userCreditsProvider.notifier).deductCredits(creditsUsed);
@@ -522,13 +522,13 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
         _showSingleResultDialog(resultUrl, creditsUsed);
       }
     } on InsufficientCreditsException catch (e) {
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
       _showErrorDialog('رصيد غير كافي', e.toString());
     } on ApiException catch (e) {
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
       _showErrorDialog('خطأ', e.message);
     } catch (e) {
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
       _showErrorDialog('خطأ', e.toString());
     }
   }
@@ -624,7 +624,7 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
                 resultUrl,
                 height: 200,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (_, e, s) => Container(
                   height: 200,
                   color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   child: const Icon(Icons.image, size: 48),
@@ -683,7 +683,7 @@ class _GenerateTabState extends ConsumerState<GenerateTab> {
                     child: Image.network(
                       resultUrls[index],
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
+                      errorBuilder: (_, e, s) => Container(
                         color: Theme.of(
                           context,
                         ).colorScheme.surfaceContainerHighest,
@@ -871,7 +871,7 @@ class _GenerateToolCard extends StatelessWidget {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: colorScheme.primary.withOpacity(0.3),
+                    color: colorScheme.primary.withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -1118,7 +1118,7 @@ class _GenerateToolSheetState extends State<_GenerateToolSheet> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: colorScheme.primaryContainer.withOpacity(0.3),
+                color: colorScheme.primaryContainer.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(

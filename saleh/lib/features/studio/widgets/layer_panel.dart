@@ -36,7 +36,7 @@ class LayerPanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         border: Border(
-          right: BorderSide(color: colorScheme.outline.withOpacity(0.2)),
+          right: BorderSide(color: colorScheme.outline.withValues(alpha: 0.2)),
         ),
       ),
       child: Column(
@@ -46,7 +46,7 @@ class LayerPanel extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: colorScheme.outline.withOpacity(0.2)),
+                bottom: BorderSide(color: colorScheme.outline.withValues(alpha: 0.2)),
               ),
             ),
             child: Row(
@@ -112,7 +112,7 @@ class LayerPanel extends StatelessWidget {
             size: 48,
             color: Theme.of(
               context,
-            ).colorScheme.onSurfaceVariant.withOpacity(0.5),
+            ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 12),
           Text(
@@ -127,7 +127,7 @@ class LayerPanel extends StatelessWidget {
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: Theme.of(
                 context,
-              ).colorScheme.onSurfaceVariant.withOpacity(0.7),
+              ).colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
             ),
           ),
         ],
@@ -172,12 +172,12 @@ class LayerListItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           decoration: BoxDecoration(
             color: isSelected
-                ? colorScheme.primaryContainer.withOpacity(0.5)
+                ? colorScheme.primaryContainer.withValues(alpha: 0.5)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: isSelected
-                  ? colorScheme.primary.withOpacity(0.5)
+                  ? colorScheme.primary.withValues(alpha: 0.5)
                   : Colors.transparent,
             ),
           ),
@@ -187,7 +187,7 @@ class LayerListItem extends StatelessWidget {
               Icon(
                 Icons.drag_indicator,
                 size: 16,
-                color: colorScheme.onSurfaceVariant.withOpacity(0.5),
+                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
               ),
               const SizedBox(width: 6),
 
@@ -196,7 +196,7 @@ class LayerListItem extends StatelessWidget {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: _getTypeColor().withOpacity(0.2),
+                  color: _getTypeColor().withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Icon(_getTypeIcon(), size: 16, color: _getTypeColor()),
@@ -249,7 +249,7 @@ class LayerListItem extends StatelessWidget {
                     ),
                     color: layer.isVisible
                         ? colorScheme.onSurfaceVariant
-                        : colorScheme.onSurfaceVariant.withOpacity(0.3),
+                        : colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
                   ),
 
                   // زر القفل
@@ -268,7 +268,7 @@ class LayerListItem extends StatelessWidget {
                     ),
                     color: layer.isLocked
                         ? colorScheme.primary
-                        : colorScheme.onSurfaceVariant.withOpacity(0.5),
+                        : colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                   ),
 
                   // زر الحذف
@@ -280,7 +280,7 @@ class LayerListItem extends StatelessWidget {
                       minWidth: 28,
                       minHeight: 28,
                     ),
-                    color: colorScheme.error.withOpacity(0.7),
+                    color: colorScheme.error.withValues(alpha: 0.7),
                   ),
                 ],
               ),

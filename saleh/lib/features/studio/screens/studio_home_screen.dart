@@ -162,7 +162,7 @@ class _StudioHomeScreenState extends ConsumerState<StudioHomeScreen>
             size: 80,
             color: Theme.of(
               context,
-            ).colorScheme.onSurfaceVariant.withOpacity(0.5),
+            ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 24),
           Text(
@@ -223,7 +223,7 @@ class _StudioHomeScreenState extends ConsumerState<StudioHomeScreen>
           child: templatesAsync.when(
             data: (templates) => _buildTemplatesGrid(templates),
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (_, __) => _buildTemplatesGrid(getDefaultTemplates()),
+            error: (e, st) => _buildTemplatesGrid(getDefaultTemplates()),
           ),
         ),
       ],
@@ -324,9 +324,11 @@ class _StudioHomeScreenState extends ConsumerState<StudioHomeScreen>
           );
       _openProject(project);
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+      }
     }
   }
 
@@ -363,13 +365,17 @@ class _StudioHomeScreenState extends ConsumerState<StudioHomeScreen>
     if (confirm == true) {
       try {
         await ref.read(projectsProvider.notifier).deleteProject(project.id);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('تم حذف المشروع')));
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('تم حذف المشروع')));
+        }
       } catch (e) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+        }
       }
     }
   }
@@ -542,9 +548,9 @@ class _ProjectCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

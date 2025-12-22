@@ -180,7 +180,7 @@ class _CanvasEditorScreenState extends ConsumerState<CanvasEditorScreen> {
           decoration: BoxDecoration(
             color: Colors.black,
             boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 20),
+              BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 20),
             ],
           ),
           child: Stack(
@@ -200,7 +200,7 @@ class _CanvasEditorScreenState extends ConsumerState<CanvasEditorScreen> {
                   child: CustomPaint(
                     painter: GridPainter(
                       gridSize: state.gridSize.toDouble(),
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                     ),
                   ),
                 ),
@@ -245,7 +245,7 @@ class _CanvasEditorScreenState extends ConsumerState<CanvasEditorScreen> {
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 12),
         ],
       ),
       child: SingleChildScrollView(
@@ -278,7 +278,7 @@ class _CanvasEditorScreenState extends ConsumerState<CanvasEditorScreen> {
               height: 32,
               width: 1,
               margin: const EdgeInsets.symmetric(horizontal: 8),
-              color: colorScheme.outline.withOpacity(0.2),
+              color: colorScheme.outline.withValues(alpha: 0.2),
             ),
             _ToolButton(
               icon: Icons.auto_awesome,
@@ -289,7 +289,7 @@ class _CanvasEditorScreenState extends ConsumerState<CanvasEditorScreen> {
               height: 32,
               width: 1,
               margin: const EdgeInsets.symmetric(horizontal: 8),
-              color: colorScheme.outline.withOpacity(0.2),
+              color: colorScheme.outline.withValues(alpha: 0.2),
             ),
             _ToolButton(
               icon: Icons.layers,
@@ -318,7 +318,7 @@ class _CanvasEditorScreenState extends ConsumerState<CanvasEditorScreen> {
         color: Theme.of(context).colorScheme.surface,
         border: Border(
           left: BorderSide(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
           ),
         ),
       ),
@@ -567,9 +567,11 @@ class _CanvasEditorScreenState extends ConsumerState<CanvasEditorScreen> {
             .read(canvasEditorProvider.notifier)
             .addImageLayer(imageUrl: imageUrl);
       } catch (e) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+        }
       }
     }
   }

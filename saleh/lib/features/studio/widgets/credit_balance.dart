@@ -23,7 +23,7 @@ class CreditBalanceWidget extends ConsumerWidget {
       loading: () => compact
           ? const SizedBox(width: 60, child: LinearProgressIndicator())
           : const Center(child: CircularProgressIndicator()),
-      error: (_, __) => compact
+      error: (e, st) => compact
           ? Icon(Icons.error_outline, color: colorScheme.error, size: 20)
           : Center(
               child: Text(
@@ -42,13 +42,13 @@ class CreditBalanceWidget extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: isLow
-            ? colorScheme.errorContainer.withOpacity(0.5)
-            : colorScheme.primaryContainer.withOpacity(0.5),
+            ? colorScheme.errorContainer.withValues(alpha: 0.5)
+            : colorScheme.primaryContainer.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isLow
-              ? colorScheme.error.withOpacity(0.3)
-              : colorScheme.primary.withOpacity(0.3),
+              ? colorScheme.error.withValues(alpha: 0.3)
+              : colorScheme.primary.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -86,17 +86,17 @@ class CreditBalanceWidget extends ConsumerWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: isLow
-              ? [colorScheme.errorContainer, colorScheme.error.withOpacity(0.3)]
+              ? [colorScheme.errorContainer, colorScheme.error.withValues(alpha: 0.3)]
               : [
                   colorScheme.primaryContainer,
-                  colorScheme.primary.withOpacity(0.3),
+                  colorScheme.primary.withValues(alpha: 0.3),
                 ],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: (isLow ? colorScheme.error : colorScheme.primary)
-                .withOpacity(0.2),
+                .withValues(alpha: 0.2),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -110,7 +110,7 @@ class CreditBalanceWidget extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -126,7 +126,7 @@ class CreditBalanceWidget extends ConsumerWidget {
                     'رصيدك الحالي',
                     style: TextStyle(
                       fontSize: 12,
-                      color: colorScheme.onPrimaryContainer.withOpacity(0.8),
+                      color: colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
                     ),
                   ),
                   Text(
@@ -203,7 +203,7 @@ class CreditBalanceWidget extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -211,7 +211,7 @@ class CreditBalanceWidget extends ConsumerWidget {
             Icon(
               icon,
               size: 18,
-              color: colorScheme.onPrimaryContainer.withOpacity(0.7),
+              color: colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
             ),
             const SizedBox(width: 8),
             Column(
@@ -221,7 +221,7 @@ class CreditBalanceWidget extends ConsumerWidget {
                   label,
                   style: TextStyle(
                     fontSize: 11,
-                    color: colorScheme.onPrimaryContainer.withOpacity(0.7),
+                    color: colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
                   ),
                 ),
                 Text(
@@ -275,8 +275,8 @@ class CreditCostCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: hasEnough
-              ? colorScheme.outline.withOpacity(0.2)
-              : colorScheme.error.withOpacity(0.5),
+              ? colorScheme.outline.withValues(alpha: 0.2)
+              : colorScheme.error.withValues(alpha: 0.5),
         ),
       ),
       child: Column(
@@ -310,7 +310,7 @@ class CreditCostCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: colorScheme.errorContainer.withOpacity(0.5),
+                color: colorScheme.errorContainer.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -392,7 +392,7 @@ class CreditPricingList extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer.withOpacity(0.5),
+                      color: colorScheme.primaryContainer.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(item.$3, size: 18, color: colorScheme.primary),

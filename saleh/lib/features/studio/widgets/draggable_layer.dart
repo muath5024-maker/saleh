@@ -101,7 +101,7 @@ class _DraggableLayerState extends State<DraggableLayer> {
       VideoLayerContent(:final data) => _buildVideoContent(data),
       EmptyLayerContent() => Container(
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.3),
+          color: Colors.grey.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(8),
         ),
         child: const Center(
@@ -145,7 +145,7 @@ class _DraggableLayerState extends State<DraggableLayer> {
       child: Image.network(
         content.url,
         fit: content.fit,
-        errorBuilder: (_, __, ___) => Container(
+        errorBuilder: (_, e, s) => Container(
           color: Colors.grey[300],
           child: const Icon(Icons.broken_image, color: Colors.grey),
         ),
@@ -500,18 +500,18 @@ class LinePainter extends CustomPainter {
 
 // إضافة extension لـ cos و sin
 extension on double {
-  double get cos => this.abs() < 1.57
+  double get cos => abs() < 1.57
       ? 1 - (this * this) / 2
       : -(1 -
-            ((this.abs() - 3.14159).abs() * (this.abs() - 3.14159).abs()) / 2);
+            ((abs() - 3.14159).abs() * (abs() - 3.14159).abs()) / 2);
 
-  double get sin => this.abs() < 1.57
+  double get sin => abs() < 1.57
       ? this - (this * this * this) / 6
       : (this > 0 ? 1 : -1) *
             (3.14159 -
-                this.abs() -
-                ((3.14159 - this.abs()) *
-                        (3.14159 - this.abs()) *
-                        (3.14159 - this.abs())) /
+                abs() -
+                ((3.14159 - abs()) *
+                        (3.14159 - abs()) *
+                        (3.14159 - abs())) /
                     6);
 }

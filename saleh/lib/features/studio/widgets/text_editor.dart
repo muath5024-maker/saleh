@@ -263,7 +263,7 @@ class _TextEditorPanelState extends State<TextEditorPanel> {
               border: Border.all(
                 color: isSelected
                     ? Theme.of(context).colorScheme.primary
-                    : Colors.grey.withOpacity(0.3),
+                    : Colors.grey.withValues(alpha: 0.3),
                 width: isSelected ? 2 : 1,
               ),
               boxShadow: isSelected
@@ -271,7 +271,7 @@ class _TextEditorPanelState extends State<TextEditorPanel> {
                       BoxShadow(
                         color: Theme.of(
                           context,
-                        ).colorScheme.primary.withOpacity(0.3),
+                        ).colorScheme.primary.withValues(alpha: 0.3),
                         blurRadius: 8,
                       ),
                     ]

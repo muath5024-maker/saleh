@@ -326,7 +326,7 @@ class _StudioMainPageState extends ConsumerState<StudioMainPage>
                   height: 96,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                   ),
                 ),
               ),
@@ -339,7 +339,7 @@ class _StudioMainPageState extends ConsumerState<StudioMainPage>
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
+                      color: color.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(icon, color: color, size: 22),
@@ -458,7 +458,7 @@ class _StudioMainPageState extends ConsumerState<StudioMainPage>
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                    colors: [Colors.transparent, Colors.black.withValues(alpha: 0.7)],
                     stops: const [0.4, 1.0],
                   ),
                 ),
@@ -595,7 +595,7 @@ class _StudioMainPageState extends ConsumerState<StudioMainPage>
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: color.withOpacity(0.1),
+                          color: color.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(icon, color: color, size: 24),

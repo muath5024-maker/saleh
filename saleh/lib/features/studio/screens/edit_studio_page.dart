@@ -152,9 +152,9 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: StudioColors.surfaceDarkAlt.withOpacity(0.95),
+        color: StudioColors.surfaceDarkAlt.withValues(alpha: 0.95),
         border: Border(
-          bottom: BorderSide(color: Colors.white.withOpacity(0.05)),
+          bottom: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
         ),
       ),
       child: Row(
@@ -183,7 +183,7 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                   flipX: true,
                   child: Icon(
                     Icons.undo,
-                    color: Colors.white.withOpacity(0.6),
+                    color: Colors.white.withValues(alpha: 0.6),
                     size: 20,
                   ),
                 ),
@@ -202,7 +202,7 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                 onPressed: () => HapticFeedback.lightImpact(),
                 icon: Icon(
                   Icons.redo,
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   size: 20,
                 ),
               ),
@@ -243,14 +243,14 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
       decoration: BoxDecoration(
         color: StudioColors.surfaceDarkAlt,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Stack(
         children: [
           // Dot Pattern Background
           Positioned.fill(
             child: CustomPaint(
-              painter: _DotPatternPainter(Colors.white.withOpacity(0.03)),
+              painter: _DotPatternPainter(Colors.white.withValues(alpha: 0.03)),
             ),
           ),
 
@@ -268,13 +268,13 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        StudioColors.primaryColor.withOpacity(0.3),
-                        StudioColors.secondaryColor.withOpacity(0.3),
+                        StudioColors.primaryColor.withValues(alpha: 0.3),
+                        StudioColors.secondaryColor.withValues(alpha: 0.3),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: StudioColors.primaryColor.withOpacity(0.3),
+                      color: StudioColors.primaryColor.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Column(
@@ -283,13 +283,13 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                       Icon(
                         Icons.add_photo_alternate,
                         size: 48,
-                        color: Colors.white.withOpacity(0.5),
+                        color: Colors.white.withValues(alpha: 0.5),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'اضغط لإضافة صورة',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.white.withValues(alpha: 0.5),
                           fontSize: 14,
                         ),
                       ),
@@ -306,7 +306,7 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -331,8 +331,8 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
             child: Container(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: Colors.white.withOpacity(0.2)),
-                  left: BorderSide(color: Colors.white.withOpacity(0.2)),
+                  top: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                  left: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
                 ),
               ),
             ),
@@ -345,8 +345,8 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
               height: 40,
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: Colors.white.withOpacity(0.2)),
-                  right: BorderSide(color: Colors.white.withOpacity(0.2)),
+                  top: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+                  right: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
                 ),
               ),
             ),
@@ -360,7 +360,7 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
     return Container(
       decoration: BoxDecoration(
         color: StudioColors.surfaceDarkAlt,
-        border: Border(top: BorderSide(color: Colors.white.withOpacity(0.05))),
+        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -399,7 +399,7 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                     activeTrackColor: StudioColors.primaryColor,
                     inactiveTrackColor: StudioColors.surfaceLighter,
                     thumbColor: Colors.white,
-                    overlayColor: StudioColors.primaryColor.withOpacity(0.2),
+                    overlayColor: StudioColors.primaryColor.withValues(alpha: 0.2),
                     trackHeight: 4,
                     thumbShape: const RoundSliderThumbShape(
                       enabledThumbRadius: 10,
@@ -476,7 +476,7 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
           Container(
             padding: const EdgeInsets.fromLTRB(8, 12, 8, 24),
             decoration: BoxDecoration(
-              color: StudioColors.bgDark.withOpacity(0.5),
+              color: StudioColors.bgDark.withValues(alpha: 0.5),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -493,7 +493,7 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: isActive
-                                ? StudioColors.primaryColor.withOpacity(0.1)
+                                ? StudioColors.primaryColor.withValues(alpha: 0.1)
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(8),
                           ),

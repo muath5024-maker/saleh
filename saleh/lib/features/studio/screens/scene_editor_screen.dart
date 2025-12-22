@@ -127,7 +127,7 @@ class _SceneEditorScreenState extends ConsumerState<SceneEditorScreen> {
             size: 80,
             color: Theme.of(
               context,
-            ).colorScheme.onSurfaceVariant.withOpacity(0.5),
+            ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 24),
           const Text('لا توجد مشاهد'),
@@ -157,7 +157,7 @@ class _SceneEditorScreenState extends ConsumerState<SceneEditorScreen> {
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: Stack(
         fit: StackFit.expand,
@@ -169,7 +169,7 @@ class _SceneEditorScreenState extends ConsumerState<SceneEditorScreen> {
                 ? Image.network(
                     scene.generatedImageUrl!,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => _buildPlaceholder(),
+                    errorBuilder: (_, e, s) => _buildPlaceholder(),
                   )
                 : _buildPlaceholder(),
           ),
@@ -183,7 +183,7 @@ class _SceneEditorScreenState extends ConsumerState<SceneEditorScreen> {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -208,7 +208,7 @@ class _SceneEditorScreenState extends ConsumerState<SceneEditorScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.7),
+                color: Colors.black.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -233,7 +233,7 @@ class _SceneEditorScreenState extends ConsumerState<SceneEditorScreen> {
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.9),
+                  color: Colors.green.withValues(alpha: 0.9),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -342,7 +342,7 @@ class _SceneEditorScreenState extends ConsumerState<SceneEditorScreen> {
         color: Theme.of(context).colorScheme.surface,
         border: Border(
           top: BorderSide(
-            color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
           ),
         ),
       ),
@@ -452,7 +452,7 @@ class _SceneEditorScreenState extends ConsumerState<SceneEditorScreen> {
         color: Theme.of(context).colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),
@@ -569,9 +569,11 @@ class _SceneEditorScreenState extends ConsumerState<SceneEditorScreen> {
       );
     } catch (e) {
       _updateScene(scene.copyWith(status: SceneStatus.error));
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+      }
     }
   }
 
@@ -590,13 +592,17 @@ class _SceneEditorScreenState extends ConsumerState<SceneEditorScreen> {
 
       _updateScene(scene.copyWith(generatedAudioUrl: audioUrl));
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('تم توليد الصوت بنجاح')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('تم توليد الصوت بنجاح')));
+      }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+      }
     }
   }
 

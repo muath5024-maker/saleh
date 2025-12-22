@@ -63,7 +63,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
             SliverAppBar(
               pinned: true,
               expandedHeight: 0,
-              backgroundColor: bgColor.withOpacity(0.85),
+              backgroundColor: bgColor.withValues(alpha: 0.85),
               surfaceTintColor: Colors.transparent,
               leading: IconButton(
                 icon: const Icon(Icons.menu, size: 28),
@@ -200,7 +200,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                             icon: Icons.animation,
                             iconColor: const Color(0xFF3B82F6),
                             bgColor: isDark
-                                ? const Color(0xFF3B82F6).withOpacity(0.1)
+                                ? const Color(0xFF3B82F6).withValues(alpha: 0.1)
                                 : const Color(0xFFEFF6FF),
                             title: 'موشن جرافيك',
                             description: 'تحريك شعارات ورسوم توضيحية احترافية.',
@@ -216,7 +216,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                             icon: Icons.ads_click,
                             iconColor: const Color(0xFFF97316),
                             bgColor: isDark
-                                ? const Color(0xFFF97316).withOpacity(0.1)
+                                ? const Color(0xFFF97316).withValues(alpha: 0.1)
                                 : const Color(0xFFFFF7ED),
                             title: 'إعلانات سوشال',
                             description:
@@ -243,7 +243,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                             icon: Icons.video_camera_front,
                             iconColor: const Color(0xFFF43F5E),
                             bgColor: isDark
-                                ? const Color(0xFFF43F5E).withOpacity(0.1)
+                                ? const Color(0xFFF43F5E).withValues(alpha: 0.1)
                                 : const Color(0xFFFFF1F2),
                             title: 'فلوقات',
                             description: 'مونتاج يومياتك بأسلوب سينمائي مميز.',
@@ -259,7 +259,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                             icon: Icons.smartphone,
                             iconColor: const Color(0xFF10B981),
                             bgColor: isDark
-                                ? const Color(0xFF10B981).withOpacity(0.1)
+                                ? const Color(0xFF10B981).withValues(alpha: 0.1)
                                 : const Color(0xFFECFDF5),
                             title: 'فيديو UGC',
                             description: 'محتوى عفوي من صناع محتوى حقيقيين.',
@@ -281,7 +281,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                             icon: Icons.palette,
                             iconColor: const Color(0xFFEC4899),
                             bgColor: isDark
-                                ? const Color(0xFFEC4899).withOpacity(0.1)
+                                ? const Color(0xFFEC4899).withValues(alpha: 0.1)
                                 : const Color(0xFFFDF2F8),
                             title: 'هوية بصرية',
                             description:
@@ -334,8 +334,8 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
               boxShadow: [
                 BoxShadow(
                   color: isFirst
-                      ? const Color(0xFF3B82F6).withOpacity(0.15)
-                      : const Color(0xFF8B5CF6).withOpacity(0.15),
+                      ? const Color(0xFF3B82F6).withValues(alpha: 0.15)
+                      : const Color(0xFF8B5CF6).withValues(alpha: 0.15),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -354,7 +354,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
                         _buildShimmerPlaceholder(isDark),
-                    errorWidget: (_, __, ___) => Container(
+                    errorWidget: (_, e, s) => Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: isFirst
@@ -378,8 +378,8 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withOpacity(0.4),
-                          Colors.black.withOpacity(0.9),
+                          Colors.black.withValues(alpha: 0.4),
+                          Colors.black.withValues(alpha: 0.9),
                         ],
                         stops: const [0.0, 0.5, 1.0],
                       ),
@@ -401,8 +401,8 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                           ),
                           decoration: BoxDecoration(
                             color: isFirst
-                                ? const Color(0xFF3B82F6).withOpacity(0.9)
-                                : const Color(0xFF8B5CF6).withOpacity(0.9),
+                                ? const Color(0xFF3B82F6).withValues(alpha: 0.9)
+                                : const Color(0xFF8B5CF6).withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
@@ -505,14 +505,14 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
               borderRadius: BorderRadius.circular(32),
               border: Border.all(
                 color: isDark
-                    ? Colors.white.withOpacity(0.05)
+                    ? Colors.white.withValues(alpha: 0.05)
                     : Colors.transparent,
               ),
               boxShadow: isDark
                   ? null
                   : [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 20,
                         offset: const Offset(0, 4),
                       ),
@@ -583,7 +583,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
             borderRadius: BorderRadius.circular(40),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF4F46E5).withOpacity(0.3),
+                color: const Color(0xFF4F46E5).withValues(alpha: 0.3),
                 blurRadius: 24,
                 offset: const Offset(0, 12),
               ),
@@ -600,7 +600,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                   height: 160,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.05),
+                    color: Colors.white.withValues(alpha: 0.05),
                   ),
                 ),
               ),
@@ -612,7 +612,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                   height: 100,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                   ),
                 ),
               ),
@@ -629,7 +629,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                             Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Icon(
@@ -678,7 +678,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: Transform.scale(
@@ -714,10 +714,10 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
+            color: isDark ? Colors.white.withValues(alpha: 0.05) : Colors.grey[50],
             borderRadius: BorderRadius.circular(32),
             border: Border.all(
-              color: isDark ? Colors.white.withOpacity(0.1) : Colors.grey[200]!,
+              color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.grey[200]!,
               width: 2,
               strokeAlign: BorderSide.strokeAlignInside,
             ),
@@ -729,13 +729,13 @@ class _PackagesPageState extends ConsumerState<PackagesPage>
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: isDark ? Colors.white.withOpacity(0.05) : Colors.white,
+                  color: isDark ? Colors.white.withValues(alpha: 0.05) : Colors.white,
                   shape: BoxShape.circle,
                   boxShadow: isDark
                       ? null
                       : [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 10,
                           ),
                         ],
@@ -842,8 +842,8 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                const Color(0xFF3B82F6).withOpacity(0.1),
-                                const Color(0xFF8B5CF6).withOpacity(0.1),
+                                const Color(0xFF3B82F6).withValues(alpha: 0.1),
+                                const Color(0xFF8B5CF6).withValues(alpha: 0.1),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(24),
@@ -880,7 +880,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                                     decoration: BoxDecoration(
                                       color: const Color(
                                         0xFF3B82F6,
-                                      ).withOpacity(0.1),
+                                      ).withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Row(
@@ -962,7 +962,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             color: isDark
-                                ? Colors.white.withOpacity(0.05)
+                                ? Colors.white.withValues(alpha: 0.05)
                                 : Colors.grey[200]!,
                           ),
                         ),
@@ -971,7 +971,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                             Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF3B82F6).withOpacity(0.1),
+                                color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Icon(
@@ -1052,7 +1052,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: isDark
-                                      ? Colors.white.withOpacity(0.05)
+                                      ? Colors.white.withValues(alpha: 0.05)
                                       : Colors.grey[200]!,
                                 ),
                               ),
@@ -1094,7 +1094,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                   border: Border(
                     top: BorderSide(
                       color: isDark
-                          ? Colors.white.withOpacity(0.05)
+                          ? Colors.white.withValues(alpha: 0.05)
                           : Colors.grey[200]!,
                     ),
                   ),
@@ -1117,7 +1117,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                           ? null
                           : [
                               BoxShadow(
-                                color: const Color(0xFF3B82F6).withOpacity(0.4),
+                                color: const Color(0xFF3B82F6).withValues(alpha: 0.4),
                                 blurRadius: 16,
                                 offset: const Offset(0, 8),
                               ),
@@ -1300,7 +1300,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF3B82F6).withOpacity(0.1),
+                          color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: const Icon(
@@ -1368,7 +1368,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
                           color: isDark
-                              ? Colors.white.withOpacity(0.1)
+                              ? Colors.white.withValues(alpha: 0.1)
                               : Colors.grey[200]!,
                         ),
                       ),
@@ -1414,7 +1414,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
                           color: isDark
-                              ? Colors.white.withOpacity(0.1)
+                              ? Colors.white.withValues(alpha: 0.1)
                               : Colors.grey[200]!,
                         ),
                       ),
@@ -1447,7 +1447,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
                                 color: isDark
-                                    ? Colors.white.withOpacity(0.1)
+                                    ? Colors.white.withValues(alpha: 0.1)
                                     : Colors.grey[300]!,
                               ),
                             ),
@@ -1513,7 +1513,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                                 BoxShadow(
                                   color: const Color(
                                     0xFF3B82F6,
-                                  ).withOpacity(0.4),
+                                  ).withValues(alpha: 0.4),
                                   blurRadius: 16,
                                   offset: const Offset(0, 8),
                                 ),
@@ -1584,7 +1584,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.1),
+                color: Colors.red.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -1629,7 +1629,7 @@ class _PackageDetailSheetState extends ConsumerState<_PackageDetailSheet> {
                 height: 56,
                 decoration: BoxDecoration(
                   color: isDark
-                      ? Colors.white.withOpacity(0.1)
+                      ? Colors.white.withValues(alpha: 0.1)
                       : Colors.grey[100],
                   borderRadius: BorderRadius.circular(16),
                 ),

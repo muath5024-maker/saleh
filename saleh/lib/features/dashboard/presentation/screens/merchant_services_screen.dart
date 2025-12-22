@@ -946,7 +946,7 @@ class _MerchantServicesScreenState
             onPressed: () async {
               Navigator.pop(dialogContext);
               await ref.read(authControllerProvider.notifier).logout();
-              if (context.mounted) {
+              if (mounted) {
                 context.go('/login');
               }
             },
