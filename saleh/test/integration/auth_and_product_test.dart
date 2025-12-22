@@ -12,7 +12,7 @@ import 'dart:convert';
 void main() {
   const String baseUrl = 'https://misty-mode-b68b.baharista1.workers.dev';
 
-  test('Login and Add Product Test', () async {
+  test('Login and Add Product Test', skip: 'Requires real API endpoint - for manual testing only', () async {
     print('\n=== اختبار تسجيل الدخول وإضافة منتج ===\n');
 
     // ========================================

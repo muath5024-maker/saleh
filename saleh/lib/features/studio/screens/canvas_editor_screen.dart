@@ -180,7 +180,10 @@ class _CanvasEditorScreenState extends ConsumerState<CanvasEditorScreen> {
           decoration: BoxDecoration(
             color: Colors.black,
             boxShadow: [
-              BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 20),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.3),
+                blurRadius: 20,
+              ),
             ],
           ),
           child: Stack(
