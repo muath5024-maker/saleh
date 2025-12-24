@@ -140,7 +140,7 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                 Expanded(child: _buildCanvasArea(context)),
 
                 // Adjustment Controls Section
-                _buildAdjustmentControls(context),
+                Flexible(flex: 0, child: _buildAdjustmentControls(context)),
               ],
             ),
           ),
@@ -383,7 +383,7 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
         children: [
           // Slider Section
           Padding(
-            padding: const EdgeInsets.fromLTRB(24, 16, 24, 12),
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
             child: Column(
               children: [
                 Row(
@@ -409,7 +409,7 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 SliderTheme(
                   data: SliderThemeData(
                     activeTrackColor: StudioColors.primaryColor,
@@ -436,20 +436,20 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
 
           // Sub-tools Chips
           SizedBox(
-            height: 48,
+            height: 36,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               itemCount: _subTools.length,
               itemBuilder: (context, index) {
                 final isActive = index == _selectedSubToolIndex;
                 return Padding(
-                  padding: const EdgeInsets.only(left: 12),
+                  padding: const EdgeInsets.only(left: 8),
                   child: GestureDetector(
                     onTap: () => _selectSubTool(index),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                         color: isActive
                             ? Colors.white
@@ -461,16 +461,16 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                         children: [
                           Icon(
                             _subTools[index].icon,
-                            size: AppDimensions.iconS,
+                            size: 16,
                             color: isActive
                                 ? StudioColors.surfaceDarkAlt
                                 : Colors.grey[400],
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 4),
                           Text(
                             _subTools[index].label,
                             style: TextStyle(
-                              fontSize: AppDimensions.fontBody,
+                              fontSize: AppDimensions.fontCaption,
                               fontWeight: isActive
                                   ? FontWeight.bold
                                   : FontWeight.w500,
@@ -488,11 +488,11 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
             ),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 2),
 
           // Bottom Navigation
           Container(
-            padding: const EdgeInsets.fromLTRB(8, 12, 8, 24),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             decoration: BoxDecoration(
               color: StudioColors.bgDark.withValues(alpha: 0.5),
             ),
@@ -502,45 +502,22 @@ class _EditStudioPageState extends ConsumerState<EditStudioPage>
                 final isActive = index == _selectedNavIndex;
                 return GestureDetector(
                   onTap: () => _selectNavItem(index),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: isActive
-                                ? StudioColors.primaryColor.withValues(
-                                    alpha: 0.1,
-                                  )
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            isActive
-                                ? _navItems[index].activeIcon
-                                : _navItems[index].icon,
-                            size: AppDimensions.iconM,
-                            color: isActive
-                                ? StudioColors.primaryColor
-                                : Colors.grey[400],
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _navItems[index].label,
-                          style: TextStyle(
-                            fontSize: AppDimensions.fontCaption,
-                            fontWeight: isActive
-                                ? FontWeight.bold
-                                : FontWeight.w500,
-                            color: isActive
-                                ? StudioColors.primaryColor
-                                : Colors.grey[400],
-                          ),
-                        ),
-                      ],
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? StudioColors.primaryColor.withValues(alpha: 0.15)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      isActive
+                          ? _navItems[index].activeIcon
+                          : _navItems[index].icon,
+                      size: 22,
+                      color: isActive
+                          ? StudioColors.primaryColor
+                          : Colors.grey[400],
                     ),
                   ),
                 );

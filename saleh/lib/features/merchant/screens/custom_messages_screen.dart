@@ -83,60 +83,110 @@ class _CustomMessagesScreenState extends State<CustomMessagesScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: SvgPicture.asset(
-            AppIcons.arrowBack,
-            width: 24,
-            height: 24,
-            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-          ),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text('الرسائل المخصصة'),
-        backgroundColor: AppTheme.primaryColor,
-        foregroundColor: Colors.white,
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
-          isScrollable: true,
-          tabs: const [
-            Tab(text: 'نظرة عامة', icon: Icon(Icons.dashboard)),
-            Tab(text: 'الحملات', icon: Icon(Icons.campaign)),
-            Tab(text: 'الأتمتة', icon: Icon(Icons.auto_mode)),
-            Tab(text: 'القوالب', icon: Icon(Icons.description)),
-          ],
-        ),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-          ? Center(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header ثابت مع TabBar
+            Container(
+              color: AppTheme.primaryColor,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  Text(_error!, style: const TextStyle(color: Colors.red)),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  ElevatedButton(
-                    onPressed: _loadData,
-                    child: const Text('إعادة المحاولة'),
+                  // Header Row
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => context.pop(),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SvgPicture.asset(
+                              AppIcons.arrowBack,
+                              width: 20,
+                              height: 20,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          child: Text(
+                            'الرسائل المخصصة',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 36),
+                      ],
+                    ),
+                  ),
+                  // TabBar
+                  TabBar(
+                    controller: _tabController,
+                    indicatorColor: Colors.white,
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.white70,
+                    isScrollable: true,
+                    tabs: const [
+                      Tab(text: 'نظرة عامة', icon: Icon(Icons.dashboard)),
+                      Tab(text: 'الحملات', icon: Icon(Icons.campaign)),
+                      Tab(text: 'الأتمتة', icon: Icon(Icons.auto_mode)),
+                      Tab(text: 'القوالب', icon: Icon(Icons.description)),
+                    ],
                   ),
                 ],
               ),
-            )
-          : TabBarView(
-              controller: _tabController,
-              children: [
-                _buildOverviewTab(),
-                _buildCampaignsTab(),
-                _buildAutomationTab(),
-                _buildTemplatesTab(),
-              ],
             ),
+            // Body content
+            Expanded(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _error != null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            size: 64,
+                            color: Colors.red[300],
+                          ),
+                          const SizedBox(height: AppDimensions.spacing16),
+                          Text(
+                            _error!,
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                          const SizedBox(height: AppDimensions.spacing16),
+                          ElevatedButton(
+                            onPressed: _loadData,
+                            child: const Text('إعادة المحاولة'),
+                          ),
+                        ],
+                      ),
+                    )
+                  : TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildOverviewTab(),
+                        _buildCampaignsTab(),
+                        _buildAutomationTab(),
+                        _buildTemplatesTab(),
+                      ],
+                    ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

@@ -103,64 +103,111 @@ class _CustomerSegmentsScreenState extends State<CustomerSegmentsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: SvgPicture.asset(
-            AppIcons.arrowBack,
-            width: 24,
-            height: 24,
-            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-          ),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text('تصنيف العملاء'),
-        backgroundColor: AppTheme.primaryColor,
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _recalculateAll,
-            tooltip: 'إعادة حساب RFM',
-          ),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
-          tabs: const [
-            Tab(text: 'الشرائح', icon: Icon(Icons.pie_chart)),
-            Tab(text: 'الوسوم', icon: Icon(Icons.label)),
-            Tab(text: 'التحليلات', icon: Icon(Icons.analytics)),
-          ],
-        ),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-          ? Center(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header ثابت مع TabBar
+            Container(
+              color: AppTheme.primaryColor,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  Text(_error!, style: const TextStyle(color: Colors.red)),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  ElevatedButton(
-                    onPressed: _loadData,
-                    child: const Text('إعادة المحاولة'),
+                  // Header Row
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => context.pop(),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SvgPicture.asset(
+                              AppIcons.arrowBack,
+                              width: 20,
+                              height: 20,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          child: Text(
+                            'تصنيف العملاء',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.refresh, color: Colors.white),
+                          onPressed: _recalculateAll,
+                          tooltip: 'إعادة حساب RFM',
+                        ),
+                      ],
+                    ),
+                  ),
+                  // TabBar
+                  TabBar(
+                    controller: _tabController,
+                    indicatorColor: Colors.white,
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.white70,
+                    tabs: const [
+                      Tab(text: 'الشرائح', icon: Icon(Icons.pie_chart)),
+                      Tab(text: 'الوسوم', icon: Icon(Icons.label)),
+                      Tab(text: 'التحليلات', icon: Icon(Icons.analytics)),
+                    ],
                   ),
                 ],
               ),
-            )
-          : TabBarView(
-              controller: _tabController,
-              children: [
-                _buildSegmentsTab(),
-                _buildTagsTab(),
-                _buildAnalyticsTab(),
-              ],
             ),
+            // Body content
+            Expanded(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _error != null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            size: 64,
+                            color: Colors.red[300],
+                          ),
+                          const SizedBox(height: AppDimensions.spacing16),
+                          Text(
+                            _error!,
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                          const SizedBox(height: AppDimensions.spacing16),
+                          ElevatedButton(
+                            onPressed: _loadData,
+                            child: const Text('إعادة المحاولة'),
+                          ),
+                        ],
+                      ),
+                    )
+                  : TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildSegmentsTab(),
+                        _buildTagsTab(),
+                        _buildAnalyticsTab(),
+                      ],
+                    ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

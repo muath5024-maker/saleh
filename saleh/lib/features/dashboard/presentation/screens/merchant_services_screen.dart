@@ -104,10 +104,8 @@ class _MerchantServicesScreenState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(context),
-                      const SizedBox(height: 16),
-                      _buildStoreInfoCard(store),
                       const SizedBox(height: 20),
-                      _buildQuickStats(store),
+                      _buildQuickTabs(),
                       const SizedBox(height: 24),
                       const MbuySectionTitle(title: 'إعدادات المتجر'),
                       const SizedBox(height: 12),
@@ -163,246 +161,84 @@ class _MerchantServicesScreenState
             ),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            HapticFeedback.lightImpact();
-            _showSettingsSheet(context);
-          },
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(
-              Icons.more_vert,
-              size: AppDimensions.iconS,
-              color: AppTheme.primaryColor,
-            ),
-          ),
-        ),
       ],
     );
   }
 
-  Widget _buildStoreInfoCard(dynamic store) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1A1A2E), Color(0xFF16213E)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: const Icon(
-                  Icons.store,
-                  color: Colors.white,
-                  size: AppDimensions.iconXL,
-                ),
-              ),
-              const SizedBox(width: AppDimensions.spacing16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      store?.name ?? 'متجري',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: AppDimensions.fontDisplay3,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            color: store?.isActive == true
-                                ? Colors.green.withValues(alpha: 0.2)
-                                : Colors.red.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            store?.isActive == true ? 'نشط' : 'غير نشط',
-                            style: TextStyle(
-                              color: store?.isActive == true
-                                  ? Colors.greenAccent
-                                  : Colors.redAccent,
-                              fontSize: AppDimensions.fontLabel,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        if (store?.isVerified == true) ...[
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.verified,
-                                  color: Colors.lightBlueAccent,
-                                  size: AppDimensions.iconXS,
-                                ),
-                                SizedBox(width: AppDimensions.spacing4),
-                                Text(
-                                  'موثق',
-                                  style: TextStyle(
-                                    color: Colors.lightBlueAccent,
-                                    fontSize: AppDimensions.fontLabel,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.location_on_outlined,
-                  color: Colors.white70,
-                  size: AppDimensions.iconS,
-                ),
-                const SizedBox(width: AppDimensions.spacing8),
-                Expanded(
-                  child: Text(
-                    store?.city ?? 'لم يتم تحديد المدينة',
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: AppDimensions.fontBody,
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => _editStoreInfo(context),
-                  child: const Text(
-                    'تعديل',
-                    style: TextStyle(
-                      color: AppTheme.accentColor,
-                      fontSize: AppDimensions.fontBody2,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickStats(dynamic store) {
+  Widget _buildQuickTabs() {
     return Row(
       children: [
         Expanded(
-          child: _buildStatItem(
-            icon: Icons.star_outline,
-            value: store?.rating?.toStringAsFixed(1) ?? '0.0',
-            label: 'التقييم',
-            color: Colors.amber,
+          child: _buildQuickTabItem(
+            icon: Icons.info_outline,
+            label: 'معلومات المتجر',
+            color: const Color(0xFF13EC80),
+            onTap: () => context.push('/dashboard/store/create-store'),
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
-          child: _buildStatItem(
-            icon: Icons.people_outline,
-            value: '${store?.followersCount ?? 0}',
-            label: 'المتابعين',
+          child: _buildQuickTabItem(
+            icon: Icons.palette_outlined,
+            label: 'مظهر المتجر',
             color: Colors.blue,
+            onTap: () => context.push('/dashboard/webstore'),
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
-          child: _buildStatItem(
-            icon: Icons.inventory_2_outlined,
-            value: '0',
-            label: 'المنتجات',
-            color: Colors.purple,
+          child: _buildQuickTabItem(
+            icon: Icons.notifications_outlined,
+            label: 'الإشعارات',
+            color: Colors.orange,
+            onTap: () => context.push('/notification-settings'),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildStatItem({
+  Widget _buildQuickTabItem({
     required IconData icon,
-    required String value,
     required String label,
     required Color color,
+    required VoidCallback onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade100),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: AppDimensions.iconM),
-          const SizedBox(height: AppDimensions.spacing8),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: AppDimensions.fontHeadline,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        onTap();
+      },
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey.shade100),
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color, size: AppDimensions.iconM),
             ),
-          ),
-          const SizedBox(height: AppDimensions.spacing2),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: AppDimensions.fontLabel,
-              color: Colors.grey[600],
+            const SizedBox(height: AppDimensions.spacing8),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: AppDimensions.fontLabel,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey[800],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -413,7 +249,7 @@ class _MerchantServicesScreenState
         'icon': Icons.info_outline,
         'title': 'معلومات المتجر',
         'subtitle': 'الاسم، الوصف، المدينة',
-        'onTap': () => _editStoreInfo(context),
+        'onTap': () => context.push('/dashboard/store/create-store'),
         'enabled': true,
       },
       {
@@ -879,8 +715,8 @@ class _MerchantServicesScreenState
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -892,9 +728,11 @@ class _MerchantServicesScreenState
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 8),
               ListTile(
-                leading: const Icon(Icons.share_outlined),
+                dense: true,
+                visualDensity: VisualDensity.compact,
+                leading: const Icon(Icons.share_outlined, size: 22),
                 title: const Text('مشاركة المتجر'),
                 onTap: () {
                   Navigator.pop(context);
@@ -902,7 +740,9 @@ class _MerchantServicesScreenState
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.qr_code),
+                dense: true,
+                visualDensity: VisualDensity.compact,
+                leading: const Icon(Icons.qr_code, size: 22),
                 title: const Text('رمز QR'),
                 onTap: () {
                   Navigator.pop(context);
@@ -910,9 +750,12 @@ class _MerchantServicesScreenState
                 },
               ),
               ListTile(
+                dense: true,
+                visualDensity: VisualDensity.compact,
                 leading: Icon(
                   Icons.pause_circle_outline,
                   color: Colors.orange[700],
+                  size: 22,
                 ),
                 title: Text(
                   'إيقاف المتجر مؤقتاً',
@@ -923,11 +766,14 @@ class _MerchantServicesScreenState
                   _showComingSoon('إيقاف المتجر');
                 },
               ),
-              const Divider(),
+              const Divider(height: 1),
               ListTile(
+                dense: true,
+                visualDensity: VisualDensity.compact,
                 leading: const Icon(
                   Icons.logout_outlined,
                   color: Colors.orange,
+                  size: 22,
                 ),
                 title: const Text(
                   'تسجيل الخروج',
@@ -939,9 +785,12 @@ class _MerchantServicesScreenState
                 },
               ),
               ListTile(
+                dense: true,
+                visualDensity: VisualDensity.compact,
                 leading: const Icon(
                   Icons.delete_forever_outlined,
                   color: Colors.red,
+                  size: 22,
                 ),
                 title: const Text(
                   'حذف المتجر',

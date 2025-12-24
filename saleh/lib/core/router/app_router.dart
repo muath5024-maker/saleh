@@ -24,6 +24,7 @@ import '../../features/finance/presentation/screens/points_screen.dart';
 import '../../features/finance/presentation/screens/sales_screen.dart';
 // Store
 import '../../features/store/presentation/screens/store_tab.dart';
+import '../../features/store/presentation/screens/app_store_screen.dart';
 import '../../features/store/presentation/screens/inventory_screen.dart';
 import '../../features/store/presentation/screens/view_my_store_screen.dart';
 import '../../features/store/presentation/screens/store_tools_tab.dart';
@@ -515,7 +516,7 @@ class AppRouter {
             GoRoute(
               path: '/dashboard/store',
               name: 'store',
-              builder: (context, state) => const StoreTab(),
+              builder: (context, state) => const AppStoreScreen(),
               routes: [
                 GoRoute(
                   path: 'create-store',

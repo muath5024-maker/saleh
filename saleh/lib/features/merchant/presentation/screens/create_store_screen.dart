@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../shared/widgets/exports.dart';
 import '../../data/merchant_store_provider.dart';
 
-/// شاشة إنشاء أو تعديل متجر
+/// شاشة إعدادات المتجر - Store Settings Screen
+/// تحتوي على الهوية ومعلومات الاتصال والسياسات وأوقات العمل
 class CreateStoreScreen extends ConsumerStatefulWidget {
   const CreateStoreScreen({super.key});
 
@@ -17,14 +18,27 @@ class _CreateStoreScreenState extends ConsumerState<CreateStoreScreen> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _cityController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _shippingPolicyController = TextEditingController();
+  final _returnPolicyController = TextEditingController();
 
   bool _isEditMode = false;
   String? _storeId;
+  bool _isStoreOpen = true;
+  TimeOfDay _openTime = const TimeOfDay(hour: 9, minute: 0);
+  TimeOfDay _closeTime = const TimeOfDay(hour: 22, minute: 0);
+  int _selectedDayIndex = 0; // 0 = الكل
+
+  // Colors
+  static const Color _primaryColor = Color(0xFF13EC80);
+  static const Color _backgroundDark = Color(0xFF102219);
+  static const Color _surfaceDark = Color(0xFF193326);
+  static const Color _borderDark = Color(0xFF32674D);
 
   @override
   void initState() {
     super.initState();
-    // تحميل بيانات المتجر إذا كان موجوداً
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final storeState = ref.read(merchantStoreControllerProvider);
@@ -50,6 +64,10 @@ class _CreateStoreScreenState extends ConsumerState<CreateStoreScreen> {
     _nameController.dispose();
     _descriptionController.dispose();
     _cityController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    _shippingPolicyController.dispose();
+    _returnPolicyController.dispose();
     super.dispose();
   }
 
@@ -62,7 +80,6 @@ class _CreateStoreScreenState extends ConsumerState<CreateStoreScreen> {
     bool success;
 
     if (_isEditMode && _storeId != null) {
-      // وضع التعديل
       success = await controller.updateStoreInfo(
         storeId: _storeId!,
         name: _nameController.text.trim(),
@@ -70,7 +87,6 @@ class _CreateStoreScreenState extends ConsumerState<CreateStoreScreen> {
         city: _cityController.text.trim(),
       );
     } else {
-      // وضع الإنشاء
       success = await controller.createStore(
         name: _nameController.text.trim(),
         description: _descriptionController.text.trim(),
@@ -90,14 +106,12 @@ class _CreateStoreScreenState extends ConsumerState<CreateStoreScreen> {
         ),
       );
 
-      // الانتقال للوحة التحكم أو العودة
       if (_isEditMode) {
         context.pop();
       } else {
         context.go('/dashboard');
       }
     } else {
-      // عرض رسالة الخطأ
       final error = ref.read(merchantStoreErrorProvider);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -113,78 +127,329 @@ class _CreateStoreScreenState extends ConsumerState<CreateStoreScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(merchantStoreLoadingProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDark ? _backgroundDark : const Color(0xFFF6F8F7);
+    final surfaceColor = isDark ? _surfaceDark : Colors.white;
+    final textColor = isDark ? Colors.white : const Color(0xFF0F172A);
+    final secondaryTextColor = isDark
+        ? Colors.grey[400]!
+        : const Color(0xFF64748B);
+    final borderColor = isDark ? _borderDark : Colors.grey[200]!;
+    final inputBgColor = isDark ? _backgroundDark : Colors.grey[50]!;
 
-    return MbuyScaffold(
-      showAppBar: false,
+    return Scaffold(
+      backgroundColor: backgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: AppDimensions.screenPadding,
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildSubPageHeader(
-                  context,
-                  _isEditMode ? 'تعديل المتجر' : 'إنشاء متجر جديد',
-                ),
-                // أيقونة المتجر
-                MbuyCircleIcon(
-                  icon: Icons.store,
-                  size: 80,
-                  backgroundColor: AppTheme.primaryColor,
-                  iconColor: Colors.white,
-                ),
-                const SizedBox(height: AppDimensions.spacing16),
+        child: Column(
+          children: [
+            // Header
+            _buildHeader(
+              context,
+              isDark,
+              textColor,
+              backgroundColor,
+              isLoading,
+            ),
+            // Content
+            Expanded(
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: [
+                    // Section 1: Identity (الهوية)
+                    _buildSectionHeader('الهوية', textColor),
+                    _buildIdentitySection(
+                      surfaceColor,
+                      textColor,
+                      secondaryTextColor,
+                      borderColor,
+                      inputBgColor,
+                      isDark,
+                    ),
 
-                // عنوان ترحيبي
-                if (!_isEditMode) ...[
-                  Text(
-                    'مرحباً بك!',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.textPrimaryColor,
+                    // Section 2: Contact Info (معلومات الاتصال)
+                    _buildSectionHeader('معلومات الاتصال', textColor),
+                    _buildContactSection(
+                      surfaceColor,
+                      textColor,
+                      secondaryTextColor,
+                      borderColor,
+                      inputBgColor,
+                      isDark,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: AppDimensions.spacing8),
-                  const Text(
-                    'قم بإنشاء متجرك الإلكتروني وابدأ في عرض منتجاتك',
-                    style: TextStyle(
-                      color: AppTheme.textSecondaryColor,
-                      fontSize: AppDimensions.fontBody,
+
+                    // Section 3: Policies (السياسات)
+                    _buildSectionHeader('السياسات', textColor),
+                    _buildPoliciesSection(
+                      surfaceColor,
+                      textColor,
+                      secondaryTextColor,
+                      borderColor,
+                      inputBgColor,
+                      isDark,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ] else ...[
-                  Text(
-                    'تعديل معلومات المتجر',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.textPrimaryColor,
+
+                    // Section 4: Business Hours (أوقات العمل)
+                    _buildBusinessHoursHeader(textColor, secondaryTextColor),
+                    _buildBusinessHoursSection(
+                      surfaceColor,
+                      textColor,
+                      secondaryTextColor,
+                      borderColor,
+                      inputBgColor,
+                      isDark,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: AppDimensions.spacing8),
-                  const Text(
-                    'قم بتحديث معلومات متجرك',
-                    style: TextStyle(
-                      color: AppTheme.textSecondaryColor,
-                      fontSize: AppDimensions.fontBody,
+
+                    const SizedBox(height: 32),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(
+    BuildContext context,
+    bool isDark,
+    Color textColor,
+    Color backgroundColor,
+    bool isLoading,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: backgroundColor.withValues(alpha: 0.95),
+        border: Border(
+          bottom: BorderSide(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.05)
+                : Colors.grey[200]!,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          // Back Button
+          GestureDetector(
+            onTap: () => context.canPop() ? context.pop() : null,
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.transparent,
+              ),
+              child: Icon(Icons.arrow_forward, color: textColor, size: 24),
+            ),
+          ),
+          // Title
+          Expanded(
+            child: Text(
+              'إعدادات المتجر',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
+            ),
+          ),
+          // Save Button
+          GestureDetector(
+            onTap: isLoading ? null : _handleSaveStore,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: _primaryColor,
+                      ),
+                    )
+                  : const Text(
+                      'حفظ',
+                      style: TextStyle(
+                        color: _primaryColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title, Color textColor) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24, bottom: 8),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: textColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIdentitySection(
+    Color surfaceColor,
+    Color textColor,
+    Color secondaryTextColor,
+    Color borderColor,
+    Color inputBgColor,
+    bool isDark,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor.withValues(alpha: 0.5)),
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: Column(
+        children: [
+          // Logo Upload
+          InkWell(
+            onTap: () {
+              // TODO: Implement logo upload
+            },
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: borderColor.withValues(alpha: 0.3)),
+                ),
+              ),
+              child: Row(
+                children: [
+                  // Logo with edit badge
+                  Stack(
+                    children: [
+                      Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _primaryColor.withValues(alpha: 0.1),
+                          border: Border.all(color: borderColor, width: 2),
+                        ),
+                        child: const Icon(
+                          Icons.store,
+                          color: _primaryColor,
+                          size: 32,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: _primaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.edit,
+                            color: _backgroundDark,
+                            size: 12,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'شعار المتجر',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: textColor,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'PNG, JPG بحد أقصى 2MB',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: secondaryTextColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.chevron_left, color: secondaryTextColor),
                 ],
-                const SizedBox(height: AppDimensions.spacing32),
+              ),
+            ),
+          ),
 
-                // حقل اسم المتجر
-                MbuyInputField(
+          // Store Name
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: borderColor.withValues(alpha: 0.3)),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'اسم المتجر',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: secondaryTextColor,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
                   controller: _nameController,
-                  label: 'اسم المتجر *',
-                  hint: 'أدخل اسم متجرك',
-                  prefixIcon: const Icon(
-                    Icons.storefront,
-                    color: AppTheme.textSecondaryColor,
+                  style: TextStyle(color: textColor),
+                  decoration: InputDecoration(
+                    hintText: 'أدخل اسم المتجر',
+                    hintStyle: TextStyle(color: secondaryTextColor),
+                    filled: true,
+                    fillColor: inputBgColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: _primaryColor),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -195,119 +460,668 @@ class _CreateStoreScreenState extends ConsumerState<CreateStoreScreen> {
                     }
                     return null;
                   },
-                  textInputAction: TextInputAction.next,
                 ),
-                const SizedBox(height: AppDimensions.spacing16),
-
-                // حقل المدينة
-                MbuyInputField(
-                  controller: _cityController,
-                  label: 'المدينة',
-                  hint: 'أدخل مدينة المتجر',
-                  prefixIcon: const Icon(
-                    Icons.location_city,
-                    color: AppTheme.textSecondaryColor,
-                  ),
-                  textInputAction: TextInputAction.next,
-                ),
-                const SizedBox(height: AppDimensions.spacing16),
-
-                // حقل الوصف
-                MbuyInputField(
-                  controller: _descriptionController,
-                  label: 'وصف المتجر',
-                  hint: 'أدخل وصفاً مختصراً لمتجرك',
-                  prefixIcon: const Icon(
-                    Icons.description,
-                    color: AppTheme.textSecondaryColor,
-                  ),
-                  maxLines: 4,
-                  textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (_) => _handleSaveStore(),
-                ),
-                const SizedBox(height: AppDimensions.spacing32),
-
-                // زر الحفظ
-                MbuyButton(
-                  text: _isEditMode ? 'حفظ التعديلات' : 'إنشاء المتجر',
-                  onPressed: isLoading ? null : _handleSaveStore,
-                  isLoading: isLoading,
-                  type: MbuyButtonType.primary,
-                ),
-                const SizedBox(height: AppDimensions.spacing16),
-
-                // ملاحظة
-                if (!_isEditMode)
-                  Container(
-                    padding: AppDimensions.paddingS,
-                    decoration: BoxDecoration(
-                      color: AppTheme.infoColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.radiusM,
-                      ),
-                      border: Border.all(
-                        color: AppTheme.infoColor.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.info_outline,
-                          color: AppTheme.infoColor,
-                          size: AppDimensions.iconM,
-                        ),
-                        const SizedBox(width: AppDimensions.spacing12),
-                        const Expanded(
-                          child: Text(
-                            'يمكنك تعديل معلومات المتجر لاحقاً من صفحة الإعدادات',
-                            style: TextStyle(
-                              fontSize: AppDimensions.fontBody2,
-                              color: AppTheme.infoColor,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
               ],
             ),
           ),
-        ),
+
+          // Description
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'نبذة عن المتجر',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: secondaryTextColor,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _descriptionController,
+                  style: TextStyle(color: textColor),
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    hintText: 'اكتب وصفاً مختصراً لمتجرك...',
+                    hintStyle: TextStyle(color: secondaryTextColor),
+                    filled: true,
+                    fillColor: inputBgColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: _primaryColor),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildSubPageHeader(BuildContext context, String title) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: AppDimensions.spacing16),
-      child: Row(
+  Widget _buildContactSection(
+    Color surfaceColor,
+    Color textColor,
+    Color secondaryTextColor,
+    Color borderColor,
+    Color inputBgColor,
+    bool isDark,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor.withValues(alpha: 0.5)),
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: Column(
         children: [
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
-            child: Container(
-              padding: AppDimensions.paddingXS,
-              decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withValues(alpha: 0.1),
-                borderRadius: AppDimensions.borderRadiusS,
-              ),
-              child: Icon(
-                Icons.arrow_back_ios_rounded,
-                size: AppDimensions.iconS,
-                color: AppTheme.primaryColor,
-              ),
+          // Phone
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'رقم الهاتف',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: secondaryTextColor,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _phoneController,
+                  style: TextStyle(color: textColor),
+                  keyboardType: TextInputType.phone,
+                  textDirection: TextDirection.ltr,
+                  textAlign: TextAlign.right,
+                  decoration: InputDecoration(
+                    hintText: '+966 50 123 4567',
+                    hintStyle: TextStyle(color: secondaryTextColor),
+                    filled: true,
+                    fillColor: inputBgColor,
+                    prefixIcon: Icon(
+                      Icons.call,
+                      color: secondaryTextColor,
+                      size: 20,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: _primaryColor),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const Spacer(),
+
+          // Email
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(color: borderColor.withValues(alpha: 0.3)),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'البريد الإلكتروني',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: secondaryTextColor,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _emailController,
+                  style: TextStyle(color: textColor),
+                  keyboardType: TextInputType.emailAddress,
+                  textDirection: TextDirection.ltr,
+                  textAlign: TextAlign.right,
+                  decoration: InputDecoration(
+                    hintText: 'contact@storename.com',
+                    hintStyle: TextStyle(color: secondaryTextColor),
+                    filled: true,
+                    fillColor: inputBgColor,
+                    prefixIcon: Icon(
+                      Icons.mail_outline,
+                      color: secondaryTextColor,
+                      size: 20,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: _primaryColor),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Address/Location
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(color: borderColor.withValues(alpha: 0.3)),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'العنوان',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: secondaryTextColor,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 128,
+                        width: double.infinity,
+                        color: isDark ? _backgroundDark : Colors.grey[200],
+                        child: Icon(
+                          Icons.map_outlined,
+                          size: 64,
+                          color: secondaryTextColor.withValues(alpha: 0.5),
+                        ),
+                      ),
+                      Positioned.fill(
+                        child: Container(
+                          color: Colors.black.withValues(alpha: 0.4),
+                          child: Center(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                // TODO: Implement location picker
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: _surfaceDark.withValues(
+                                  alpha: 0.8,
+                                ),
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 10,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  side: const BorderSide(color: _borderDark),
+                                ),
+                              ),
+                              icon: const Icon(Icons.location_on, size: 18),
+                              label: const Text(
+                                'تحديد الموقع',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPoliciesSection(
+    Color surfaceColor,
+    Color textColor,
+    Color secondaryTextColor,
+    Color borderColor,
+    Color inputBgColor,
+    bool isDark,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor.withValues(alpha: 0.5)),
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: Column(
+        children: [
+          // Shipping Policy
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: borderColor.withValues(alpha: 0.3)),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'سياسة الشحن',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: secondaryTextColor,
+                      ),
+                    ),
+                    Icon(
+                      Icons.local_shipping_outlined,
+                      color: secondaryTextColor,
+                      size: 20,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _shippingPolicyController,
+                  style: TextStyle(color: textColor, fontSize: 14),
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    hintText:
+                        'مثال: الشحن خلال 3-5 أيام عمل لجميع مناطق المملكة...',
+                    hintStyle: TextStyle(
+                      color: secondaryTextColor.withValues(alpha: 0.7),
+                      fontSize: 14,
+                    ),
+                    filled: true,
+                    fillColor: inputBgColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: _primaryColor),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Return Policy
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'سياسة الاسترجاع',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: secondaryTextColor,
+                      ),
+                    ),
+                    Icon(
+                      Icons.assignment_return_outlined,
+                      color: secondaryTextColor,
+                      size: 20,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _returnPolicyController,
+                  style: TextStyle(color: textColor, fontSize: 14),
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    hintText:
+                        'مثال: الاسترجاع متاح خلال 14 يوم من تاريخ الشراء بشرط عدم فتح العبوة...',
+                    hintStyle: TextStyle(
+                      color: secondaryTextColor.withValues(alpha: 0.7),
+                      fontSize: 14,
+                    ),
+                    filled: true,
+                    fillColor: inputBgColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: borderColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(color: _primaryColor),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBusinessHoursHeader(Color textColor, Color secondaryTextColor) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24, bottom: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
           Text(
-            title,
-            style: const TextStyle(
+            'أوقات العمل',
+            style: TextStyle(
+              fontSize: 18,
               fontWeight: FontWeight.bold,
-              fontSize: AppDimensions.fontHeadline,
-              color: AppTheme.textPrimaryColor,
+              color: textColor,
             ),
           ),
-          const Spacer(),
-          const SizedBox(width: AppDimensions.iconM + AppDimensions.spacing16),
+          Row(
+            children: [
+              Text(
+                _isStoreOpen ? 'مفتوح الآن' : 'مغلق',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: _isStoreOpen ? _primaryColor : secondaryTextColor,
+                ),
+              ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isStoreOpen = !_isStoreOpen;
+                  });
+                },
+                child: Container(
+                  width: 40,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: _isStoreOpen
+                        ? _primaryColor.withValues(alpha: 0.2)
+                        : secondaryTextColor.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Stack(
+                    children: [
+                      AnimatedPositioned(
+                        duration: const Duration(milliseconds: 200),
+                        right: _isStoreOpen ? 4 : null,
+                        left: _isStoreOpen ? null : 4,
+                        top: 4,
+                        child: Container(
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: _isStoreOpen
+                                ? _primaryColor
+                                : secondaryTextColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBusinessHoursSection(
+    Color surfaceColor,
+    Color textColor,
+    Color secondaryTextColor,
+    Color borderColor,
+    Color inputBgColor,
+    bool isDark,
+  ) {
+    final days = ['الكل', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس'];
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor.withValues(alpha: 0.5)),
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: Column(
+        children: [
+          // Time Pickers
+          Row(
+            children: [
+              // From Time
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'من الساعة',
+                      style: TextStyle(fontSize: 12, color: secondaryTextColor),
+                    ),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: () async {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: _openTime,
+                        );
+                        if (time != null) {
+                          setState(() {
+                            _openTime = time;
+                          });
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: inputBgColor,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: borderColor),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${_openTime.hour.toString().padLeft(2, '0')}:${_openTime.minute.toString().padLeft(2, '0')}',
+                            style: TextStyle(color: textColor, fontSize: 14),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 24, left: 8, right: 8),
+                child: Text(
+                  '-',
+                  style: TextStyle(color: secondaryTextColor, fontSize: 16),
+                ),
+              ),
+              // To Time
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'إلى الساعة',
+                      style: TextStyle(fontSize: 12, color: secondaryTextColor),
+                    ),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: () async {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: _closeTime,
+                        );
+                        if (time != null) {
+                          setState(() {
+                            _closeTime = time;
+                          });
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: inputBgColor,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: borderColor),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${_closeTime.hour.toString().padLeft(2, '0')}:${_closeTime.minute.toString().padLeft(2, '0')}',
+                            style: TextStyle(color: textColor, fontSize: 14),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          // Day Selector
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: List.generate(days.length, (index) {
+              final isSelected = _selectedDayIndex == index;
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedDayIndex = index;
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? _primaryColor.withValues(alpha: 0.1)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                      color: isSelected ? _primaryColor : borderColor,
+                    ),
+                  ),
+                  child: Text(
+                    days[index],
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      color: isSelected ? _primaryColor : secondaryTextColor,
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
         ],
       ),
     );

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/constants/app_icons.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../shared/widgets/app_icon.dart';
 
 class WhatsappScreen extends StatefulWidget {
   const WhatsappScreen({super.key});
@@ -30,27 +33,81 @@ class _WhatsappScreenState extends State<WhatsappScreen>
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('واتساب بزنس'),
-          bottom: TabBar(
-            controller: _tabController,
-            isScrollable: true,
-            tabs: const [
-              Tab(text: 'المحادثات', icon: Icon(Icons.chat)),
-              Tab(text: 'الردود السريعة', icon: Icon(Icons.quickreply)),
-              Tab(text: 'الحملات', icon: Icon(Icons.campaign)),
-              Tab(text: 'الإعدادات', icon: Icon(Icons.settings)),
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Header ثابت مع TabBar
+              Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Column(
+                  children: [
+                    // Header Row
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => context.pop(),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppTheme.primaryColor.withValues(
+                                  alpha: 0.1,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: AppIcon(
+                                AppIcons.arrowBack,
+                                size: 20,
+                                color: AppTheme.primaryColor,
+                              ),
+                            ),
+                          ),
+                          const Expanded(
+                            child: Text(
+                              'واتساب بزنس',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 36),
+                        ],
+                      ),
+                    ),
+                    // TabBar
+                    TabBar(
+                      controller: _tabController,
+                      isScrollable: true,
+                      tabs: const [
+                        Tab(text: 'المحادثات', icon: Icon(Icons.chat)),
+                        Tab(
+                          text: 'الردود السريعة',
+                          icon: Icon(Icons.quickreply),
+                        ),
+                        Tab(text: 'الحملات', icon: Icon(Icons.campaign)),
+                        Tab(text: 'الإعدادات', icon: Icon(Icons.settings)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Body content
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildConversationsTab(),
+                    _buildQuickRepliesTab(),
+                    _buildCampaignsTab(),
+                    _buildSettingsTab(),
+                  ],
+                ),
+              ),
             ],
           ),
-        ),
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            _buildConversationsTab(),
-            _buildQuickRepliesTab(),
-            _buildCampaignsTab(),
-            _buildSettingsTab(),
-          ],
         ),
       ),
     );

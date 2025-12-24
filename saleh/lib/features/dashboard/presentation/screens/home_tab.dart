@@ -454,8 +454,8 @@ class _HomeTabState extends ConsumerState<HomeTab> {
             Expanded(
               child: _buildFeatureCard(
                 icon: Icons.store,
-                label: 'المتجر',
-                onTap: () => context.push('/dashboard/store-tools'),
+                label: 'متجر التطبيقات',
+                onTap: () => context.push('/dashboard/store'),
               ),
             ),
             const SizedBox(width: 12),

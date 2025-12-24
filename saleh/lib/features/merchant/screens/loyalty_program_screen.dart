@@ -111,68 +111,117 @@ class _LoyaltyProgramScreenState extends State<LoyaltyProgramScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: SvgPicture.asset(
-            AppIcons.arrowBack,
-            width: 24,
-            height: 24,
-            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-          ),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text('برنامج الولاء'),
-        backgroundColor: AppTheme.primaryColor,
-        foregroundColor: Colors.white,
-        actions: [
-          if (_program.isNotEmpty)
-            Switch(
-              value: _program['is_active'] ?? false,
-              onChanged: _toggleProgram,
-              activeThumbColor: Colors.white,
-            ),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
-          isScrollable: true,
-          tabs: const [
-            Tab(text: 'نظرة عامة', icon: Icon(Icons.dashboard)),
-            Tab(text: 'المستويات', icon: Icon(Icons.military_tech)),
-            Tab(text: 'الأعضاء', icon: Icon(Icons.people)),
-            Tab(text: 'المكافآت', icon: Icon(Icons.card_giftcard)),
-          ],
-        ),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-          ? Center(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header ثابت مع TabBar
+            Container(
+              color: AppTheme.primaryColor,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  Text(_error!, style: const TextStyle(color: Colors.red)),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  ElevatedButton(
-                    onPressed: _loadData,
-                    child: const Text('إعادة المحاولة'),
+                  // Header Row
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => context.pop(),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SvgPicture.asset(
+                              AppIcons.arrowBack,
+                              width: 20,
+                              height: 20,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          child: Text(
+                            'برنامج الولاء',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        if (_program.isNotEmpty)
+                          Switch(
+                            value: _program['is_active'] ?? false,
+                            onChanged: _toggleProgram,
+                            activeThumbColor: Colors.white,
+                          )
+                        else
+                          const SizedBox(width: 36),
+                      ],
+                    ),
+                  ),
+                  // TabBar
+                  TabBar(
+                    controller: _tabController,
+                    indicatorColor: Colors.white,
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.white70,
+                    isScrollable: true,
+                    tabs: const [
+                      Tab(text: 'نظرة عامة', icon: Icon(Icons.dashboard)),
+                      Tab(text: 'المستويات', icon: Icon(Icons.military_tech)),
+                      Tab(text: 'الأعضاء', icon: Icon(Icons.people)),
+                      Tab(text: 'المكافآت', icon: Icon(Icons.card_giftcard)),
+                    ],
                   ),
                 ],
               ),
-            )
-          : TabBarView(
-              controller: _tabController,
-              children: [
-                _buildOverviewTab(),
-                _buildTiersTab(),
-                _buildMembersTab(),
-                _buildRewardsTab(),
-              ],
             ),
+            // Body content
+            Expanded(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _error != null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            size: 64,
+                            color: Colors.red[300],
+                          ),
+                          const SizedBox(height: AppDimensions.spacing16),
+                          Text(
+                            _error!,
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                          const SizedBox(height: AppDimensions.spacing16),
+                          ElevatedButton(
+                            onPressed: _loadData,
+                            child: const Text('إعادة المحاولة'),
+                          ),
+                        ],
+                      ),
+                    )
+                  : TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildOverviewTab(),
+                        _buildTiersTab(),
+                        _buildMembersTab(),
+                        _buildRewardsTab(),
+                      ],
+                    ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

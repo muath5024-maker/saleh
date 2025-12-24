@@ -29,197 +29,204 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppTheme.surfaceColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: AppIcon(AppIcons.arrowBack, color: AppTheme.primaryColor),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text(
-          'إعدادات الحساب',
-          style: TextStyle(
-            color: AppTheme.textPrimaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: ListView(
-        padding: AppDimensions.paddingM,
-        children: [
-          // معلومات الحساب
-          _buildSectionTitle('معلومات الحساب'),
-          _buildSettingsCard([
-            _buildInfoTile(
-              icon: AppIcons.email,
-              title: 'البريد الإلكتروني',
-              subtitle: authState.userEmail ?? 'غير محدد',
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header ثابت في الأعلى
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: _buildHeader(context),
             ),
-            const Divider(height: 1),
-            _buildInfoTile(
-              icon: AppIcons.person,
-              title: 'نوع الحساب',
-              subtitle: authState.userRole == 'merchant' ? 'تاجر' : 'عميل',
-            ),
-          ]),
-
-          const SizedBox(height: 24),
-
-          // الأمان
-          _buildSectionTitle('الأمان'),
-          _buildSettingsCard([
-            _buildActionTile(
-              icon: AppIcons.lock,
-              title: 'تغيير كلمة المرور',
-              onTap: () => _showChangePasswordDialog(),
-            ),
-          ]),
-
-          const SizedBox(height: 24),
-
-          // الإشعارات
-          _buildSectionTitle('الإشعارات'),
-          _buildSettingsCard([
-            _buildActionTile(
-              icon: AppIcons.notifications,
-              title: 'إعدادات الإشعارات المتقدمة',
-              onTap: () => context.push('/notification-settings'),
-            ),
-            const Divider(height: 1),
-            _buildSwitchTile(
-              icon: AppIcons.notifications,
-              title: 'إشعارات التطبيق',
-              subtitle: 'استلام إشعارات الطلبات والتحديثات',
-              value: _notificationsEnabled,
-              onChanged: (value) {
-                HapticFeedback.selectionClick();
-                setState(() => _notificationsEnabled = value);
-              },
-            ),
-            const Divider(height: 1),
-            _buildSwitchTile(
-              icon: AppIcons.email,
-              title: 'إشعارات البريد',
-              subtitle: 'استلام تحديثات عبر البريد الإلكتروني',
-              value: _emailNotifications,
-              onChanged: (value) {
-                HapticFeedback.selectionClick();
-                setState(() => _emailNotifications = value);
-              },
-            ),
-            const Divider(height: 1),
-            _buildSwitchTile(
-              icon: AppIcons.megaphone,
-              title: 'رسائل تسويقية',
-              subtitle: 'استلام عروض وأخبار Mbuy',
-              value: _marketingEmails,
-              onChanged: (value) {
-                HapticFeedback.selectionClick();
-                setState(() => _marketingEmails = value);
-              },
-            ),
-          ]),
-
-          const SizedBox(height: 24),
-
-          // اللغة والمظهر
-          _buildSectionTitle('اللغة والمظهر'),
-          _buildSettingsCard([
-            _buildActionTile(
-              icon: AppIcons.sun,
-              title: 'إعدادات المظهر',
-              onTap: () => context.push('/appearance-settings'),
-            ),
-            const Divider(height: 1),
-            _buildDropdownTile(
-              icon: AppIcons.globe,
-              title: 'اللغة',
-              value: _selectedLanguage,
-              items: const [
-                DropdownMenuItem(value: 'ar', child: Text('العربية')),
-                DropdownMenuItem(value: 'en', child: Text('English')),
-              ],
-              onChanged: (value) {
-                if (value != null) {
-                  HapticFeedback.selectionClick();
-                  setState(() => _selectedLanguage = value);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text(
-                        'سيتم تطبيق اللغة عند إعادة تشغيل التطبيق',
-                      ),
-                      backgroundColor: AppTheme.infoColor,
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: AppDimensions.borderRadiusS,
-                      ),
+            const SizedBox(height: 16),
+            // المحتوى القابل للتمرير
+            Expanded(
+              child: ListView(
+                padding: AppDimensions.paddingM,
+                children: [
+                  // معلومات الحساب
+                  _buildSectionTitle('معلومات الحساب'),
+                  _buildSettingsCard([
+                    _buildInfoTile(
+                      icon: AppIcons.email,
+                      title: 'البريد الإلكتروني',
+                      subtitle: authState.userEmail ?? 'غير محدد',
                     ),
-                  );
-                }
-              },
+                    const Divider(height: 1),
+                    _buildInfoTile(
+                      icon: AppIcons.person,
+                      title: 'نوع الحساب',
+                      subtitle: authState.userRole == 'merchant'
+                          ? 'تاجر'
+                          : 'عميل',
+                    ),
+                  ]),
+
+                  const SizedBox(height: 24),
+
+                  // الأمان
+                  _buildSectionTitle('الأمان'),
+                  _buildSettingsCard([
+                    _buildActionTile(
+                      icon: AppIcons.lock,
+                      title: 'تغيير كلمة المرور',
+                      onTap: () => _showChangePasswordDialog(),
+                    ),
+                  ]),
+
+                  const SizedBox(height: 24),
+
+                  // الإشعارات
+                  _buildSectionTitle('الإشعارات'),
+                  _buildSettingsCard([
+                    _buildActionTile(
+                      icon: AppIcons.notifications,
+                      title: 'إعدادات الإشعارات المتقدمة',
+                      onTap: () => context.push('/notification-settings'),
+                    ),
+                    const Divider(height: 1),
+                    _buildSwitchTile(
+                      icon: AppIcons.notifications,
+                      title: 'إشعارات التطبيق',
+                      subtitle: 'استلام إشعارات الطلبات والتحديثات',
+                      value: _notificationsEnabled,
+                      onChanged: (value) {
+                        HapticFeedback.selectionClick();
+                        setState(() => _notificationsEnabled = value);
+                      },
+                    ),
+                    const Divider(height: 1),
+                    _buildSwitchTile(
+                      icon: AppIcons.email,
+                      title: 'إشعارات البريد',
+                      subtitle: 'استلام تحديثات عبر البريد الإلكتروني',
+                      value: _emailNotifications,
+                      onChanged: (value) {
+                        HapticFeedback.selectionClick();
+                        setState(() => _emailNotifications = value);
+                      },
+                    ),
+                    const Divider(height: 1),
+                    _buildSwitchTile(
+                      icon: AppIcons.megaphone,
+                      title: 'رسائل تسويقية',
+                      subtitle: 'استلام عروض وأخبار Mbuy',
+                      value: _marketingEmails,
+                      onChanged: (value) {
+                        HapticFeedback.selectionClick();
+                        setState(() => _marketingEmails = value);
+                      },
+                    ),
+                  ]),
+
+                  const SizedBox(height: 24),
+
+                  // اللغة والمظهر
+                  _buildSectionTitle('اللغة والمظهر'),
+                  _buildSettingsCard([
+                    _buildActionTile(
+                      icon: AppIcons.sun,
+                      title: 'إعدادات المظهر',
+                      onTap: () => context.push('/appearance-settings'),
+                    ),
+                    const Divider(height: 1),
+                    _buildDropdownTile(
+                      icon: AppIcons.globe,
+                      title: 'اللغة',
+                      value: _selectedLanguage,
+                      items: const [
+                        DropdownMenuItem(value: 'ar', child: Text('العربية')),
+                        DropdownMenuItem(value: 'en', child: Text('English')),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          HapticFeedback.selectionClick();
+                          setState(() => _selectedLanguage = value);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text(
+                                'سيتم تطبيق اللغة عند إعادة تشغيل التطبيق',
+                              ),
+                              backgroundColor: AppTheme.infoColor,
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: AppDimensions.borderRadiusS,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ]),
+
+                  const SizedBox(height: 24),
+
+                  // القانوني
+                  _buildSectionTitle('القانوني'),
+                  _buildSettingsCard([
+                    _buildActionTile(
+                      icon: AppIcons.document,
+                      title: 'سياسة الخصوصية',
+                      onTap: () => context.push('/privacy-policy'),
+                    ),
+                    const Divider(height: 1),
+                    _buildActionTile(
+                      icon: AppIcons.document,
+                      title: 'شروط الاستخدام',
+                      onTap: () => context.push('/terms'),
+                    ),
+                  ]),
+
+                  const SizedBox(height: 24),
+
+                  // إجراءات الحساب
+                  _buildSectionTitle('إجراءات الحساب'),
+                  _buildSettingsCard([
+                    _buildActionTile(
+                      icon: AppIcons.logout,
+                      title: 'تسجيل الخروج',
+                      titleColor: AppTheme.warningColor,
+                      onTap: () => _showLogoutDialog(),
+                    ),
+                    const Divider(height: 1),
+                    _buildActionTile(
+                      icon: AppIcons.delete,
+                      title: 'حذف الحساب',
+                      titleColor: AppTheme.errorColor,
+                      onTap: () => _showDeleteAccountDialog(),
+                    ),
+                  ]),
+
+                  const SizedBox(height: 40),
+
+                  // معلومات التطبيق
+                  Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          'Mbuy v1.0.0',
+                          style: TextStyle(
+                            color: AppTheme.mutedSlate,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '© 2025 Mbuy. جميع الحقوق محفوظة',
+                          style: TextStyle(
+                            color: AppTheme.mutedSlate,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
-          ]),
-
-          const SizedBox(height: 24),
-
-          // القانوني
-          _buildSectionTitle('القانوني'),
-          _buildSettingsCard([
-            _buildActionTile(
-              icon: AppIcons.document,
-              title: 'سياسة الخصوصية',
-              onTap: () => context.push('/privacy-policy'),
-            ),
-            const Divider(height: 1),
-            _buildActionTile(
-              icon: AppIcons.document,
-              title: 'شروط الاستخدام',
-              onTap: () => context.push('/terms'),
-            ),
-          ]),
-
-          const SizedBox(height: 24),
-
-          // إجراءات الحساب
-          _buildSectionTitle('إجراءات الحساب'),
-          _buildSettingsCard([
-            _buildActionTile(
-              icon: AppIcons.logout,
-              title: 'تسجيل الخروج',
-              titleColor: AppTheme.warningColor,
-              onTap: () => _showLogoutDialog(),
-            ),
-            const Divider(height: 1),
-            _buildActionTile(
-              icon: AppIcons.delete,
-              title: 'حذف الحساب',
-              titleColor: AppTheme.errorColor,
-              onTap: () => _showDeleteAccountDialog(),
-            ),
-          ]),
-
-          const SizedBox(height: 40),
-
-          // معلومات التطبيق
-          Center(
-            child: Column(
-              children: [
-                Text(
-                  'Mbuy v1.0.0',
-                  style: TextStyle(color: AppTheme.mutedSlate, fontSize: 12),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '© 2025 Mbuy. جميع الحقوق محفوظة',
-                  style: TextStyle(color: AppTheme.mutedSlate, fontSize: 11),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 20),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -538,6 +545,40 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () => context.pop(),
+          child: Container(
+            padding: const EdgeInsets.all(AppDimensions.spacing8),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withValues(alpha: 0.1),
+              borderRadius: AppDimensions.borderRadiusS,
+            ),
+            child: AppIcon(
+              AppIcons.arrowBack,
+              size: AppDimensions.iconS,
+              color: AppTheme.primaryColor,
+            ),
+          ),
+        ),
+        const Expanded(
+          child: Text(
+            'إعدادات الحساب',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: AppDimensions.fontHeadline,
+              color: AppTheme.textPrimaryColor,
+            ),
+          ),
+        ),
+        const SizedBox(width: AppDimensions.iconM + AppDimensions.spacing16),
+      ],
     );
   }
 }

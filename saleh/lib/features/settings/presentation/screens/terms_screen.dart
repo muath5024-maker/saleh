@@ -15,69 +15,64 @@ class TermsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppTheme.surfaceColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: AppIcon(AppIcons.arrowBack, color: AppTheme.primaryColor),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text(
-          'شروط الاستخدام',
-          style: TextStyle(
-            color: AppTheme.textPrimaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: AppDimensions.paddingL,
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // تاريخ التحديث
-            Container(
-              padding: AppDimensions.paddingS,
-              decoration: BoxDecoration(
-                color: AppTheme.infoColor.withValues(alpha: 0.1),
-                borderRadius: AppDimensions.borderRadiusS,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppIcon(
-                    AppIcons.calendar,
-                    size: 16,
-                    color: AppTheme.infoColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'آخر تحديث: $_lastUpdatedDate',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.infoColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+            // Header ثابت في الأعلى
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: _buildHeader(context),
             ),
+            const SizedBox(height: 16),
+            // المحتوى القابل للتمرير
+            Expanded(
+              child: SingleChildScrollView(
+                padding: AppDimensions.paddingL,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // تاريخ التحديث
+                    Container(
+                      padding: AppDimensions.paddingS,
+                      decoration: BoxDecoration(
+                        color: AppTheme.infoColor.withValues(alpha: 0.1),
+                        borderRadius: AppDimensions.borderRadiusS,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AppIcon(
+                            AppIcons.calendar,
+                            size: 16,
+                            color: AppTheme.infoColor,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'آخر تحديث: $_lastUpdatedDate',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppTheme.infoColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-            const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-            _buildSection(
-              title: 'مقدمة',
-              content: '''
+                    _buildSection(
+                      title: 'مقدمة',
+                      content: '''
 مرحباً بك في Mbuy! هذه الشروط والأحكام تحكم استخدامك لتطبيق Mbuy وجميع الخدمات المرتبطة به.
 
 باستخدامك للتطبيق، فإنك توافق على الالتزام بهذه الشروط. إذا كنت لا توافق على أي جزء منها، يرجى عدم استخدام التطبيق.
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'التعريفات',
-              content: '''
+                    _buildSection(
+                      title: 'التعريفات',
+                      content: '''
 • **"التطبيق":** تطبيق Mbuy للهواتف المحمولة والويب
 • **"الخدمات":** جميع الخدمات المقدمة عبر التطبيق
 • **"المستخدم":** أي شخص يستخدم التطبيق
@@ -86,11 +81,11 @@ class TermsScreen extends StatelessWidget {
 • **"المحتوى":** أي نصوص، صور، فيديوهات، أو بيانات
 • **"النقاط":** العملة الافتراضية داخل التطبيق
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'الأهلية',
-              content: '''
+                    _buildSection(
+                      title: 'الأهلية',
+                      content: '''
 لاستخدام Mbuy، يجب أن:
 
 • يكون عمرك 18 سنة على الأقل
@@ -99,11 +94,11 @@ class TermsScreen extends StatelessWidget {
 • تلتزم بجميع القوانين المعمول بها في بلدك
 • لا تكون محظوراً من استخدام خدماتنا سابقاً
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'الحساب والأمان',
-              content: '''
+                    _buildSection(
+                      title: 'الحساب والأمان',
+                      content: '''
 أنت مسؤول عن:
 
 • الحفاظ على سرية بيانات حسابك
@@ -115,11 +110,11 @@ class TermsScreen extends StatelessWidget {
 • تعليق أو إنهاء حسابك في حالة انتهاك الشروط
 • طلب تأكيد هويتك في أي وقت
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'شروط التاجر',
-              content: '''
+                    _buildSection(
+                      title: 'شروط التاجر',
+                      content: '''
 كتاجر على Mbuy، تلتزم بما يلي:
 
 **المنتجات:**
@@ -137,11 +132,11 @@ class TermsScreen extends StatelessWidget {
 • دفع رسوم المنصة في الوقت المحدد
 • عمولة على كل عملية بيع ناجحة
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'النقاط والاشتراكات',
-              content: '''
+                    _buildSection(
+                      title: 'النقاط والاشتراكات',
+                      content: '''
 **النقاط:**
 • النقاط عملة افتراضية غير قابلة للاسترداد نقداً
 • يمكن استخدامها لأدوات AI والميزات المتقدمة
@@ -154,11 +149,11 @@ class TermsScreen extends StatelessWidget {
 • لا يتم استرداد المبالغ المدفوعة
 • تغييرات الأسعار تُعلن مسبقاً
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'المحتوى المحظور',
-              content: '''
+                    _buildSection(
+                      title: 'المحتوى المحظور',
+                      content: '''
 يُحظر على المستخدمين نشر أو بيع:
 
 • منتجات غير قانونية أو مقلدة
@@ -169,33 +164,33 @@ class TermsScreen extends StatelessWidget {
 • محتوى يحرض على الكراهية أو العنف
 • أي شيء ينتهك القوانين المحلية أو الدولية
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'حقوق الملكية الفكرية',
-              content: '''
+                    _buildSection(
+                      title: 'حقوق الملكية الفكرية',
+                      content: '''
 • Mbuy وشعاراتها علامات تجارية محمية
 • جميع حقوق التطبيق محفوظة لـ Mbuy
 • يحتفظ التجار بملكية محتواهم
 • بنشر المحتوى، تمنحنا ترخيصاً لاستخدامه
 • نحترم حقوق الملكية الفكرية للآخرين
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'إخلاء المسؤولية',
-              content: '''
+                    _buildSection(
+                      title: 'إخلاء المسؤولية',
+                      content: '''
 • التطبيق يُقدم "كما هو" دون ضمانات
 • لا نضمن توفر الخدمة بشكل متواصل
 • لسنا مسؤولين عن المعاملات بين التجار والعملاء
 • لا نتحمل مسؤولية الأضرار غير المباشرة
 • مسؤوليتنا محدودة بالمبلغ المدفوع لنا
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'التعديلات',
-              content: '''
+                    _buildSection(
+                      title: 'التعديلات',
+                      content: '''
 نحتفظ بالحق في تعديل هذه الشروط في أي وقت:
 
 • سنُخطرك بالتغييرات الجوهرية
@@ -203,21 +198,21 @@ class TermsScreen extends StatelessWidget {
 • التعديلات تسري من تاريخ نشرها
 • ننصحك بمراجعة الشروط بشكل دوري
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'القانون المعمول به',
-              content: '''
+                    _buildSection(
+                      title: 'القانون المعمول به',
+                      content: '''
 • تخضع هذه الشروط لقوانين المملكة العربية السعودية
 • أي نزاع يُحل ودياً أولاً
 • في حالة عدم الحل، تُحال للمحاكم المختصة
 • اللغة العربية هي اللغة المعتمدة
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'تواصل معنا',
-              content: '''
+                    _buildSection(
+                      title: 'تواصل معنا',
+                      content: '''
 لأي استفسارات حول شروط الاستخدام:
 
 • البريد الإلكتروني: legal@mbuy.app
@@ -226,9 +221,13 @@ class TermsScreen extends StatelessWidget {
 
 سنرد على استفساراتك خلال 48 ساعة عمل.
 ''',
-            ),
+                    ),
 
-            const SizedBox(height: 40),
+                    const SizedBox(height: 40),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -257,6 +256,40 @@ class TermsScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () => context.pop(),
+          child: Container(
+            padding: const EdgeInsets.all(AppDimensions.spacing8),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withValues(alpha: 0.1),
+              borderRadius: AppDimensions.borderRadiusS,
+            ),
+            child: AppIcon(
+              AppIcons.arrowBack,
+              size: AppDimensions.iconS,
+              color: AppTheme.primaryColor,
+            ),
+          ),
+        ),
+        const Expanded(
+          child: Text(
+            'شروط الاستخدام',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: AppDimensions.fontHeadline,
+              color: AppTheme.textPrimaryColor,
+            ),
+          ),
+        ),
+        const SizedBox(width: AppDimensions.iconM + AppDimensions.spacing16),
       ],
     );
   }

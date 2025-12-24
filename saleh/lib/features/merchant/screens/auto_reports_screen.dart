@@ -290,34 +290,88 @@ class _AutoReportsScreenState extends State<AutoReportsScreen>
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: SvgPicture.asset(AppIcons.arrowBack, width: 24, height: 24),
-            onPressed: () => context.pop(),
-          ),
-          title: const Text('التقارير التلقائية'),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(CupertinoIcons.add_circled),
-              onPressed: _showGenerateReportSheet,
-              tooltip: 'إنشاء تقرير',
-            ),
-          ],
-          bottom: TabBar(
-            controller: _tabController,
-            tabs: const [
-              Tab(text: 'التقارير'),
-              Tab(text: 'الإعدادات'),
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Header ثابت مع TabBar
+              Container(
+                color:
+                    theme.appBarTheme.backgroundColor ??
+                    theme.colorScheme.primary,
+                child: Column(
+                  children: [
+                    // Header Row
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => context.pop(),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: SvgPicture.asset(
+                                AppIcons.arrowBack,
+                                width: 20,
+                                height: 20,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Expanded(
+                            child: Text(
+                              'التقارير التلقائية',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              CupertinoIcons.add_circled,
+                              color: Colors.white,
+                            ),
+                            onPressed: _showGenerateReportSheet,
+                            tooltip: 'إنشاء تقرير',
+                          ),
+                        ],
+                      ),
+                    ),
+                    // TabBar
+                    TabBar(
+                      controller: _tabController,
+                      indicatorColor: Colors.white,
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.white70,
+                      tabs: const [
+                        Tab(text: 'التقارير'),
+                        Tab(text: 'الإعدادات'),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Body content
+              Expanded(
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : TabBarView(
+                        controller: _tabController,
+                        children: [_buildReportsTab(), _buildSettingsTab()],
+                      ),
+              ),
             ],
           ),
         ),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : TabBarView(
-                controller: _tabController,
-                children: [_buildReportsTab(), _buildSettingsTab()],
-              ),
       ),
     );
   }

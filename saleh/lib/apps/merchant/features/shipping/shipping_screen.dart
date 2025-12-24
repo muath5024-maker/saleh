@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/constants/app_icons.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class ShippingScreen extends StatefulWidget {
   const ShippingScreen({super.key});
@@ -33,28 +34,79 @@ class _ShippingScreenState extends State<ShippingScreen>
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: SvgPicture.asset(AppIcons.arrowBack, width: 24, height: 24),
-            onPressed: () => context.pop(),
-          ),
-          title: const Text('إدارة الشحن'),
-          bottom: TabBar(
-            controller: _tabController,
-            tabs: const [
-              Tab(text: 'نظرة عامة', icon: Icon(Icons.dashboard)),
-              Tab(text: 'الشحنات', icon: Icon(Icons.local_shipping)),
-              Tab(text: 'الإعدادات', icon: Icon(Icons.settings)),
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Header ثابت مع TabBar
+              Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Column(
+                  children: [
+                    // Header Row
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => context.pop(),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppTheme.primaryColor.withValues(
+                                  alpha: 0.1,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: SvgPicture.asset(
+                                AppIcons.arrowBack,
+                                width: 20,
+                                height: 20,
+                                colorFilter: const ColorFilter.mode(
+                                  AppTheme.primaryColor,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Expanded(
+                            child: Text(
+                              'إدارة الشحن',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 36),
+                        ],
+                      ),
+                    ),
+                    // TabBar
+                    TabBar(
+                      controller: _tabController,
+                      tabs: const [
+                        Tab(text: 'نظرة عامة', icon: Icon(Icons.dashboard)),
+                        Tab(text: 'الشحنات', icon: Icon(Icons.local_shipping)),
+                        Tab(text: 'الإعدادات', icon: Icon(Icons.settings)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Body content
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildOverviewTab(),
+                    _buildShipmentsTab(),
+                    _buildSettingsTab(),
+                  ],
+                ),
+              ),
             ],
           ),
-        ),
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            _buildOverviewTab(),
-            _buildShipmentsTab(),
-            _buildSettingsTab(),
-          ],
         ),
       ),
     );

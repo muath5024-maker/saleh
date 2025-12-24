@@ -299,120 +299,152 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      appBar: AppBar(
-        title: const Text(
-          'إدارة المخزون',
-          style: TextStyle(
-            color: AppTheme.textPrimaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: AppTheme.surfaceColor,
-        foregroundColor: AppTheme.textPrimaryColor,
-        elevation: 0,
-        scrolledUnderElevation: 1,
-        surfaceTintColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: AppTheme.primaryColor, size: 24),
-        leading: IconButton(
-          icon: SvgPicture.asset(
-            AppIcons.arrowBack,
-            width: 24,
-            height: 24,
-            colorFilter: const ColorFilter.mode(
-              AppTheme.primaryColor,
-              BlendMode.srcIn,
-            ),
-          ),
-          onPressed: () => context.pop(),
-        ),
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: AppTheme.primaryColor,
-          unselectedLabelColor: Colors.grey,
-          indicatorColor: AppTheme.primaryColor,
-          isScrollable: true,
-          tabs: [
-            Tab(text: 'الكل $_totalProducts'),
-            Tab(
-              child: Row(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header ثابت مع TabBar
+            Container(
+              color: AppTheme.surfaceColor,
+              child: Column(
                 children: [
-                  const Text('منخفض'),
-                  if (_lowStockCount > 0) ...[
-                    const SizedBox(width: 4),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        '$_lowStockCount',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
+                  // Header Row
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => context.pop(),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: AppTheme.primaryColor.withValues(
+                                alpha: 0.1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SvgPicture.asset(
+                              AppIcons.arrowBack,
+                              width: 20,
+                              height: 20,
+                              colorFilter: const ColorFilter.mode(
+                                AppTheme.primaryColor,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          child: Text(
+                            'إدارة المخزون',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: AppTheme.textPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 36),
+                      ],
+                    ),
+                  ),
+                  // TabBar
+                  TabBar(
+                    controller: _tabController,
+                    labelColor: AppTheme.primaryColor,
+                    unselectedLabelColor: Colors.grey,
+                    indicatorColor: AppTheme.primaryColor,
+                    isScrollable: true,
+                    tabs: [
+                      Tab(text: 'الكل $_totalProducts'),
+                      Tab(
+                        child: Row(
+                          children: [
+                            const Text('منخفض'),
+                            if (_lowStockCount > 0) ...[
+                              const SizedBox(width: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.orange,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  '$_lowStockCount',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
                       ),
-                    ),
-                  ],
+                      Tab(
+                        child: Row(
+                          children: [
+                            const Text('نفذ'),
+                            if (_outOfStockCount > 0) ...[
+                              const SizedBox(width: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  '$_outOfStockCount',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      const Tab(text: 'الحركات'),
+                    ],
+                  ),
                 ],
               ),
             ),
-            Tab(
-              child: Row(
-                children: [
-                  const Text('نفذ'),
-                  if (_outOfStockCount > 0) ...[
-                    const SizedBox(width: 4),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        '$_outOfStockCount',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
+            // Body content
+            Expanded(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _error != null
+                  ? _buildErrorView()
+                  : Column(
+                      children: [
+                        // بطاقات الإحصائيات
+                        _buildStatsCards(),
+                        // المحتوى
+                        Expanded(
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              _buildProductsList(_allProducts),
+                              _buildProductsList(_lowStockProducts),
+                              _buildProductsList(_outOfStockProducts),
+                              _buildMovementsList(),
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ],
-              ),
             ),
-            const Tab(text: 'الحركات'),
           ],
         ),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-          ? _buildErrorView()
-          : Column(
-              children: [
-                // بطاقات الإحصائيات
-                _buildStatsCards(),
-                // المحتوى
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      _buildProductsList(_allProducts),
-                      _buildProductsList(_lowStockProducts),
-                      _buildProductsList(_outOfStockProducts),
-                      _buildMovementsList(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
     );
   }
 

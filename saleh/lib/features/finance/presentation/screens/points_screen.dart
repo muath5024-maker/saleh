@@ -204,75 +204,103 @@ class _PointsScreenState extends ConsumerState<PointsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppTheme.surfaceColor,
-        foregroundColor: AppTheme.textPrimaryColor,
-        elevation: 0,
-        scrolledUnderElevation: 1,
-        surfaceTintColor: Colors.transparent,
-        leading: IconButton(
-          icon: SvgPicture.asset(
-            AppIcons.arrowBack,
-            width: AppDimensions.iconM,
-            height: AppDimensions.iconM,
-            colorFilter: const ColorFilter.mode(
-              AppTheme.primaryColor,
-              BlendMode.srcIn,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header ثابت في الأعلى
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: _buildHeader(context),
             ),
-          ),
-          onPressed: () => context.pop(),
+            const SizedBox(height: 16),
+            // المحتوى القابل للتمرير
+            Expanded(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : RefreshIndicator(
+                      onRefresh: _loadPointsData,
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // رصيد النقاط الرئيسي
+                            _buildPointsCard(),
+                            const SizedBox(height: 16),
+                            // إحصائيات سريعة
+                            _buildStatsRow(),
+                            const SizedBox(height: 24),
+                            // المكافآت المتاحة
+                            _buildRewardsSection(),
+                            const SizedBox(height: 24),
+                            // سجل المعاملات
+                            _buildTransactionsSection(),
+                            const SizedBox(height: 80),
+                          ],
+                        ),
+                      ),
+                    ),
+            ),
+          ],
         ),
-        title: Text(
-          'نقاطي',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: AppDimensions.fontHeadline,
-            color: AppTheme.textPrimaryColor,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: SvgPicture.asset(
-              AppIcons.help,
-              width: AppDimensions.iconM,
-              height: AppDimensions.iconM,
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () => context.pop(),
+          child: Container(
+            padding: const EdgeInsets.all(AppDimensions.spacing8),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withValues(alpha: 0.1),
+              borderRadius: AppDimensions.borderRadiusS,
+            ),
+            child: SvgPicture.asset(
+              AppIcons.arrowBack,
+              width: AppDimensions.iconS,
+              height: AppDimensions.iconS,
               colorFilter: const ColorFilter.mode(
-                AppTheme.textPrimaryColor,
+                AppTheme.primaryColor,
                 BlendMode.srcIn,
               ),
             ),
-            onPressed: _showHelpDialog,
-            tooltip: 'كيف أكسب النقاط؟',
           ),
-        ],
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: _loadPointsData,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // رصيد النقاط الرئيسي
-                    _buildPointsCard(),
-                    const SizedBox(height: 16),
-                    // إحصائيات سريعة
-                    _buildStatsRow(),
-                    const SizedBox(height: 24),
-                    // المكافآت المتاحة
-                    _buildRewardsSection(),
-                    const SizedBox(height: 24),
-                    // سجل المعاملات
-                    _buildTransactionsSection(),
-                    const SizedBox(height: 80),
-                  ],
-                ),
+        ),
+        const Expanded(
+          child: Text(
+            'نقاطي',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: AppDimensions.fontHeadline,
+              color: AppTheme.textPrimaryColor,
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: _showHelpDialog,
+          child: Container(
+            padding: const EdgeInsets.all(AppDimensions.spacing8),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withValues(alpha: 0.1),
+              borderRadius: AppDimensions.borderRadiusS,
+            ),
+            child: SvgPicture.asset(
+              AppIcons.help,
+              width: AppDimensions.iconS,
+              height: AppDimensions.iconS,
+              colorFilter: const ColorFilter.mode(
+                AppTheme.primaryColor,
+                BlendMode.srcIn,
               ),
             ),
+          ),
+        ),
+      ],
     );
   }
 

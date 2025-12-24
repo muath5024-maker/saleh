@@ -15,69 +15,64 @@ class PrivacyPolicyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppTheme.surfaceColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: AppIcon(AppIcons.arrowBack, color: AppTheme.primaryColor),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text(
-          'سياسة الخصوصية',
-          style: TextStyle(
-            color: AppTheme.textPrimaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: AppDimensions.paddingL,
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // تاريخ التحديث
-            Container(
-              padding: AppDimensions.paddingS,
-              decoration: BoxDecoration(
-                color: AppTheme.infoColor.withValues(alpha: 0.1),
-                borderRadius: AppDimensions.borderRadiusS,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppIcon(
-                    AppIcons.calendar,
-                    size: 16,
-                    color: AppTheme.infoColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'آخر تحديث: $_lastUpdatedDate',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.infoColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
+            // Header ثابت في الأعلى
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: _buildHeader(context),
             ),
+            const SizedBox(height: 16),
+            // المحتوى القابل للتمرير
+            Expanded(
+              child: SingleChildScrollView(
+                padding: AppDimensions.paddingL,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // تاريخ التحديث
+                    Container(
+                      padding: AppDimensions.paddingS,
+                      decoration: BoxDecoration(
+                        color: AppTheme.infoColor.withValues(alpha: 0.1),
+                        borderRadius: AppDimensions.borderRadiusS,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AppIcon(
+                            AppIcons.calendar,
+                            size: 16,
+                            color: AppTheme.infoColor,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'آخر تحديث: $_lastUpdatedDate',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppTheme.infoColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-            const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-            _buildSection(
-              title: 'مقدمة',
-              content: '''
+                    _buildSection(
+                      title: 'مقدمة',
+                      content: '''
 نحن في Mbuy نحترم خصوصيتك ونلتزم بحماية بياناتك الشخصية. توضح سياسة الخصوصية هذه كيفية جمع واستخدام وحماية المعلومات التي تقدمها لنا عند استخدام تطبيقنا.
 
 باستخدامك لتطبيق Mbuy، فإنك توافق على جمع واستخدام المعلومات وفقاً لهذه السياسة.
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'المعلومات التي نجمعها',
-              content: '''
+                    _buildSection(
+                      title: 'المعلومات التي نجمعها',
+                      content: '''
 نقوم بجمع أنواع مختلفة من المعلومات لأغراض متعددة:
 
 • **معلومات الحساب:** الاسم، البريد الإلكتروني، رقم الهاتف
@@ -86,11 +81,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
 • **بيانات الاستخدام:** كيفية تفاعلك مع التطبيق
 • **معلومات الجهاز:** نوع الجهاز، نظام التشغيل، معرف الجهاز
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'كيف نستخدم معلوماتك',
-              content: '''
+                    _buildSection(
+                      title: 'كيف نستخدم معلوماتك',
+                      content: '''
 نستخدم المعلومات المجمعة للأغراض التالية:
 
 • تقديم خدمات التطبيق وتحسينها
@@ -101,11 +96,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
 • الكشف عن الاحتيال والأنشطة غير المصرح بها
 • الامتثال للمتطلبات القانونية
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'مشاركة المعلومات',
-              content: '''
+                    _buildSection(
+                      title: 'مشاركة المعلومات',
+                      content: '''
 لا نبيع أو نؤجر معلوماتك الشخصية لأطراف ثالثة. قد نشارك معلوماتك في الحالات التالية:
 
 • **مع مزودي الخدمة:** شركات الدفع، خدمات التوصيل
@@ -113,11 +108,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
 • **لحماية الحقوق:** لحماية حقوق Mbuy ومستخدميها
 • **في عمليات الدمج:** في حالة اندماج أو استحواذ
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'أمان البيانات',
-              content: '''
+                    _buildSection(
+                      title: 'أمان البيانات',
+                      content: '''
 نتخذ إجراءات أمنية مناسبة لحماية بياناتك:
 
 • تشفير البيانات أثناء النقل والتخزين (SSL/TLS)
@@ -126,11 +121,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
 • المراجعة الدورية لإجراءات الأمان
 • عدم تخزين بيانات البطاقات البنكية على خوادمنا
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'حقوقك',
-              content: '''
+                    _buildSection(
+                      title: 'حقوقك',
+                      content: '''
 لديك الحقوق التالية بخصوص بياناتك:
 
 • **الوصول:** طلب نسخة من بياناتك الشخصية
@@ -139,11 +134,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
 • **الاعتراض:** الاعتراض على معالجة بياناتك
 • **نقل البيانات:** طلب نقل بياناتك لمنصة أخرى
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'ملفات تعريف الارتباط (Cookies)',
-              content: '''
+                    _buildSection(
+                      title: 'ملفات تعريف الارتباط (Cookies)',
+                      content: '''
 نستخدم ملفات تعريف الارتباط وتقنيات مشابهة لـ:
 
 • تذكر تفضيلاتك وإعداداتك
@@ -153,11 +148,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
 يمكنك التحكم في إعدادات الكوكيز من خلال إعدادات جهازك.
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'التغييرات على السياسة',
-              content: '''
+                    _buildSection(
+                      title: 'التغييرات على السياسة',
+                      content: '''
 قد نقوم بتحديث سياسة الخصوصية من وقت لآخر. سنقوم بإعلامك بأي تغييرات جوهرية عبر:
 
 • إشعار داخل التطبيق
@@ -166,11 +161,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
 ننصحك بمراجعة هذه السياسة بشكل دوري.
 ''',
-            ),
+                    ),
 
-            _buildSection(
-              title: 'تواصل معنا',
-              content: '''
+                    _buildSection(
+                      title: 'تواصل معنا',
+                      content: '''
 إذا كان لديك أي أسئلة حول سياسة الخصوصية، يمكنك التواصل معنا:
 
 • البريد الإلكتروني: privacy@mbuy.app
@@ -179,9 +174,13 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
 سنرد على استفساراتك خلال 48 ساعة عمل.
 ''',
-            ),
+                    ),
 
-            const SizedBox(height: 40),
+                    const SizedBox(height: 40),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -210,6 +209,40 @@ class PrivacyPolicyScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () => context.pop(),
+          child: Container(
+            padding: const EdgeInsets.all(AppDimensions.spacing8),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withValues(alpha: 0.1),
+              borderRadius: AppDimensions.borderRadiusS,
+            ),
+            child: AppIcon(
+              AppIcons.arrowBack,
+              size: AppDimensions.iconS,
+              color: AppTheme.primaryColor,
+            ),
+          ),
+        ),
+        const Expanded(
+          child: Text(
+            'سياسة الخصوصية',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: AppDimensions.fontHeadline,
+              color: AppTheme.textPrimaryColor,
+            ),
+          ),
+        ),
+        const SizedBox(width: AppDimensions.iconM + AppDimensions.spacing16),
       ],
     );
   }

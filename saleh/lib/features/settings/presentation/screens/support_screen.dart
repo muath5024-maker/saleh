@@ -15,178 +15,181 @@ class SupportScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppTheme.surfaceColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: AppIcon(AppIcons.arrowBack, color: AppTheme.primaryColor),
-          onPressed: () => context.pop(),
-        ),
-        title: const Text(
-          'الدعم والمساعدة',
-          style: TextStyle(
-            color: AppTheme.textPrimaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: ListView(
-        padding: AppDimensions.paddingM,
-        children: [
-          // بطاقة الترحيب
-          Container(
-            padding: AppDimensions.paddingL,
-            decoration: BoxDecoration(
-              gradient: AppTheme.metallicGradient,
-              borderRadius: AppDimensions.borderRadiusXL,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header ثابت في الأعلى
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: _buildHeader(context),
             ),
-            child: Column(
-              children: [
-                AppIcon(AppIcons.supportAgent, size: 48, color: Colors.white),
-                const SizedBox(height: 16),
-                const Text(
-                  'كيف يمكننا مساعدتك؟',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+            const SizedBox(height: 16),
+            // المحتوى القابل للتمرير
+            Expanded(
+              child: ListView(
+                padding: AppDimensions.paddingM,
+                children: [
+                  // بطاقة الترحيب
+                  Container(
+                    padding: AppDimensions.paddingL,
+                    decoration: BoxDecoration(
+                      gradient: AppTheme.metallicGradient,
+                      borderRadius: AppDimensions.borderRadiusXL,
+                    ),
+                    child: Column(
+                      children: [
+                        AppIcon(
+                          AppIcons.supportAgent,
+                          size: 48,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'كيف يمكننا مساعدتك؟',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'فريق الدعم متاح على مدار الساعة لمساعدتك',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white.withValues(alpha: 0.9),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'فريق الدعم متاح على مدار الساعة لمساعدتك',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white.withValues(alpha: 0.9),
+
+                  const SizedBox(height: 24),
+
+                  // طرق التواصل
+                  const Text(
+                    'تواصل معنا',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimaryColor,
+                    ),
                   ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+                  const SizedBox(height: 12),
+
+                  _buildContactCard(
+                    context,
+                    icon: AppIcons.chat,
+                    title: 'واتساب',
+                    subtitle: 'أسرع طريقة للتواصل',
+                    color: const Color(0xFF25D366),
+                    onTap: () => _launchWhatsApp(context),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  _buildContactCard(
+                    context,
+                    icon: AppIcons.email,
+                    title: 'البريد الإلكتروني',
+                    subtitle: 'support@mbuy.app',
+                    color: AppTheme.primaryColor,
+                    onTap: () => _launchEmail(context),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  _buildContactCard(
+                    context,
+                    icon: AppIcons.phone,
+                    title: 'الهاتف',
+                    subtitle: '+966 50 000 0000',
+                    color: AppTheme.successColor,
+                    onTap: () => _launchPhone(context),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // الأسئلة الشائعة
+                  const Text(
+                    'الأسئلة الشائعة',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  _buildFAQCard([
+                    _FAQItem(
+                      question: 'كيف أنشئ متجري؟',
+                      answer:
+                          'بعد تسجيل الدخول، اذهب إلى "إدارة المتجر" ثم اضغط على "إنشاء متجر". أدخل اسم المتجر والوصف والشعار، ثم اضغط على "إنشاء".',
+                    ),
+                    _FAQItem(
+                      question: 'كيف أضيف منتجات؟',
+                      answer:
+                          'اضغط على زر + في الشريط السفلي، ثم أدخل بيانات المنتج (الاسم، السعر، الصور، الوصف) واضغط على "حفظ".',
+                    ),
+                    _FAQItem(
+                      question: 'كيف أشتري نقاط؟',
+                      answer:
+                          'اذهب إلى صفحة "النقاط" من الرئيسية، ثم اختر الباقة المناسبة واتبع خطوات الدفع.',
+                    ),
+                    _FAQItem(
+                      question: 'ما هي أدوات AI؟',
+                      answer:
+                          'أدوات الذكاء الاصطناعي تساعدك في توليد صور احترافية للمنتجات، وكتابة أوصاف جذابة، وتحسين متجرك.',
+                    ),
+                    _FAQItem(
+                      question: 'كيف أسحب أرباحي؟',
+                      answer:
+                          'اذهب إلى "المحفظة"، ثم اضغط على "سحب"، أدخل المبلغ وبيانات الحساب البنكي، وسيتم التحويل خلال 3-5 أيام عمل.',
+                    ),
+                    _FAQItem(
+                      question: 'كيف ألغي اشتراكي؟',
+                      answer:
+                          'اذهب إلى "إعدادات الحساب" ثم "الاشتراكات"، واضغط على "إلغاء الاشتراك". سيبقى حسابك فعالاً حتى نهاية الفترة المدفوعة.',
+                    ),
+                  ]),
+
+                  const SizedBox(height: 32),
+
+                  // روابط مفيدة
+                  const Text(
+                    'روابط مفيدة',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  _buildLinkTile(
+                    icon: AppIcons.document,
+                    title: 'دليل المستخدم',
+                    onTap: () {},
+                  ),
+                  _buildLinkTile(
+                    icon: AppIcons.playCircle,
+                    title: 'فيديوهات تعليمية',
+                    onTap: () {},
+                  ),
+                  _buildLinkTile(
+                    icon: AppIcons.info,
+                    title: 'عن التطبيق',
+                    onTap: () => context.push('/dashboard/about'),
+                  ),
+
+                  const SizedBox(height: 40),
+                ],
+              ),
             ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // طرق التواصل
-          const Text(
-            'تواصل معنا',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppTheme.textPrimaryColor,
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          _buildContactCard(
-            context,
-            icon: AppIcons.chat,
-            title: 'واتساب',
-            subtitle: 'أسرع طريقة للتواصل',
-            color: const Color(0xFF25D366),
-            onTap: () => _launchWhatsApp(context),
-          ),
-
-          const SizedBox(height: 12),
-
-          _buildContactCard(
-            context,
-            icon: AppIcons.email,
-            title: 'البريد الإلكتروني',
-            subtitle: 'support@mbuy.app',
-            color: AppTheme.primaryColor,
-            onTap: () => _launchEmail(context),
-          ),
-
-          const SizedBox(height: 12),
-
-          _buildContactCard(
-            context,
-            icon: AppIcons.phone,
-            title: 'الهاتف',
-            subtitle: '+966 50 000 0000',
-            color: AppTheme.successColor,
-            onTap: () => _launchPhone(context),
-          ),
-
-          const SizedBox(height: 32),
-
-          // الأسئلة الشائعة
-          const Text(
-            'الأسئلة الشائعة',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppTheme.textPrimaryColor,
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          _buildFAQCard([
-            _FAQItem(
-              question: 'كيف أنشئ متجري؟',
-              answer:
-                  'بعد تسجيل الدخول، اذهب إلى "إدارة المتجر" ثم اضغط على "إنشاء متجر". أدخل اسم المتجر والوصف والشعار، ثم اضغط على "إنشاء".',
-            ),
-            _FAQItem(
-              question: 'كيف أضيف منتجات؟',
-              answer:
-                  'اضغط على زر + في الشريط السفلي، ثم أدخل بيانات المنتج (الاسم، السعر، الصور، الوصف) واضغط على "حفظ".',
-            ),
-            _FAQItem(
-              question: 'كيف أشتري نقاط؟',
-              answer:
-                  'اذهب إلى صفحة "النقاط" من الرئيسية، ثم اختر الباقة المناسبة واتبع خطوات الدفع.',
-            ),
-            _FAQItem(
-              question: 'ما هي أدوات AI؟',
-              answer:
-                  'أدوات الذكاء الاصطناعي تساعدك في توليد صور احترافية للمنتجات، وكتابة أوصاف جذابة، وتحسين متجرك.',
-            ),
-            _FAQItem(
-              question: 'كيف أسحب أرباحي؟',
-              answer:
-                  'اذهب إلى "المحفظة"، ثم اضغط على "سحب"، أدخل المبلغ وبيانات الحساب البنكي، وسيتم التحويل خلال 3-5 أيام عمل.',
-            ),
-            _FAQItem(
-              question: 'كيف ألغي اشتراكي؟',
-              answer:
-                  'اذهب إلى "إعدادات الحساب" ثم "الاشتراكات"، واضغط على "إلغاء الاشتراك". سيبقى حسابك فعالاً حتى نهاية الفترة المدفوعة.',
-            ),
-          ]),
-
-          const SizedBox(height: 32),
-
-          // روابط مفيدة
-          const Text(
-            'روابط مفيدة',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppTheme.textPrimaryColor,
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          _buildLinkTile(
-            icon: AppIcons.document,
-            title: 'دليل المستخدم',
-            onTap: () {},
-          ),
-          _buildLinkTile(
-            icon: AppIcons.playCircle,
-            title: 'فيديوهات تعليمية',
-            onTap: () {},
-          ),
-          _buildLinkTile(
-            icon: AppIcons.info,
-            title: 'عن التطبيق',
-            onTap: () => context.push('/dashboard/about'),
-          ),
-
-          const SizedBox(height: 40),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -391,6 +394,40 @@ class SupportScreen extends StatelessWidget {
         );
       }
     }
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () => context.pop(),
+          child: Container(
+            padding: const EdgeInsets.all(AppDimensions.spacing8),
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor.withValues(alpha: 0.1),
+              borderRadius: AppDimensions.borderRadiusS,
+            ),
+            child: AppIcon(
+              AppIcons.arrowBack,
+              size: AppDimensions.iconS,
+              color: AppTheme.primaryColor,
+            ),
+          ),
+        ),
+        const Expanded(
+          child: Text(
+            'الدعم والمساعدة',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: AppDimensions.fontHeadline,
+              color: AppTheme.textPrimaryColor,
+            ),
+          ),
+        ),
+        const SizedBox(width: AppDimensions.iconM + AppDimensions.spacing16),
+      ],
+    );
   }
 }
 

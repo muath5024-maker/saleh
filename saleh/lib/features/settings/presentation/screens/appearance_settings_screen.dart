@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../core/services/user_preferences_service.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -15,58 +16,66 @@ class AppearanceSettingsScreen extends ConsumerWidget {
     final currentThemeMode = ref.watch(preferencesStateProvider).themeMode;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: AppIcon(AppIcons.arrowBack, color: AppTheme.primaryColor),
-          onPressed: () => context.pop(),
+      backgroundColor: AppTheme.backgroundColor,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header ثابت في الأعلى
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: _buildHeader(context),
+            ),
+            const SizedBox(height: 16),
+            // المحتوى القابل للتمرير
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  Text(
+                    'اختر المظهر المناسب لك',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 16),
+                  _ThemeOptionCard(
+                    title: 'فاتح',
+                    subtitle: 'تجربة كلاسيكية وواضحة.',
+                    icon: AppIcons.sun,
+                    isSelected: currentThemeMode == ThemeMode.light,
+                    onTap: () {
+                      ref
+                          .read(preferencesStateProvider.notifier)
+                          .updateThemeMode(ThemeMode.light);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _ThemeOptionCard(
+                    title: 'داكن',
+                    subtitle: 'مريح للعين في الإضاءة المنخفضة.',
+                    icon: AppIcons.moon,
+                    isSelected: currentThemeMode == ThemeMode.dark,
+                    onTap: () {
+                      ref
+                          .read(preferencesStateProvider.notifier)
+                          .updateThemeMode(ThemeMode.dark);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _ThemeOptionCard(
+                    title: 'افتراضي النظام',
+                    subtitle: 'يتكيف مع إعدادات جهازك.',
+                    icon: AppIcons.monitor,
+                    isSelected: currentThemeMode == ThemeMode.system,
+                    onTap: () {
+                      ref
+                          .read(preferencesStateProvider.notifier)
+                          .updateThemeMode(ThemeMode.system);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        title: const Text('المظهر'),
-        centerTitle: true,
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Text(
-            'اختر المظهر المناسب لك',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 16),
-          _ThemeOptionCard(
-            title: 'فاتح',
-            subtitle: 'تجربة كلاسيكية وواضحة.',
-            icon: AppIcons.sun,
-            isSelected: currentThemeMode == ThemeMode.light,
-            onTap: () {
-              ref
-                  .read(preferencesStateProvider.notifier)
-                  .updateThemeMode(ThemeMode.light);
-            },
-          ),
-          const SizedBox(height: 12),
-          _ThemeOptionCard(
-            title: 'داكن',
-            subtitle: 'مريح للعين في الإضاءة المنخفضة.',
-            icon: AppIcons.moon,
-            isSelected: currentThemeMode == ThemeMode.dark,
-            onTap: () {
-              ref
-                  .read(preferencesStateProvider.notifier)
-                  .updateThemeMode(ThemeMode.dark);
-            },
-          ),
-          const SizedBox(height: 12),
-          _ThemeOptionCard(
-            title: 'افتراضي النظام',
-            subtitle: 'يتكيف مع إعدادات جهازك.',
-            icon: AppIcons.monitor,
-            isSelected: currentThemeMode == ThemeMode.system,
-            onTap: () {
-              ref
-                  .read(preferencesStateProvider.notifier)
-                  .updateThemeMode(ThemeMode.system);
-            },
-          ),
-        ],
       ),
     );
   }
@@ -150,4 +159,38 @@ class _ThemeOptionCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _buildHeader(BuildContext context) {
+  return Row(
+    children: [
+      GestureDetector(
+        onTap: () => context.pop(),
+        child: Container(
+          padding: EdgeInsets.all(AppDimensions.spacing8),
+          decoration: BoxDecoration(
+            color: AppTheme.primaryColor.withValues(alpha: 0.1),
+            borderRadius: AppDimensions.borderRadiusS,
+          ),
+          child: AppIcon(
+            AppIcons.arrowBack,
+            size: AppDimensions.iconS,
+            color: AppTheme.primaryColor,
+          ),
+        ),
+      ),
+      Expanded(
+        child: Text(
+          'المظهر',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: AppDimensions.fontHeadline,
+            color: AppTheme.textPrimaryColor,
+          ),
+        ),
+      ),
+      SizedBox(width: AppDimensions.iconM + AppDimensions.spacing16),
+    ],
+  );
 }
