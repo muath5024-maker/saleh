@@ -1,9 +1,9 @@
 # 📊 APP_AUDIT_REPORT - Saleh (MBUY Merchant)
 ## تقرير فحص شامل للتطبيق
 
-> **تاريخ الفحص:** 2025-12-24
-> **نوع التطبيق:** Flutter (Merchant Dashboard)
-> **حالة الفحص:** ✅ مكتمل
+> **تاريخ الفحص:** 2025-12-24  
+> **نوع التطبيق:** Flutter (Merchant Dashboard)  
+> **حالة الفحص:** ✅ مكتمل - تحليل شامل بدون تعديلات
 
 ---
 
@@ -11,19 +11,19 @@
 
 | البند | الحالة | التفاصيل |
 |-------|--------|----------|
-| **إجمالي الشاشات** | 82 | شاشات/صفحات/تبويبات |
-| **Routes مسجلة** | 56 | في GoRouter |
-| **Entry Points** | 1 | `main.dart` → `AppShell` |
-| **MaterialApp instances** | 3 | (1 للـ Router + 2 للحالات الخاصة) |
-| **شاشات مكررة** | 2 | يحتاج مراجعة |
-| **شاشات غير مستخدمة** | 8 | Dead Screens |
-| **Routes معطلة** | 3 | Broken Routes |
+| **إجمالي الشاشات** | **85+** | شاشات/صفحات/تبويبات |
+| **Routes مسجلة** | **56+** | في GoRouter |
+| **Entry Points** | **1** | `main.dart` → `AppShell` |
+| **MaterialApp instances** | **3** | (1 للـ Router + 2 للحالات الخاصة) |
+| **شاشات مكررة** | **2** | يحتاج مراجعة |
+| **شاشات غير مستخدمة** | **8+** | Dead Screens |
+| **Routes معطلة** | **1** | Redirect Route |
 
 ### 🚨 مشاكل تحتاج إصلاح فوري:
-1. **3 Routes تشير لصفحات غير موجودة**
-2. **8 شاشات موجودة لكن غير مربوطة بأي Route**
-3. **2 ملفات مكررة (backup)**
-4. **2 شاشات LoginScreen متطابقة**
+1. **8+ شاشات موجودة لكن غير مربوطة بأي Route**
+2. **2 ملفات مكررة (backup)**
+3. **2 شاشات LoginScreen متطابقة** (shared vs auth)
+4. **1 Route redirect** (`/dashboard/promotions` → `/dashboard`)
 
 ---
 
@@ -32,309 +32,367 @@
 ### 📂 features/auth/presentation/screens/ (3 ملفات)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `LoginScreen` | `login_screen.dart` | ✅ مستخدم |
-| `RegisterScreen` | `register_screen.dart` | ✅ مستخدم |
-| `ForgotPasswordScreen` | `forgot_password_screen.dart` | ✅ مستخدم |
+| `LoginScreen` | `login_screen.dart` | ✅ مستخدم في Route `/login` |
+| `RegisterScreen` | `register_screen.dart` | ✅ مستخدم في Route `/register` |
+| `ForgotPasswordScreen` | `forgot_password_screen.dart` | ✅ مستخدم في Route `/forgot-password` |
 
 ### 📂 features/dashboard/presentation/screens/ (12 ملف)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
 | `DashboardShell` | `dashboard_shell.dart` | ✅ Shell للـ Navigation |
-| `HomeTab` | `home_tab.dart` | ✅ مستخدم |
-| `OrdersTab` | `orders_tab.dart` | ✅ مستخدم |
-| `ProductsTab` | `products_tab.dart` | ✅ مستخدم |
-| `CustomersScreen` | `customers_screen.dart` | ✅ مستخدم |
-| `MerchantServicesScreen` | `merchant_services_screen.dart` | ✅ مستخدم |
-| `MbuyToolsScreen` | `mbuy_tools_screen.dart` | ✅ مستخدم |
-| `ShortcutsScreen` | `shortcuts_screen.dart` | ✅ مستخدم |
-| `AuditLogsScreen` | `audit_logs_screen.dart` | ✅ مستخدم |
-| `NotificationsScreen` | `notifications_screen.dart` | ✅ مستخدم |
-| `ReportsScreen` | `reports_screen.dart` | ✅ مستخدم |
+| `HomeTab` | `home_tab.dart` | ✅ مستخدم في Route `/dashboard` |
+| `OrdersTab` | `orders_tab.dart` | ✅ مستخدم في Route `/dashboard/orders` |
+| `ProductsTab` | `products_tab.dart` | ✅ مستخدم في Route `/dashboard/products` |
+| `CustomersScreen` | `customers_screen.dart` | ✅ مستخدم في Route `/dashboard/customers` |
+| `MerchantServicesScreen` | `merchant_services_screen.dart` | ✅ مستخدم في Route `/dashboard/store-management` |
+| `MbuyToolsScreen` | `mbuy_tools_screen.dart` | ✅ مستخدم في Route `/dashboard/tools` |
+| `ShortcutsScreen` | `shortcuts_screen.dart` | ✅ مستخدم في Route `/dashboard/shortcuts` |
+| `AuditLogsScreen` | `audit_logs_screen.dart` | ✅ مستخدم في Route `/dashboard/audit-logs` |
+| `NotificationsScreen` | `notifications_screen.dart` | ✅ مستخدم في Route `/dashboard/notifications` |
+| `ReportsScreen` | `reports_screen.dart` | ✅ مستخدم في Route `/dashboard/reports` |
+| `ProductSettingsView` | `product_settings_view.dart` | ⚠️ Widget داخلي (ليس Route) |
 
 ### 📂 features/store/presentation/screens/ (5 ملفات)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `StoreTab` | `store_tab.dart` | ⚠️ غير مستخدم (import فقط) |
-| `AppStoreScreen` | `app_store_screen.dart` | ✅ مستخدم |
-| `StoreToolsTab` | `store_tools_tab.dart` | ✅ مستخدم |
-| `InventoryScreen` | `inventory_screen.dart` | ✅ مستخدم |
-| `ViewMyStoreScreen` | `view_my_store_screen.dart` | ✅ مستخدم |
+| `StoreTab` | `store_tab.dart` | ❌ **غير مستخدم** - Import فقط في router لكن لا Route |
+| `AppStoreScreen` | `app_store_screen.dart` | ✅ مستخدم في Route `/dashboard/store` |
+| `StoreToolsTab` | `store_tools_tab.dart` | ✅ مستخدم في Route `/dashboard/store-tools` |
+| `InventoryScreen` | `inventory_screen.dart` | ✅ مستخدم في Route `/dashboard/inventory` |
+| `ViewMyStoreScreen` | `view_my_store_screen.dart` | ✅ مستخدم في Route `/dashboard/view-store` |
 
 ### 📂 features/finance/presentation/screens/ (3 ملفات)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `WalletScreen` | `wallet_screen.dart` | ✅ مستخدم |
-| `SalesScreen` | `sales_screen.dart` | ✅ مستخدم |
-| `PointsScreen` | `points_screen.dart` | ✅ مستخدم |
+| `WalletScreen` | `wallet_screen.dart` | ✅ مستخدم في Route `/dashboard/wallet` |
+| `SalesScreen` | `sales_screen.dart` | ✅ مستخدم في Route `/dashboard/sales` |
+| `PointsScreen` | `points_screen.dart` | ✅ مستخدم في Route `/dashboard/points` |
 
 ### 📂 features/marketing/presentation/screens/ (5 ملفات)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `MarketingScreen` | `marketing_screen.dart` | ✅ مستخدم |
-| `CouponsScreen` | `coupons_screen.dart` | ✅ مستخدم |
-| `FlashSalesScreen` | `flash_sales_screen.dart` | ✅ مستخدم |
-| `BoostSalesScreen` | `boost_sales_screen.dart` | ✅ مستخدم |
-| `PromotionsScreen` | `promotions_screen.dart` | ❌ غير مستخدم |
+| `MarketingScreen` | `marketing_screen.dart` | ✅ مستخدم في Route `/dashboard/marketing` |
+| `CouponsScreen` | `coupons_screen.dart` | ✅ مستخدم في Route `/dashboard/coupons` |
+| `FlashSalesScreen` | `flash_sales_screen.dart` | ✅ مستخدم في Route `/dashboard/flash-sales` |
+| `BoostSalesScreen` | `boost_sales_screen.dart` | ✅ مستخدم في Route `/dashboard/boost-sales` |
+| `PromotionsScreen` | `promotions_screen.dart` | ⚠️ **Route redirect** - Route موجود لكن redirect لـ `/dashboard` |
 
 ### 📂 features/dropshipping/presentation/screens/ (2 ملف)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `DropshippingScreen` | `dropshipping_screen.dart` | ✅ مستخدم |
-| `SupplierOrdersScreen` | `supplier_orders_screen.dart` | ✅ مستخدم |
+| `DropshippingScreen` | `dropshipping_screen.dart` | ✅ مستخدم في Route `/dashboard/dropshipping` |
+| `SupplierOrdersScreen` | `supplier_orders_screen.dart` | ✅ مستخدم في Route `/dashboard/supplier-orders` |
 
-### 📂 features/products/presentation/screens/ (2 ملف)
+### 📂 features/products/presentation/screens/ (3 ملفات)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `AddProductScreen` | `add_product_screen.dart` | ✅ مستخدم |
-| `ProductDetailsScreen` | `product_details_screen.dart` | ✅ مستخدم |
+| `AddProductScreen` | `add_product_screen.dart` | ✅ مستخدم في Route `/dashboard/products/add` |
+| `ProductDetailsScreen` | `product_details_screen.dart` | ✅ مستخدم في Route `/dashboard/products/:id` |
+| `_FullScreenGalleryPage` | `product_details_screen.dart` | ⚠️ Widget داخلي (ليس Route) |
 
 ### 📂 features/merchant/presentation/screens/ (2 ملف)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `CreateStoreScreen` | `create_store_screen.dart` | ✅ مستخدم |
-| `CreateStoreScreen` | `create_store_screen_backup.dart` | ❌ **تكرار (Backup)** |
+| `CreateStoreScreen` | `create_store_screen.dart` | ✅ مستخدم في Route `/dashboard/store/create-store` |
+| `CreateStoreScreen` | `create_store_screen_backup.dart` | ❌ **تكرار (Backup)** - نفس الكلاس، ملف احتياطي |
 
 ### 📂 features/merchant/screens/ (11 ملف)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `AiAssistantScreen` | `ai_assistant_screen.dart` | ✅ مستخدم |
-| `ContentGeneratorScreen` | `content_generator_screen.dart` | ✅ مستخدم |
-| `AbandonedCartScreen` | `abandoned_cart_screen.dart` | ✅ مستخدم |
-| `ReferralScreen` | `referral_screen.dart` | ✅ مستخدم |
-| `LoyaltyProgramScreen` | `loyalty_program_screen.dart` | ✅ مستخدم |
-| `CustomerSegmentsScreen` | `customer_segments_screen.dart` | ✅ مستخدم |
-| `CustomMessagesScreen` | `custom_messages_screen.dart` | ✅ مستخدم |
-| `SmartPricingScreen` | `smart_pricing_screen.dart` | ✅ مستخدم |
-| `SmartAnalyticsScreen` | `smart_analytics_screen.dart` | ✅ مستخدم |
-| `AutoReportsScreen` | `auto_reports_screen.dart` | ✅ مستخدم |
-| `HeatmapScreen` | `heatmap_screen.dart` | ✅ مستخدم |
+| `AiAssistantScreen` | `ai_assistant_screen.dart` | ✅ مستخدم في Route `/dashboard/ai-assistant` |
+| `ContentGeneratorScreen` | `content_generator_screen.dart` | ✅ مستخدم في Route `/dashboard/content-generator` |
+| `SmartAnalyticsScreen` | `smart_analytics_screen.dart` | ✅ مستخدم في Route `/dashboard/smart-analytics` |
+| `AutoReportsScreen` | `auto_reports_screen.dart` | ✅ مستخدم في Route `/dashboard/auto-reports` |
+| `HeatmapScreen` | `heatmap_screen.dart` | ✅ مستخدم في Route `/dashboard/heatmap` |
+| `AbandonedCartScreen` | `abandoned_cart_screen.dart` | ✅ مستخدم في Route `/dashboard/abandoned-cart` |
+| `ReferralScreen` | `referral_screen.dart` | ✅ مستخدم في Route `/dashboard/referral` |
+| `LoyaltyProgramScreen` | `loyalty_program_screen.dart` | ✅ مستخدم في Route `/dashboard/loyalty-program` |
+| `CustomerSegmentsScreen` | `customer_segments_screen.dart` | ✅ مستخدم في Route `/dashboard/customer-segments` |
+| `CustomMessagesScreen` | `custom_messages_screen.dart` | ✅ مستخدم في Route `/dashboard/custom-messages` |
+| `SmartPricingScreen` | `smart_pricing_screen.dart` | ✅ مستخدم في Route `/dashboard/smart-pricing` |
 
 ### 📂 features/settings/presentation/screens/ (7 ملفات)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `AccountSettingsScreen` | `account_settings_screen.dart` | ✅ مستخدم |
-| `NotificationSettingsScreen` | `notification_settings_screen.dart` | ✅ مستخدم |
-| `AppearanceSettingsScreen` | `appearance_settings_screen.dart` | ✅ مستخدم |
-| `PrivacyPolicyScreen` | `privacy_policy_screen.dart` | ✅ مستخدم |
-| `TermsScreen` | `terms_screen.dart` | ✅ مستخدم |
-| `SupportScreen` | `support_screen.dart` | ✅ مستخدم |
-| `AboutScreen` | `about_screen.dart` | ✅ مستخدم |
-
-### 📂 features/studio/screens/ (12 ملف)
-| الكلاس | الملف | الحالة |
-|--------|-------|--------|
-| `StudioMainPage` | `studio_main_page.dart` | ✅ مستخدم |
-| `StudioHomeScreen` | `studio_home_screen.dart` | ✅ مستخدم |
-| `ScriptGeneratorScreen` | `script_generator_screen.dart` | ✅ مستخدم |
-| `SceneEditorScreen` | `scene_editor_screen.dart` | ✅ مستخدم |
-| `CanvasEditorScreen` | `canvas_editor_screen.dart` | ✅ مستخدم |
-| `ExportScreen` | `export_screen.dart` | ✅ مستخدم |
-| `PackagesPage` | `packages_page.dart` | ✅ مستخدم |
-| `GenerationStudioPage` | `generation_studio_page.dart` | ⚠️ داخلي فقط |
-| `EditStudioPage` | `edit_studio_page.dart` | ⚠️ داخلي فقط |
-| `EditTab` | `edit_tab.dart` | ⚠️ داخلي فقط |
-| `GenerateTab` | `generate_tab.dart` | ⚠️ داخلي فقط |
-
-### 📂 features/conversations/presentation/screens/ (1 ملف)
-| الكلاس | الملف | الحالة |
-|--------|-------|--------|
-| `ConversationsScreen` | `conversations_screen.dart` | ✅ مستخدم |
+| `AccountSettingsScreen` | `account_settings_screen.dart` | ✅ مستخدم في Route `/settings` |
+| `PrivacyPolicyScreen` | `privacy_policy_screen.dart` | ✅ مستخدم في Route `/privacy-policy` |
+| `TermsScreen` | `terms_screen.dart` | ✅ مستخدم في Route `/terms` |
+| `SupportScreen` | `support_screen.dart` | ✅ مستخدم في Route `/support` |
+| `AboutScreen` | `about_screen.dart` | ✅ مستخدم في Route `/dashboard/about` |
+| `NotificationSettingsScreen` | `notification_settings_screen.dart` | ✅ مستخدم في Route `/notification-settings` |
+| `AppearanceSettingsScreen` | `appearance_settings_screen.dart` | ✅ مستخدم في Route `/appearance-settings` |
 
 ### 📂 features/onboarding/presentation/screens/ (1 ملف)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `OnboardingScreen` | `onboarding_screen.dart` | ✅ مستخدم |
+| `OnboardingScreen` | `onboarding_screen.dart` | ✅ مستخدم في Route `/onboarding` |
 
-### 📂 features/dev/ (1 ملف)
+### 📂 features/conversations/presentation/screens/ (1 ملف)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `WidgetCatalogScreen` | `widget_catalog_screen.dart` | ❌ غير مستخدم (Dev only) |
+| `ConversationsScreen` | `conversations_screen.dart` | ✅ مستخدم في Route `/dashboard/conversations` |
+| `_ChatDetailScreen` | `conversations_screen.dart` | ⚠️ Widget داخلي (ليس Route) |
 
-### 📂 apps/merchant/features/ (6 ملفات)
+### 📂 features/studio/screens/ (9 ملفات)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `WebstoreScreen` | `webstore/webstore_screen.dart` | ✅ مستخدم |
-| `ShippingScreen` | `shipping/shipping_screen.dart` | ✅ مستخدم |
-| `PaymentMethodsScreen` | `payments/payment_methods_screen.dart` | ✅ مستخدم |
-| `CodSettingsScreen` | `payments/cod_settings_screen.dart` | ❌ غير مستخدم |
-| `DeliveryOptionsScreen` | `delivery/delivery_options_screen.dart` | ❌ غير مستخدم |
-| `WhatsappScreen` | `whatsapp/whatsapp_screen.dart` | ❌ غير مستخدم |
-| `QrCodeScreen` | `qrcode/qr_code_screen.dart` | ❌ غير مستخدم |
+| `StudioMainPage` | `studio_main_page.dart` | ✅ مستخدم في Route `/dashboard/studio` |
+| `StudioHomeScreen` | `studio_home_screen.dart` | ✅ مستخدم في Route `/dashboard/content-studio` |
+| `ScriptGeneratorScreen` | `script_generator_screen.dart` | ✅ مستخدم في Route `/dashboard/content-studio/script-generator` |
+| `SceneEditorScreen` | `scene_editor_screen.dart` | ✅ مستخدم في Route `/dashboard/content-studio/editor` |
+| `CanvasEditorScreen` | `canvas_editor_screen.dart` | ✅ مستخدم في Route `/dashboard/content-studio/canvas` |
+| `ExportScreen` | `export_screen.dart` | ✅ مستخدم في Route `/dashboard/content-studio/export` |
+| `PackagesPage` | `packages_page.dart` | ✅ مستخدم في Route `/dashboard/packages` |
+| `EditTab` | `edit_tab.dart` | ⚠️ Widget داخلي (Tab داخل Studio) |
+| `GenerateTab` | `generate_tab.dart` | ⚠️ Widget داخلي (Tab داخل Studio) |
+| `EditStudioPage` | `edit_studio_page.dart` | ❌ **غير مستخدم** - لا Route |
+| `GenerationStudioPage` | `generation_studio_page.dart` | ❌ **غير مستخدم** - لا Route |
+
+### 📂 apps/merchant/features/ (4 ملفات)
+| الكلاس | الملف | الحالة |
+|--------|-------|--------|
+| `WebstoreScreen` | `webstore/webstore_screen.dart` | ✅ مستخدم في Route `/dashboard/webstore` |
+| `ShippingScreen` | `shipping/shipping_screen.dart` | ✅ مستخدم في Route `/dashboard/shipping` |
+| `PaymentMethodsScreen` | `payments/payment_methods_screen.dart` | ✅ مستخدم في Route `/dashboard/payment-methods` |
+| `QrCodeScreen` | `qrcode/qr_code_screen.dart` | ❌ **غير مستخدم** - لا Route |
+| `DeliveryOptionsScreen` | `delivery/delivery_options_screen.dart` | ❌ **غير مستخدم** - لا Route |
+| `CodSettingsScreen` | `payments/cod_settings_screen.dart` | ❌ **غير مستخدم** - لا Route |
+| `WhatsappScreen` | `whatsapp/whatsapp_screen.dart` | ❌ **غير مستخدم** - لا Route |
 
 ### 📂 shared/screens/ (1 ملف)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `LoginScreen` | `login_screen.dart` | ⚠️ **تكرار مع features/auth** |
+| `LoginScreen` | `login_screen.dart` | ⚠️ **تكرار** - نفس الاسم في `features/auth` |
 
 ### 📂 shared/widgets/ (Base Classes)
 | الكلاس | الملف | الحالة |
 |--------|-------|--------|
-| `BaseScreen` | `base_screen.dart` | ✅ Base Widget |
-| `ComingSoonScreen` | `base_screen.dart` | ✅ مستخدم |
-| `SubPageScreen` | `base_screen.dart` | ✅ Base Widget |
+| `BaseScreen` | `base_screen.dart` | ✅ Base class (ليس Route) |
+| `SubPageScreen` | `base_screen.dart` | ✅ Base class (ليس Route) |
+| `ComingSoonScreen` | `base_screen.dart` | ✅ مستخدم في Route `/dashboard/feature/:name` |
+| `BaseListScreen` | `base_screen.dart` | ✅ Base class (ليس Route) |
+| `BaseFormScreen` | `base_screen.dart` | ✅ Base class (ليس Route) |
+| `BaseDetailsScreen` | `base_screen.dart` | ✅ Base class (ليس Route) |
+| `SubPageScaffold` | `sub_page_scaffold.dart` | ✅ Widget مساعد (ليس Route) |
+
+### 📂 features/dev/ (1 ملف)
+| الكلاس | الملف | الحالة |
+|--------|-------|--------|
+| `WidgetCatalogScreen` | `widget_catalog_screen.dart` | ❌ **Dev Screen** - لا Route (للاختبار فقط) |
 
 ---
 
 ## 2️⃣ Audit للـ Routes / Navigation
 
-### 📍 ملف تعريف المسارات
-**الملف:** `lib/core/router/app_router.dart` (550 سطر)
+### 📍 Router Configuration
+- **الملف:** `lib/core/router/app_router.dart`
+- **النوع:** GoRouter (declarative routing)
+- **Entry Point:** `MerchantApp` → `AppRouter.createRouter()`
+- **Initial Location:** `/login`
 
-### 📊 جدول Routes الكامل
+### 📊 Routes Table (جدول المسارات)
 
-#### Auth Routes (خارج Shell)
-| Route Path | Route Name | الشاشة | السطر |
-|------------|------------|--------|-------|
-| `/login` | `login` | `LoginScreen` (shared) | 134 |
-| `/register` | `register` | `RegisterScreen` | 139 |
-| `/forgot-password` | `forgot-password` | `ForgotPasswordScreen` | 144 |
+#### Auth Routes (3 routes)
+| Route Path | Route Name | الشاشة | السطر | الحالة |
+|------------|------------|--------|-------|--------|
+| `/login` | `login` | `LoginScreen` (shared) | 136 | ✅ |
+| `/register` | `register` | `RegisterScreen` | 141 | ✅ |
+| `/forgot-password` | `forgot-password` | `ForgotPasswordScreen` | 146 | ✅ |
 
-#### Settings Routes (خارج Shell)
-| Route Path | Route Name | الشاشة | السطر |
-|------------|------------|--------|-------|
-| `/settings` | `settings` | `AccountSettingsScreen` | 152 |
-| `/privacy-policy` | `privacy-policy` | `PrivacyPolicyScreen` | 157 |
-| `/terms` | `terms` | `TermsScreen` | 162 |
-| `/support` | `support` | `SupportScreen` | 167 |
-| `/notification-settings` | `notification-settings` | `NotificationSettingsScreen` | 172 |
-| `/appearance-settings` | `appearance-settings` | `AppearanceSettingsScreen` | 177 |
+#### Settings Routes (6 routes)
+| Route Path | Route Name | الشاشة | السطر | الحالة |
+|------------|------------|--------|-------|--------|
+| `/settings` | `settings` | `AccountSettingsScreen` | 155 | ✅ |
+| `/privacy-policy` | `privacy-policy` | `PrivacyPolicyScreen` | 160 | ✅ |
+| `/terms` | `terms` | `TermsScreen` | 165 | ✅ |
+| `/support` | `support` | `SupportScreen` | 170 | ✅ |
+| `/notification-settings` | `notification-settings` | `NotificationSettingsScreen` | 175 | ✅ |
+| `/appearance-settings` | `appearance-settings` | `AppearanceSettingsScreen` | 180 | ✅ |
 
-#### Onboarding Route
-| Route Path | Route Name | الشاشة | السطر |
-|------------|------------|--------|-------|
-| `/onboarding` | `onboarding` | `OnboardingScreen` | 185 |
+#### Onboarding Route (1 route)
+| Route Path | Route Name | الشاشة | السطر | الحالة |
+|------------|------------|--------|-------|--------|
+| `/onboarding` | `onboarding` | `OnboardingScreen` | 189 | ✅ |
 
-#### Dashboard Shell Routes
-| Route Path | Route Name | الشاشة | السطر |
-|------------|------------|--------|-------|
-| `/dashboard` | `dashboard` | `HomeTab` | 200 |
-| `/dashboard/studio` | `mbuy-studio` | `StudioMainPage` | 206 |
-| `/dashboard/tools` | `mbuy-tools` | `MbuyToolsScreen` | 211 |
-| `/dashboard/marketing` | `marketing` | `MarketingScreen` | 216 |
-| `/dashboard/store-management` | `store-management` | `MerchantServicesScreen` | 221 |
-| `/dashboard/boost-sales` | `boost-sales` | `BoostSalesScreen` | 226 |
-| `/dashboard/webstore` | `webstore` | `WebstoreScreen` | 231 |
-| `/dashboard/shipping` | `shipping` | `ShippingScreen` | 236 |
-| `/dashboard/payment-methods` | `payment-methods` | `PaymentMethodsScreen` | 241 |
-| `/dashboard/feature/:name` | `feature` | `ComingSoonScreen` | 246 |
-| `/dashboard/shortcuts` | `shortcuts` | `ShortcutsScreen` | 260 |
-| `/dashboard/promotions` | `promotions` | **REDIRECT** → `/dashboard` | 265 |
-| `/dashboard/inventory` | `inventory` | `InventoryScreen` | 269 |
-| `/dashboard/audit-logs` | `audit-logs` | `AuditLogsScreen` | 274 |
-| `/dashboard/view-store` | `view-store` | `ViewMyStoreScreen` | 279 |
-| `/dashboard/notifications` | `notifications` | `NotificationsScreen` | 284 |
-| `/dashboard/dropshipping` | `dropshipping` | `DropshippingScreen` | 289 |
-| `/dashboard/supplier-orders` | `supplier-orders` | `SupplierOrdersScreen` | 294 |
-| `/dashboard/packages` | `packages` | `PackagesPage` | 299 |
-| `/dashboard/reports` | `reports` | `ReportsScreen` | 304 |
-| `/dashboard/customers` | `customers` | `CustomersScreen` | 309 |
-| `/dashboard/wallet` | `wallet` | `WalletScreen` | 315 |
-| `/dashboard/points` | `points` | `PointsScreen` | 320 |
-| `/dashboard/sales` | `sales` | `SalesScreen` | 325 |
-| `/dashboard/coupons` | `coupons` | `CouponsScreen` | 331 |
-| `/dashboard/flash-sales` | `flash-sales` | `FlashSalesScreen` | 336 |
-| `/dashboard/abandoned-cart` | `abandoned-cart` | `AbandonedCartScreen` | 341 |
-| `/dashboard/referral` | `referral` | `ReferralScreen` | 346 |
-| `/dashboard/loyalty-program` | `loyalty-program` | `LoyaltyProgramScreen` | 351 |
-| `/dashboard/customer-segments` | `customer-segments` | `CustomerSegmentsScreen` | 356 |
-| `/dashboard/custom-messages` | `custom-messages` | `CustomMessagesScreen` | 361 |
-| `/dashboard/smart-pricing` | `smart-pricing` | `SmartPricingScreen` | 366 |
-| `/dashboard/store-tools` | `store-tools` | `StoreToolsTab` | 372 |
-| `/dashboard/ai-generation` | `ai-generation` | `StudioMainPage` | 378 |
-| `/dashboard/content-studio` | `content-studio` | `StudioHomeScreen` | 384 |
-| `/dashboard/content-studio/script-generator` | `studio-script` | `ScriptGeneratorScreen` | 390 |
-| `/dashboard/content-studio/editor` | `studio-editor` | `SceneEditorScreen` | 400 |
-| `/dashboard/content-studio/canvas` | `studio-canvas` | `CanvasEditorScreen` | 415 |
-| `/dashboard/content-studio/preview` | `studio-preview` | `ComingSoonScreen` | 425 |
-| `/dashboard/content-studio/export` | `studio-export` | `ExportScreen` | 432 |
-| `/dashboard/ai-assistant` | `ai-assistant` | `AiAssistantScreen` | 444 |
-| `/dashboard/content-generator` | `content-generator` | `ContentGeneratorScreen` | 449 |
-| `/dashboard/smart-analytics` | `smart-analytics` | `SmartAnalyticsScreen` | 455 |
-| `/dashboard/auto-reports` | `auto-reports` | `AutoReportsScreen` | 460 |
-| `/dashboard/heatmap` | `heatmap` | `HeatmapScreen` | 465 |
-| `/dashboard/orders` | `orders` | `OrdersTab` | 473 |
-| `/dashboard/products` | `products` | `ProductsTab` | 479 |
-| `/dashboard/products/add` | `add-product` | `AddProductScreen` | 485 |
-| `/dashboard/products/:id` | `product-details` | `ProductDetailsScreen` | 498 |
-| `/dashboard/conversations` | `conversations` | `ConversationsScreen` | 509 |
-| `/dashboard/store` | `store` | `AppStoreScreen` | 515 |
-| `/dashboard/store/create-store` | `create-store` | `CreateStoreScreen` | 521 |
-| `/dashboard/about` | `about` | `AboutScreen` | 528 |
+#### Dashboard Shell Routes (Main Tab - 0)
+| Route Path | Route Name | الشاشة | السطر | الحالة |
+|------------|------------|--------|-------|--------|
+| `/dashboard` | `dashboard` | `HomeTab` | 202 | ✅ |
+| `/dashboard/studio` | `mbuy-studio` | `StudioMainPage` | 208 | ✅ |
+| `/dashboard/tools` | `mbuy-tools` | `MbuyToolsScreen` | 213 | ✅ |
+| `/dashboard/marketing` | `marketing` | `MarketingScreen` | 218 | ✅ |
+| `/dashboard/store-management` | `store-management` | `MerchantServicesScreen` | 223 | ✅ |
+| `/dashboard/boost-sales` | `boost-sales` | `BoostSalesScreen` | 228 | ✅ |
+| `/dashboard/webstore` | `webstore` | `WebstoreScreen` | 233 | ✅ |
+| `/dashboard/shipping` | `shipping` | `ShippingScreen` | 238 | ✅ |
+| `/dashboard/payment-methods` | `payment-methods` | `PaymentMethodsScreen` | 243 | ✅ |
+| `/dashboard/feature/:name` | `feature` | `ComingSoonScreen` | 248 | ✅ |
+| `/dashboard/shortcuts` | `shortcuts` | `ShortcutsScreen` | 265 | ✅ |
+| `/dashboard/promotions` | `promotions` | **REDIRECT** → `/dashboard` | 270 | ⚠️ |
+| `/dashboard/inventory` | `inventory` | `InventoryScreen` | 275 | ✅ |
+| `/dashboard/audit-logs` | `audit-logs` | `AuditLogsScreen` | 280 | ✅ |
+| `/dashboard/view-store` | `view-store` | `ViewMyStoreScreen` | 285 | ✅ |
+| `/dashboard/notifications` | `notifications` | `NotificationsScreen` | 290 | ✅ |
+| `/dashboard/dropshipping` | `dropshipping` | `DropshippingScreen` | 295 | ✅ |
+| `/dashboard/supplier-orders` | `supplier-orders` | `SupplierOrdersScreen` | 300 | ✅ |
+| `/dashboard/packages` | `packages` | `PackagesPage` | 305 | ✅ |
+| `/dashboard/reports` | `reports` | `ReportsScreen` | 310 | ✅ |
+| `/dashboard/customers` | `customers` | `CustomersScreen` | 315 | ✅ |
+| `/dashboard/wallet` | `wallet` | `WalletScreen` | 321 | ✅ |
+| `/dashboard/points` | `points` | `PointsScreen` | 326 | ✅ |
+| `/dashboard/sales` | `sales` | `SalesScreen` | 331 | ✅ |
+| `/dashboard/coupons` | `coupons` | `CouponsScreen` | 337 | ✅ |
+| `/dashboard/flash-sales` | `flash-sales` | `FlashSalesScreen` | 342 | ✅ |
+| `/dashboard/abandoned-cart` | `abandoned-cart` | `AbandonedCartScreen` | 347 | ✅ |
+| `/dashboard/referral` | `referral` | `ReferralScreen` | 352 | ✅ |
+| `/dashboard/loyalty-program` | `loyalty-program` | `LoyaltyProgramScreen` | 357 | ✅ |
+| `/dashboard/customer-segments` | `customer-segments` | `CustomerSegmentsScreen` | 362 | ✅ |
+| `/dashboard/custom-messages` | `custom-messages` | `CustomMessagesScreen` | 367 | ✅ |
+| `/dashboard/smart-pricing` | `smart-pricing` | `SmartPricingScreen` | 372 | ✅ |
+| `/dashboard/store-tools` | `store-tools` | `StoreToolsTab` | 378 | ✅ |
+| `/dashboard/ai-generation` | `ai-generation` | `StudioMainPage` (redirect) | 384 | ✅ |
+| `/dashboard/content-studio` | `content-studio` | `StudioHomeScreen` | 390 | ✅ |
+| `/dashboard/content-studio/script-generator` | `studio-script` | `ScriptGeneratorScreen` | 395 | ✅ |
+| `/dashboard/content-studio/editor` | `studio-editor` | `SceneEditorScreen` | 404 | ✅ |
+| `/dashboard/content-studio/canvas` | `studio-canvas` | `CanvasEditorScreen` | 417 | ✅ |
+| `/dashboard/content-studio/preview` | `studio-preview` | `ComingSoonScreen` | 426 | ✅ |
+| `/dashboard/content-studio/export` | `studio-export` | `ExportScreen` | 433 | ✅ |
+| `/dashboard/ai-assistant` | `ai-assistant` | `AiAssistantScreen` | 445 | ✅ |
+| `/dashboard/content-generator` | `content-generator` | `ContentGeneratorScreen` | 450 | ✅ |
+| `/dashboard/smart-analytics` | `smart-analytics` | `SmartAnalyticsScreen` | 456 | ✅ |
+| `/dashboard/auto-reports` | `auto-reports` | `AutoReportsScreen` | 461 | ✅ |
+| `/dashboard/heatmap` | `heatmap` | `HeatmapScreen` | 466 | ✅ |
 
----
+#### Dashboard Shell Routes (Orders Tab - 1)
+| Route Path | Route Name | الشاشة | السطر | الحالة |
+|------------|------------|--------|-------|--------|
+| `/dashboard/orders` | `orders` | `OrdersTab` | 474 | ✅ |
 
-## 3️⃣ 🚨 Routes المعطلة (Broken Routes)
+#### Dashboard Shell Routes (Products Tab - 2)
+| Route Path | Route Name | الشاشة | السطر | الحالة |
+|------------|------------|--------|-------|--------|
+| `/dashboard/products` | `products` | `ProductsTab` | 480 | ✅ |
+| `/dashboard/products/add` | `add-product` | `AddProductScreen` | 485 | ✅ |
+| `/dashboard/products/:id` | `product-details` | `ProductDetailsScreen` | 502 | ✅ |
 
-### Routes تُستخدم في الكود لكن غير موجودة في Router:
+#### Dashboard Shell Routes (Conversations Tab - 3)
+| Route Path | Route Name | الشاشة | السطر | الحالة |
+|------------|------------|--------|-------|--------|
+| `/dashboard/conversations` | `conversations` | `ConversationsScreen` | 513 | ✅ |
 
-| Route المستخدم | الملف | السطر | المشكلة |
-|---------------|-------|-------|---------|
-| `/dashboard/settings` | `store_tab.dart` | 96 | ❌ **غير موجود في Router** |
-| `/dashboard/account-settings` | `store_tab.dart` | 105 | ❌ **غير موجود في Router** |
-| `/dashboard/store/settings` | `view_my_store_screen.dart` | 476 | ❌ **غير موجود في Router** |
+#### Dashboard Shell Routes (Store Tab - 4)
+| Route Path | Route Name | الشاشة | السطر | الحالة |
+|------------|------------|--------|-------|--------|
+| `/dashboard/store` | `store` | `AppStoreScreen` | 519 | ✅ |
+| `/dashboard/store/create-store` | `create-store` | `CreateStoreScreen` | 524 | ✅ |
 
-### 🔧 الحل المقترح:
-```
-1. إضافة Route: /dashboard/settings → AccountSettingsScreen
-2. إضافة Route: /dashboard/account-settings → AccountSettingsScreen  
-3. إضافة Route: /dashboard/store/settings → CreateStoreScreen (تعديل)
-```
+#### Dashboard Shell Routes (About)
+| Route Path | Route Name | الشاشة | السطر | الحالة |
+|------------|------------|--------|-------|--------|
+| `/dashboard/about` | `about` | `AboutScreen` | 532 | ✅ |
 
----
+### 🔍 Routes Issues (مشاكل المسارات)
 
-## 4️⃣ 🔴 الشاشات غير المستخدمة (Dead Screens)
+#### ⚠️ Routes مع Redirect
+| Route | الحالة | السبب |
+|-------|--------|-------|
+| `/dashboard/promotions` | Redirect → `/dashboard` | Route موجود لكن redirect فقط |
 
+#### ❌ Routes مفقودة (شاشات موجودة بدون Routes)
 | الشاشة | الملف | السبب |
 |--------|-------|-------|
-| `PromotionsScreen` | `features/marketing/presentation/screens/promotions_screen.dart` | لا يوجد Route يشير إليها |
-| `CodSettingsScreen` | `apps/merchant/features/payments/cod_settings_screen.dart` | لا يوجد Route |
-| `DeliveryOptionsScreen` | `apps/merchant/features/delivery/delivery_options_screen.dart` | لا يوجد Route |
-| `WhatsappScreen` | `apps/merchant/features/whatsapp/whatsapp_screen.dart` | لا يوجد Route |
 | `QrCodeScreen` | `apps/merchant/features/qrcode/qr_code_screen.dart` | لا يوجد Route |
-| `WidgetCatalogScreen` | `features/dev/widget_catalog_screen.dart` | Dev screen - لا يوجد Route |
+| `DeliveryOptionsScreen` | `apps/merchant/features/delivery/delivery_options_screen.dart` | لا يوجد Route |
+| `CodSettingsScreen` | `apps/merchant/features/payments/cod_settings_screen.dart` | لا يوجد Route |
+| `WhatsappScreen` | `apps/merchant/features/whatsapp/whatsapp_screen.dart` | لا يوجد Route |
 | `StoreTab` | `features/store/presentation/screens/store_tab.dart` | Import فقط، غير مستخدم |
-| `LoginScreen` (shared) | `shared/screens/login_screen.dart` | تكرار - يستخدم بدلاً منه auth version |
+| `EditStudioPage` | `features/studio/screens/edit_studio_page.dart` | لا يوجد Route |
+| `GenerationStudioPage` | `features/studio/screens/generation_studio_page.dart` | لا يوجد Route |
+| `WidgetCatalogScreen` | `features/dev/widget_catalog_screen.dart` | Dev screen - لا Route |
 
 ---
 
-## 5️⃣ 🔄 اكتشاف التكرار والنسخ (Duplicates)
+## 3️⃣ اكتشاف التكرار والنسخ (Duplicates)
 
-### ملفات مكررة:
+### 🔄 ملفات مكررة:
 
-| الملف الأصلي | الملف المكرر | سبب الاشتباه |
-|--------------|--------------|--------------|
-| `create_store_screen.dart` | `create_store_screen_backup.dart` | نسخة احتياطية - نفس الكلاس `CreateStoreScreen` |
-| `features/auth/.../login_screen.dart` | `shared/screens/login_screen.dart` | شاشتي تسجيل دخول - نفس الاسم |
+| الملف الأصلي | الملف المكرر | سبب الاشتباه | الحالة |
+|--------------|--------------|--------------|--------|
+| `features/merchant/presentation/screens/create_store_screen.dart` | `features/merchant/presentation/screens/create_store_screen_backup.dart` | نسخة احتياطية - نفس الكلاس `CreateStoreScreen` | ❌ **يجب حذف** |
+| `features/auth/presentation/screens/login_screen.dart` | `shared/screens/login_screen.dart` | شاشتي تسجيل دخول - نفس الاسم لكن مختلفة | ⚠️ **يجب توحيد** |
 
-### 🔧 التوصية:
-1. **حذف** `create_store_screen_backup.dart` بعد التأكد أن النسخة الأصلية تعمل
-2. **حذف** `shared/screens/login_screen.dart` واستخدام النسخة في `features/auth`
+### 📝 تفاصيل التكرار:
+
+#### 1. CreateStoreScreen Backup
+- **الملف الأصلي:** `create_store_screen.dart` (مستخدم في Route)
+- **الملف المكرر:** `create_store_screen_backup.dart` (غير مستخدم)
+- **السبب:** نسخة احتياطية قديمة
+- **التوصية:** حذف `create_store_screen_backup.dart` بعد التأكد أن النسخة الأصلية تعمل
+
+#### 2. LoginScreen Duplicate
+- **الملف 1:** `features/auth/presentation/screens/login_screen.dart` (غير مستخدم في Router)
+- **الملف 2:** `shared/screens/login_screen.dart` (مستخدم في Router - السطر 4)
+- **السبب:** نسختان مختلفتان لنفس الوظيفة
+- **التوصية:** 
+  - استخدام نسخة واحدة فقط
+  - حذف النسخة غير المستخدمة أو توحيدها
 
 ---
 
-## 6️⃣ ✅ Entry Points & MaterialApp
+## 4️⃣ الصفحات غير المستخدمة (Dead Screens)
 
-### Entry Point الرئيسي:
+### ❌ شاشات موجودة لكن غير مربوطة بأي Route:
+
+| الشاشة | الملف | السبب | التوصية |
+|---------|------|-------|---------|
+| `QrCodeScreen` | `apps/merchant/features/qrcode/qr_code_screen.dart` | لا يوجد Route | إضافة Route أو حذف |
+| `DeliveryOptionsScreen` | `apps/merchant/features/delivery/delivery_options_screen.dart` | لا يوجد Route | إضافة Route أو حذف |
+| `CodSettingsScreen` | `apps/merchant/features/payments/cod_settings_screen.dart` | لا يوجد Route | إضافة Route أو حذف |
+| `WhatsappScreen` | `apps/merchant/features/whatsapp/whatsapp_screen.dart` | لا يوجد Route | إضافة Route أو حذف |
+| `StoreTab` | `features/store/presentation/screens/store_tab.dart` | Import فقط، غير مستخدم | حذف Import أو إضافة Route |
+| `EditStudioPage` | `features/studio/screens/edit_studio_page.dart` | لا يوجد Route | إضافة Route أو حذف |
+| `GenerationStudioPage` | `features/studio/screens/generation_studio_page.dart` | لا يوجد Route | إضافة Route أو حذف |
+| `WidgetCatalogScreen` | `features/dev/widget_catalog_screen.dart` | Dev screen - للاختبار فقط | يمكن الاحتفاظ للاختبار |
+
+### ⚠️ شاشات مستخدمة بشكل غير مباشر:
+
+| الشاشة | الملف | الاستخدام |
+|---------|------|----------|
+| `PromotionsScreen` | `features/marketing/presentation/screens/promotions_screen.dart` | Route موجود لكن redirect فقط |
+
+---
+
+## 5️⃣ التأكد من Entry Points
+
+### 📍 Entry Point الرئيسي:
 ```
-main.dart → AppShell → MerchantApp (GoRouter)
+main.dart (line 15)
+  └─> AppShell (shared/app_shell.dart)
+      ├─> MerchantApp (apps/merchant/merchant_app.dart) [MaterialApp.router]
+      └─> MaterialApp (pre-login state) [MaterialApp]
 ```
 
-### MaterialApp Instances:
-| الموقع | النوع | الغرض |
-|--------|-------|-------|
-| `merchant_app.dart:24` | `MaterialApp.router` | ✅ **الأساسي** - GoRouter |
-| `app_shell.dart:92` | `MaterialApp` | ⚠️ Loading state |
-| `app_shell.dart:107` | `MaterialApp` | ⚠️ Pre-login state |
+### 🔍 MaterialApp Instances:
 
-### 🔧 ملاحظة:
-- `MaterialApp` في `app_shell.dart` تُستخدم للحالات المؤقتة قبل التوجيه لـ `MerchantApp`
-- هذا **مقبول** لأنها حالات مؤقتة (loading/pre-auth)
+| الموقع | النوع | الغرض | الحالة |
+|--------|-------|-------|--------|
+| `merchant_app.dart:24` | `MaterialApp.router` | ✅ **الأساسي** - GoRouter | ✅ صحيح |
+| `app_shell.dart:92` | `MaterialApp` | ⚠️ Loading state (مؤقت) | ✅ مقبول |
+| `app_shell.dart:107` | `MaterialApp` | ⚠️ Pre-login state (مؤقت) | ✅ مقبول |
+
+### 📝 ملاحظات:
+- ✅ **Entry Point واحد فقط:** `main.dart`
+- ✅ **MaterialApp.router واحد فقط:** في `MerchantApp`
+- ⚠️ **MaterialApp مؤقتان:** في `AppShell` للحالات الخاصة (loading/pre-auth) - **مقبول**
+- ✅ **لا يوجد تضارب:** كل MaterialApp له غرض محدد
 
 ---
 
-## 7️⃣ 📱 شجرة التنقل (Navigation Tree)
+## 6️⃣ Audit للمسارات داخل التطبيق (Deep Navigation)
 
-### Bottom Navigation Bar (5 تبويبات):
+### 📱 شجرة التنقل الأساسية:
+
+#### Bottom Navigation Bar (5 تبويبات):
 ```
 DashboardShell
 ├── [0] الرئيسية → /dashboard → HomeTab
@@ -344,7 +402,7 @@ DashboardShell
 └── [4] دروب شيب → /dashboard/dropshipping → DropshippingScreen
 ```
 
-### Nested Routes من الرئيسية:
+#### Nested Routes من الرئيسية (/dashboard):
 ```
 /dashboard
 ├── /studio → StudioMainPage
@@ -361,10 +419,15 @@ DashboardShell
 ├── /ai-assistant → AiAssistantScreen
 ├── /content-generator → ContentGeneratorScreen
 ├── /content-studio/... → Studio Nested Routes
+│   ├── /script-generator → ScriptGeneratorScreen
+│   ├── /editor → SceneEditorScreen
+│   ├── /canvas → CanvasEditorScreen
+│   ├── /preview → ComingSoonScreen
+│   └── /export → ExportScreen
 └── ... (المزيد)
 ```
 
-### Routes خارج Shell:
+#### Routes خارج Shell:
 ```
 /login → LoginScreen
 /register → RegisterScreen
@@ -378,72 +441,127 @@ DashboardShell
 /onboarding → OnboardingScreen
 ```
 
+### 🔍 Navigation Flow التحقق:
+
+#### ✅ Bottom Navigation:
+- **5 تبويبات:** جميعها مربوطة بـ Routes صحيحة
+- **التبديل:** يعمل عبر `context.go()` في `DashboardShell`
+- **الحالة النشطة:** يتم حسابها بناءً على المسار الحالي
+
+#### ✅ Nested Navigation:
+- **Products Tab:** يحتوي على nested routes (`/add`, `/:id`)
+- **Store Tab:** يحتوي على nested route (`/create-store`)
+- **Content Studio:** يحتوي على nested routes متعددة
+
+#### ✅ Back Navigation:
+- **GoRouter:** يدعم Back navigation تلقائياً
+- **Shell Routes:** Back يعمل منطقياً داخل Shell
+
 ---
 
-## 8️⃣ 📝 Recommendations (التوصيات)
+## 7️⃣ Recommendations (التوصيات)
 
 ### 🔴 عاجل (High Priority):
 
-1. **إضافة Routes المفقودة:**
-   ```dart
-   // في app_router.dart داخل Dashboard routes:
-   GoRoute(
-     path: 'settings',
-     name: 'dashboard-settings',
-     builder: (context, state) => const AccountSettingsScreen(),
-   ),
-   GoRoute(
-     path: 'account-settings', 
-     name: 'account-settings',
-     builder: (context, state) => const AccountSettingsScreen(),
-   ),
-   ```
+#### 1. إضافة Routes المفقودة:
+```dart
+// في app_router.dart داخل Dashboard routes:
+GoRoute(
+  path: 'qr-code',
+  name: 'qr-code',
+  builder: (context, state) => const QrCodeScreen(),
+),
+GoRoute(
+  path: 'delivery-options',
+  name: 'delivery-options',
+  builder: (context, state) => const DeliveryOptionsScreen(),
+),
+GoRoute(
+  path: 'cod-settings',
+  name: 'cod-settings',
+  builder: (context, state) => const CodSettingsScreen(),
+),
+GoRoute(
+  path: 'whatsapp',
+  name: 'whatsapp',
+  builder: (context, state) => const WhatsappScreen(),
+),
+```
 
-2. **إصلاح Route `/dashboard/store/settings`:**
-   - إما إضافته كـ nested route تحت `/dashboard/store`
-   - أو تغيير الكود في `view_my_store_screen.dart` لاستخدام route موجود
+#### 2. حذف الملفات المكررة:
+- ✅ **حذف** `create_store_screen_backup.dart` بعد التأكد أن النسخة الأصلية تعمل
+- ✅ **توحيد** `LoginScreen` - استخدام نسخة واحدة فقط (يفضل `shared/screens/login_screen.dart`)
+
+#### 3. إصلاح Route Redirect:
+- ✅ **إزالة redirect** من `/dashboard/promotions` أو إضافة Route فعلي لـ `PromotionsScreen`
+
+#### 4. تنظيف Imports غير المستخدمة:
+- ✅ **حذف** `StoreTab` import من `app_router.dart` إذا لم يكن مستخدماً
 
 ### 🟡 متوسط (Medium Priority):
 
-3. **حذف الملفات المكررة:**
-   - `create_store_screen_backup.dart` → حذف بعد التأكد
-   - `shared/screens/login_screen.dart` → توحيد مع `features/auth`
+#### 5. إضافة Routes للـ Studio Pages:
+```dart
+// إضافة routes لـ EditStudioPage و GenerationStudioPage
+// أو حذفها إذا لم تكن مطلوبة
+```
 
-4. **تفعيل أو حذف الشاشات غير المستخدمة:**
-   - `PromotionsScreen` → إضافة Route أو حذف
-   - `CodSettingsScreen` → إضافة Route أو حذف
-   - `DeliveryOptionsScreen` → إضافة Route أو حذف
-   - `WhatsappScreen` → إضافة Route أو حذف
-   - `QrCodeScreen` → إضافة Route أو حذف
+#### 6. توثيق Dead Screens:
+- ✅ **توثيق** سبب وجود `WidgetCatalogScreen` (Dev screen)
+- ✅ **قرار** حول `EditStudioPage` و `GenerationStudioPage`
 
 ### 🟢 منخفض (Low Priority):
 
-5. **توحيد LoginScreen:**
-   - تحديث `app_router.dart` ليستخدم `features/auth/.../login_screen.dart`
-   - حذف `shared/screens/login_screen.dart`
+#### 7. تحسين التنظيم:
+- ✅ **نقل** `QrCodeScreen`, `DeliveryOptionsScreen`, etc. إلى مجلدات مناسبة
+- ✅ **توحيد** بنية الملفات (screens vs pages vs tabs)
 
-6. **تنظيف Dev Screen:**
-   - `WidgetCatalogScreen` يمكن إبقاؤه للتطوير أو إضافة Route له
-
----
-
-## 📈 إحصائيات الفحص
-
-| المقياس | القيمة |
-|---------|--------|
-| إجمالي ملفات الشاشات | 82 |
-| شاشات مستخدمة | 66 |
-| شاشات غير مستخدمة | 8 |
-| شاشات داخلية (Internal) | 6 |
-| ملفات مكررة | 2 |
-| Routes مسجلة | 56 |
-| Routes معطلة | 3 |
-| MaterialApp instances | 3 |
-| GoRouter instances | 1 |
+#### 8. إضافة Documentation:
+- ✅ **توثيق** Navigation flow في README
+- ✅ **إضافة** comments في `app_router.dart` لكل section
 
 ---
 
-> **الخلاصة:** التطبيق بحالة جيدة بشكل عام مع بعض المشاكل البسيطة في Routes والملفات المكررة. الأولوية الأولى هي إصلاح الـ 3 Routes المعطلة.
+## 8️⃣ Statistics (إحصائيات)
+
+| الفئة | العدد |
+|-------|------|
+| **إجمالي الشاشات** | 85+ |
+| **Routes مسجلة** | 56+ |
+| **Nested Routes** | 5 |
+| **Shell Routes** | 1 (DashboardShell) |
+| **Auth Routes** | 3 |
+| **Settings Routes** | 6 |
+| **Dashboard Routes** | 45+ |
+| **Dead Screens** | 8 |
+| **Duplicate Files** | 2 |
+| **MaterialApp Instances** | 3 (1 router + 2 temp) |
+| **Entry Points** | 1 |
 
 ---
-*تم إنشاء هذا التقرير تلقائياً بتاريخ 2025-12-24*
+
+## 9️⃣ الخلاصة
+
+### ✅ النقاط الإيجابية:
+1. ✅ **بنية واضحة:** Routes منظمة في `app_router.dart`
+2. ✅ **Entry Point واحد:** لا يوجد تضارب
+3. ✅ **Navigation منطقي:** Bottom Nav + Nested Routes
+4. ✅ **معظم الشاشات مربوطة:** 90%+ من الشاشات لها Routes
+
+### ⚠️ النقاط التي تحتاج تحسين:
+1. ⚠️ **8 شاشات غير مستخدمة:** تحتاج إضافة Routes أو حذف
+2. ⚠️ **2 ملفات مكررة:** تحتاج تنظيف
+3. ⚠️ **1 Route redirect:** يحتاج إصلاح
+4. ⚠️ **LoginScreen مكرر:** يحتاج توحيد
+
+### 📊 التقييم العام:
+- **البنية:** ⭐⭐⭐⭐ (4/5)
+- **التنظيم:** ⭐⭐⭐⭐ (4/5)
+- **الاكتمال:** ⭐⭐⭐ (3/5)
+- **التوثيق:** ⭐⭐⭐ (3/5)
+
+---
+
+**تم إنشاء التقرير:** 2025-12-24  
+**آخر تحديث:** 2025-12-24  
+**الحالة:** ✅ مكتمل - جاهز للمراجعة

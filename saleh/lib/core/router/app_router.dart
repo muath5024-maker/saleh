@@ -23,7 +23,6 @@ import '../../features/finance/presentation/screens/wallet_screen.dart';
 import '../../features/finance/presentation/screens/points_screen.dart';
 import '../../features/finance/presentation/screens/sales_screen.dart';
 // Store
-import '../../features/store/presentation/screens/store_tab.dart';
 import '../../features/store/presentation/screens/app_store_screen.dart';
 import '../../features/store/presentation/screens/inventory_screen.dart';
 import '../../features/store/presentation/screens/view_my_store_screen.dart';
@@ -263,11 +262,6 @@ class AppRouter {
                   path: 'shortcuts',
                   name: 'shortcuts',
                   builder: (context, state) => const ShortcutsScreen(),
-                ),
-                GoRoute(
-                  path: 'promotions',
-                  name: 'promotions',
-                  redirect: (context, state) => '/dashboard',
                 ),
                 GoRoute(
                   path: 'inventory',
