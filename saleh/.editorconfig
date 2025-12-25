@@ -1,0 +1,53 @@
+# EditorConfig - مواصفات الترميز الموحد
+# يعمل مع معظم المحررات بما فيها VS Code
+# https://editorconfig.org
+
+root = true
+
+# تطبيق على جميع الملفات
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# ملفات Dart و Flutter
+[*.dart]
+indent_style = space
+indent_size = 2
+charset = utf-8
+end_of_line = lf
+
+# ملفات YAML
+[*.{yaml,yml}]
+indent_style = space
+indent_size = 2
+charset = utf-8
+end_of_line = lf
+
+# ملفات JSON
+[*.json]
+indent_style = space
+indent_size = 2
+charset = utf-8
+end_of_line = lf
+
+# ملفات Markdown
+[*.md]
+trim_trailing_whitespace = false
+charset = utf-8
+end_of_line = lf
+
+# ملفات Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 2
+charset = utf-8
+end_of_line = lf
+
+# pubspec files
+[pubspec.{yaml,lock}]
+indent_style = space
+indent_size = 2
+charset = utf-8
+end_of_line = lf

@@ -6,6 +6,17 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
+  
+  // File Encoding Settings - UTF-8 Only
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": false,
+  "[dart]": {
+    "files.encoding": "utf8"
+  },
+  
+  // End of Line Settings - Always LF
+  "files.eol": "\n",
+  
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
