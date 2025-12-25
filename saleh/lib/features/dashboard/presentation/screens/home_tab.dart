@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
-import 'dart:ui';
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/skeleton_loading.dart';
@@ -51,98 +50,38 @@ class _HomeTabState extends ConsumerState<HomeTab> {
   Widget build(BuildContext context) {
     final storeState = ref.watch(merchantStoreControllerProvider);
     final store = storeState.store;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          // خلفية الـ Blobs
-          _buildBackgroundBlobs(),
-          // المحتوى الرئيسي
-          RefreshIndicator(
-            onRefresh: _loadData,
-            color: AppTheme.primaryColor,
-            child: _isLoading
-                ? const SkeletonHomeDashboard()
-                : CustomScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    slivers: [
-                      // المحتوى (بدون Header - موجود في الـ shell)
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        sliver: SliverList(
-                          delegate: SliverChildListDelegate([
-                            const SizedBox(height: 16),
-                            // رابط المتجر
-                            _buildStoreLinkCard(store?.name ?? 'mbuy'),
-                            const SizedBox(height: 12),
-                            // شبكة الإحصائيات
-                            _buildStatsGrid(context, store),
-                            const SizedBox(height: 12),
-                            // شبكة الأيقونات
-                            _buildFeaturesGrid(context),
-                            const SizedBox(height: 100),
-                          ]),
-                        ),
-                      ),
-                    ],
+      backgroundColor: AppTheme.background(isDark),
+      body: RefreshIndicator(
+        onRefresh: _loadData,
+        color: AppTheme.primaryColor,
+        child: _isLoading
+            ? const SkeletonHomeDashboard()
+            : CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate([
+                        const SizedBox(height: 16),
+                        // رابط المتجر
+                        _buildStoreLinkCard(store?.name ?? 'mbuy'),
+                        const SizedBox(height: 16),
+                        // شبكة الإحصائيات 2×2
+                        _buildStatsGrid(context, store),
+                        const SizedBox(height: 16),
+                        // شبكة الأيقونات المربعة
+                        _buildFeaturesGrid(context),
+                        const SizedBox(height: 100),
+                      ]),
+                    ),
                   ),
-          ),
-        ],
+                ],
+              ),
       ),
-    );
-  }
-
-  /// خلفية الـ Blobs الملونة
-  Widget _buildBackgroundBlobs() {
-    return Stack(
-      children: [
-        // خلفية ثابتة
-        Container(color: AppTheme.backgroundColor),
-        // Blob أزرق في الأعلى
-        Positioned(
-          top: -80,
-          right: -80,
-          child: Container(
-            width: 280,
-            height: 280,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.blue.shade300.withValues(alpha: 0.3),
-            ),
-          ),
-        ),
-        // Blob بنفسجي في المنتصف
-        Positioned(
-          bottom: 200,
-          left: -100,
-          child: Container(
-            width: 240,
-            height: 240,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.purple.shade300.withValues(alpha: 0.3),
-            ),
-          ),
-        ),
-        // Blob سماوي
-        Positioned(
-          top: 300,
-          right: 50,
-          child: Container(
-            width: 180,
-            height: 180,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.cyan.shade200.withValues(alpha: 0.3),
-            ),
-          ),
-        ),
-        // تأثير الضبابية
-        BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
-          child: Container(color: Colors.transparent),
-        ),
-      ],
     );
   }
 
@@ -262,33 +201,33 @@ class _HomeTabState extends ConsumerState<HomeTab> {
     );
   }
 
-  /// شبكة الإحصائيات
+  /// شبكة الإحصائيات 2×2 - Minimal Design
   Widget _buildStatsGrid(BuildContext context, Store? store) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: [
         Row(
           children: [
             Expanded(
               child: _buildStatCard(
+                icon: Icons.account_balance_wallet_outlined,
                 value: '0.00',
                 suffix: 'ر.س',
                 label: 'الرصيد',
                 onTap: () => context.push('/dashboard/wallet'),
-                hasBlob: true,
-                blobColor: Colors.blue.shade400,
-                blobAlignment: Alignment.topRight,
+                isDark: isDark,
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: _buildStatCard(
+                icon: Icons.stars_outlined,
                 value: '0',
                 suffix: 'نقطة',
                 label: 'النقاط',
                 onTap: () => context.push('/dashboard/points'),
-                hasBlob: true,
-                blobColor: Colors.purple.shade400,
-                blobAlignment: Alignment.bottomLeft,
+                isDark: isDark,
               ),
             ),
           ],
@@ -298,19 +237,23 @@ class _HomeTabState extends ConsumerState<HomeTab> {
           children: [
             Expanded(
               child: _buildStatCard(
+                icon: Icons.people_outline,
                 value: '${store?.followersCount ?? 0}',
                 suffix: '',
                 label: 'العملاء',
                 onTap: () => context.push('/dashboard/customers'),
+                isDark: isDark,
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: _buildStatCard(
+                icon: Icons.shopping_bag_outlined,
                 value: '0',
                 suffix: '',
                 label: 'المبيعات',
                 onTap: () => context.push('/dashboard/sales'),
+                isDark: isDark,
               ),
             ),
           ],
@@ -319,70 +262,63 @@ class _HomeTabState extends ConsumerState<HomeTab> {
     );
   }
 
+  /// كارت إحصائية - Minimal مع أيقونة مربعة
   Widget _buildStatCard({
+    required IconData icon,
     required String value,
     required String suffix,
     required String label,
     required VoidCallback onTap,
-    bool hasBlob = false,
-    Color? blobColor,
-    Alignment? blobAlignment,
+    required bool isDark,
   }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
         onTap();
       },
       child: Container(
-        height: 120,
+        height: 100,
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppTheme.surface(isDark).withValues(alpha: 0.8),
-          borderRadius: BorderRadius.circular(16),
+          color: AppTheme.card(isDark),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: AppTheme.surface(isDark).withValues(alpha: 0.7),
+            color: AppTheme.border(isDark).withValues(alpha: 0.3),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: AppTheme.shadow(isDark),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
         ),
-        child: Stack(
+        child: Row(
           children: [
-            if (hasBlob && blobColor != null)
-              Positioned(
-                top: blobAlignment == Alignment.topRight ? -20 : null,
-                right: blobAlignment == Alignment.topRight ? -20 : null,
-                bottom: blobAlignment == Alignment.bottomLeft ? -20 : null,
-                left: blobAlignment == Alignment.bottomLeft ? -20 : null,
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: blobColor.withValues(alpha: 0.1),
-                  ),
-                ),
+            // أيقونة مربعة
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
               ),
-            Center(
+              child: Icon(
+                icon,
+                size: 22,
+                color: AppTheme.primaryColor,
+              ),
+            ),
+            const SizedBox(width: 12),
+            // القيمة والنص
+            Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
                       Text(
                         value,
                         style: TextStyle(
-                          fontSize: AppDimensions.fontDisplay1,
-                          fontWeight: FontWeight.w800,
-                          color: AppTheme.primaryColor,
-                          letterSpacing: -0.5,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: AppTheme.textPrimary(isDark),
                         ),
                       ),
                       if (suffix.isNotEmpty) ...[
@@ -390,22 +326,21 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                         Text(
                           suffix,
                           style: TextStyle(
-                            fontSize: AppDimensions.fontBody2,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
                             color: AppTheme.textHint(isDark),
                           ),
                         ),
                       ],
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Text(
                     label,
                     style: TextStyle(
-                      fontSize: AppDimensions.fontCaption,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.textHint(isDark),
-                      letterSpacing: 0.5,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppTheme.textSecondary(isDark),
                     ),
                   ),
                 ],
@@ -417,8 +352,10 @@ class _HomeTabState extends ConsumerState<HomeTab> {
     );
   }
 
-  /// شبكة الميزات (6 أيقونات)
+  /// شبكة الميزات - أيقونات مربعة Minimal
   Widget _buildFeaturesGrid(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: [
         Row(
@@ -428,22 +365,25 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                 icon: Icons.info_outline,
                 label: 'من نحن',
                 onTap: () => context.push('/dashboard/about'),
+                isDark: isDark,
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: _buildFeatureCard(
-                icon: Icons.receipt_long,
-                label: 'السجلات\nوالتقارير',
+                icon: Icons.receipt_long_outlined,
+                label: 'السجلات',
                 onTap: () => context.push('/dashboard/reports'),
+                isDark: isDark,
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: _buildFeatureCard(
-                icon: Icons.campaign,
+                icon: Icons.campaign_outlined,
                 label: 'التسويق',
                 onTap: () => context.push('/dashboard/marketing'),
+                isDark: isDark,
               ),
             ),
           ],
@@ -453,26 +393,29 @@ class _HomeTabState extends ConsumerState<HomeTab> {
           children: [
             Expanded(
               child: _buildFeatureCard(
-                icon: Icons.store,
-                label: 'متجر التطبيقات',
+                icon: Icons.store_outlined,
+                label: 'التطبيقات',
                 onTap: () => context.push('/dashboard/store'),
+                isDark: isDark,
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: _buildFeatureCard(
-                icon: Icons.trending_up,
+                icon: Icons.trending_up_outlined,
                 label: 'ضاعف ظهورك',
                 onTap: () => context.push('/dashboard/boost-sales'),
+                isDark: isDark,
                 showBadge: true,
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: _buildFeatureCard(
-                icon: Icons.card_giftcard,
+                icon: Icons.card_giftcard_outlined,
                 label: 'حزم التوفير',
                 onTap: () => context.push('/dashboard/packages'),
+                isDark: isDark,
               ),
             ),
           ],
@@ -481,73 +424,41 @@ class _HomeTabState extends ConsumerState<HomeTab> {
     );
   }
 
+  /// كارت ميزة - أيقونة مربعة Minimal
   Widget _buildFeatureCard({
     required IconData icon,
     required String label,
     required VoidCallback onTap,
+    required bool isDark,
     bool showBadge = false,
   }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
         onTap();
       },
       child: Container(
-        height: 110,
+        height: 100,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppTheme.surface(isDark).withValues(alpha: 0.9),
-              AppTheme.background(isDark).withValues(alpha: 0.95),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(16),
+          color: AppTheme.card(isDark),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: AppTheme.surface(isDark).withValues(alpha: 0.8),
+            color: AppTheme.border(isDark).withValues(alpha: 0.3),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: AppTheme.primaryColor.withValues(alpha: 0.05),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
-            ),
-          ],
         ),
         child: Stack(
           children: [
-            // Blob خلفي
-            Positioned(
-              top: -16,
-              right: -16,
-              child: Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blue.shade600.withValues(alpha: 0.05),
-                ),
-              ),
-            ),
             // Badge
             if (showBadge)
               Positioned(
-                top: 12,
-                right: 12,
+                top: 8,
+                left: 8,
                 child: Container(
                   width: 8,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: Colors.green.shade500,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.green.withValues(alpha: 0.6),
-                        blurRadius: 10,
-                      ),
-                    ],
+                    color: AppTheme.successColor,
+                    borderRadius: BorderRadius.circular(4),
                   ),
                 ),
               ),
@@ -556,28 +467,31 @@ class _HomeTabState extends ConsumerState<HomeTab> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // أيقونة مربعة
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 44,
+                    height: 44,
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withValues(alpha: 0.05),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: AppTheme.primaryColor.withValues(alpha: 0.1),
-                      ),
+                      color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(icon, size: 22, color: AppTheme.primaryColor),
+                    child: Icon(
+                      icon,
+                      size: 22,
+                      color: AppTheme.primaryColor,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     label,
                     style: TextStyle(
-                      fontSize: AppDimensions.fontCaption,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.primaryColor,
-                      height: 1.3,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.textPrimary(isDark),
                     ),
                     textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

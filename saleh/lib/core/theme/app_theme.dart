@@ -155,6 +155,19 @@ class AppTheme {
   static const Color ratingStarColor = Color(0xFFFFB800);
   static const Color ratingTextColor = Color(0xFF666666);
 
+  // ============================================================================
+  // App Store Theme Colors (Dark Green Theme)
+  // ============================================================================
+  static const Color appStorePrimary = Color(0xFF13EC80); // Neon Green
+  static const Color appStoreBackground = Color(0xFF102219); // Dark Green Background
+  static const Color appStoreSurface = Color(0xFF193326); // Surface Dark
+  static const Color appStoreCard = Color(0xFF1C3228); // Card Dark
+  static const Color appStoreTextPrimary = Color(0xFFFFFFFF); // White
+  static const Color appStoreTextSecondary = Color(0xFF92C9AD); // Light Green
+  static const Color appStoreTextMuted = Color(0xFF6B9B84); // Muted Green
+  static const Color appStoreBorder = Color(0xFF2A4A3A); // Border Green
+  static const Color appStoreStar = Color(0xFFFFC107); // Star/PRO Yellow
+
   // === Badge Colors ===
   static const Color freeShippingColor = Color(0xFF28A745);
   static const Color fastDeliveryColor = Color(0xFF17A2B8);

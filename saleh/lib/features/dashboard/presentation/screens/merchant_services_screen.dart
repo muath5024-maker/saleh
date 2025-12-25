@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -34,7 +34,7 @@ class _MerchantServicesScreenState
     final storeState = ref.watch(merchantStoreControllerProvider);
     final store = storeState.store;
 
-    // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† ÙˆØ¬ÙˆØ¯ Ù…ØªØ¬Ø±
+    // التحقق من وجود متجر
     if (store == null && !storeState.isLoading && !_isLoading) {
       return Scaffold(
         body: SafeArea(
@@ -53,7 +53,7 @@ class _MerchantServicesScreenState
                       ),
                       const SizedBox(height: AppDimensions.spacing16),
                       const Text(
-                        'Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ù…ØªØ¬Ø±',
+                        'لا يوجد متجر',
                         style: TextStyle(
                           fontSize: AppDimensions.fontDisplay3,
                           fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ class _MerchantServicesScreenState
                       ),
                       const SizedBox(height: AppDimensions.spacing8),
                       const Text(
-                        'ÙŠØ±Ø¬Ù‰ Ø¥Ù†Ø´Ø§Ø¡ Ù…ØªØ¬Ø± Ø£ÙˆÙ„Ø§Ù‹',
+                        'يرجى إنشاء متجر أولاً',
                         style: TextStyle(
                           fontSize: AppDimensions.fontBody,
                           color: AppTheme.textSecondaryColor,
@@ -76,7 +76,7 @@ class _MerchantServicesScreenState
                           backgroundColor: AppTheme.primaryColor,
                           foregroundColor: Colors.white,
                         ),
-                        child: const Text('Ø¥Ù†Ø´Ø§Ø¡ Ù…ØªØ¬Ø±'),
+                        child: const Text('إنشاء متجر'),
                       ),
                     ],
                   ),
@@ -105,15 +105,15 @@ class _MerchantServicesScreenState
                       const SizedBox(height: 20),
                       _buildQuickTabs(),
                       const SizedBox(height: 24),
-                      const MbuySectionTitle(title: 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ù…ØªØ¬Ø±'),
+                      const MbuySectionTitle(title: 'إعدادات المتجر'),
                       const SizedBox(height: 12),
                       _buildSettingsList(),
                       const SizedBox(height: 24),
-                      const MbuySectionTitle(title: 'Ø®Ø¯Ù…Ø§Øª Ø¥Ø¶Ø§ÙÙŠØ©'),
+                      const MbuySectionTitle(title: 'خدمات إضافية'),
                       const SizedBox(height: 12),
                       _buildServicesGrid(),
                       const SizedBox(height: 24),
-                      const MbuySectionTitle(title: 'Ø§Ù„Ø­Ø³Ø§Ø¨'),
+                      const MbuySectionTitle(title: 'الحساب'),
                       const SizedBox(height: 12),
                       _buildLogoutCard(),
                       const SizedBox(height: 12),
@@ -150,7 +150,7 @@ class _MerchantServicesScreenState
         ),
         const Expanded(
           child: Text(
-            'Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…ØªØ¬Ø±',
+            'إدارة المتجر',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -169,7 +169,7 @@ class _MerchantServicesScreenState
         Expanded(
           child: _buildQuickTabItem(
             icon: Icons.info_outline,
-            label: 'Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…ØªØ¬Ø±',
+            label: 'معلومات المتجر',
             color: AppTheme.primaryColor,
             onTap: () => context.push('/dashboard/store/create-store'),
           ),
@@ -178,7 +178,7 @@ class _MerchantServicesScreenState
         Expanded(
           child: _buildQuickTabItem(
             icon: Icons.palette_outlined,
-            label: 'Ù…Ø¸Ù‡Ø± Ø§Ù„Ù…ØªØ¬Ø±',
+            label: 'مظهر المتجر',
             color: Colors.blue,
             onTap: () => context.push('/dashboard/webstore'),
           ),
@@ -187,7 +187,7 @@ class _MerchantServicesScreenState
         Expanded(
           child: _buildQuickTabItem(
             icon: Icons.notifications_outlined,
-            label: 'Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª',
+            label: 'الإشعارات',
             color: Colors.orange,
             onTap: () => context.push('/notification-settings'),
           ),
@@ -245,50 +245,50 @@ class _MerchantServicesScreenState
     final settings = [
       {
         'icon': Icons.info_outline,
-        'title': 'Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…ØªØ¬Ø±',
-        'subtitle': 'Ø§Ù„Ø§Ø³Ù…ØŒ Ø§Ù„ÙˆØµÙØŒ Ø§Ù„Ù…Ø¯ÙŠÙ†Ø©',
+        'title': 'معلومات المتجر',
+        'subtitle': 'الاسم، الوصف، المدينة',
         'onTap': () => context.push('/dashboard/store/create-store'),
         'enabled': true,
       },
       {
         'icon': Icons.palette_outlined,
-        'title': 'ØªØ®ØµÙŠØµ Ø§Ù„Ù…ØªØ¬Ø±',
-        'subtitle': 'Ø§Ù„Ø«ÙŠÙ…Ø§Øª ÙˆØ§Ù„ØµÙØ­Ø§Øª ÙˆØ§Ù„Ø¨Ø§Ù†Ø±Ø§Øª',
+        'title': 'تخصيص المتجر',
+        'subtitle': 'الثيمات والصفحات والبانرات',
         'onTap': () => context.push('/dashboard/webstore'),
         'enabled': true,
       },
       {
         'icon': Icons.local_shipping_outlined,
-        'title': 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø´Ø­Ù†',
-        'subtitle': 'Ø§Ù„Ù…Ù†Ø§Ø·Ù‚ØŒ Ø§Ù„Ø£Ø³Ø¹Ø§Ø±ØŒ Ø§Ù„Ø´Ø±ÙƒØ§Øª',
+        'title': 'إعدادات الشحن',
+        'subtitle': 'المناطق، الأسعار، الشركات',
         'onTap': () => context.push('/dashboard/shipping'),
         'enabled': true,
       },
       {
         'icon': Icons.payment_outlined,
-        'title': 'Ø·Ø±Ù‚ Ø§Ù„Ø¯ÙØ¹',
-        'subtitle': 'Ø§Ù„Ø¨Ø·Ø§Ù‚Ø§ØªØŒ Ø§Ù„ØªØ­ÙˆÙŠÙ„ØŒ Ø§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù…',
+        'title': 'طرق الدفع',
+        'subtitle': 'البطاقات، التحويل، الدفع عند الاستلام',
         'onTap': () => context.push('/dashboard/payment-methods'),
         'enabled': true,
       },
       {
         'icon': Icons.notifications_outlined,
-        'title': 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª',
-        'subtitle': 'ØªÙ†Ø¨ÙŠÙ‡Ø§Øª Ø§Ù„Ø·Ù„Ø¨Ø§Øª ÙˆØ§Ù„Ø±Ø³Ø§Ø¦Ù„',
+        'title': 'إعدادات الإشعارات',
+        'subtitle': 'تنبيهات الطلبات والرسائل',
         'onTap': () => context.push('/notification-settings'),
         'enabled': true,
       },
       {
         'icon': Icons.palette_outlined,
-        'title': 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ù…Ø¸Ù‡Ø±',
-        'subtitle': 'Ø§Ù„Ù„ØºØ© ÙˆØ§Ù„Ø«ÙŠÙ… ÙˆØ§Ù„Ø£Ù„ÙˆØ§Ù†',
+        'title': 'إعدادات المظهر',
+        'subtitle': 'اللغة والثيم والألوان',
         'onTap': () => context.push('/appearance-settings'),
         'enabled': true,
       },
       {
         'icon': Icons.person_outline,
-        'title': 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø­Ø³Ø§Ø¨',
-        'subtitle': 'Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ ÙˆÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±',
+        'title': 'إعدادات الحساب',
+        'subtitle': 'البريد الإلكتروني وكلمة المرور',
         'onTap': () => context.push('/settings'),
         'enabled': true,
       },
@@ -383,27 +383,27 @@ class _MerchantServicesScreenState
     final services = [
       {
         'icon': Icons.account_balance_outlined,
-        'title': 'Ø§Ù„ØªÙ…ÙˆÙŠÙ„',
+        'title': 'التمويل',
         'color': const Color(0xFF4CAF50),
         'route': '/dashboard/wallet',
       },
       {
         'icon': Icons.support_agent_outlined,
-        'title': 'Ø§Ù„Ø¯Ø¹Ù…',
+        'title': 'الدعم',
         'color': const Color(0xFF2196F3),
         'route': '/dashboard/support',
       },
       {
         'icon': Icons.analytics_outlined,
-        'title': 'Ø§Ù„ØªØ­Ù„ÙŠÙ„Ø§Øª',
+        'title': 'التحليلات',
         'color': const Color(0xFF9C27B0),
         'route': '/dashboard/reports',
       },
       {
         'icon': Icons.school_outlined,
-        'title': 'Ø§Ù„ØªØ¯Ø±ÙŠØ¨',
+        'title': 'التدريب',
         'color': const Color(0xFFFF9800),
-        'route': null, // Ù‚Ø±ÙŠØ¨Ø§Ù‹
+        'route': null, // قريباً
       },
     ];
 
@@ -505,7 +505,7 @@ class _MerchantServicesScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬',
+                      'تسجيل الخروج',
                       style: TextStyle(
                         fontSize: AppDimensions.fontTitle,
                         fontWeight: FontWeight.w600,
@@ -514,7 +514,7 @@ class _MerchantServicesScreenState
                     ),
                     const SizedBox(height: AppDimensions.spacing2),
                     Text(
-                      'Ø§Ù„Ø®Ø±ÙˆØ¬ Ù…Ù† Ø§Ù„Ø­Ø³Ø§Ø¨ Ø§Ù„Ø­Ø§Ù„ÙŠ',
+                      'الخروج من الحساب الحالي',
                       style: TextStyle(
                         fontSize: AppDimensions.fontBody2,
                         color: Colors.grey[500],
@@ -568,7 +568,7 @@ class _MerchantServicesScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Ø­Ø°Ù Ø§Ù„Ù…ØªØ¬Ø±',
+                      'حذف المتجر',
                       style: TextStyle(
                         fontSize: AppDimensions.fontTitle,
                         fontWeight: FontWeight.w600,
@@ -577,7 +577,7 @@ class _MerchantServicesScreenState
                     ),
                     const SizedBox(height: AppDimensions.spacing2),
                     Text(
-                      'Ø­Ø°Ù Ø§Ù„Ù…ØªØ¬Ø± ÙˆØ¬Ù…ÙŠØ¹ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ù†Ù‡Ø§Ø¦ÙŠØ§Ù‹',
+                      'حذف المتجر وجميع البيانات نهائياً',
                       style: TextStyle(
                         fontSize: AppDimensions.fontBody2,
                         color: Colors.grey[500],
@@ -598,12 +598,12 @@ class _MerchantServicesScreenState
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬'),
-        content: const Text('Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬ØŸ'),
+        title: const Text('تسجيل الخروج'),
+        content: const Text('هل أنت متأكد من تسجيل الخروج؟'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Ø¥Ù„ØºØ§Ø¡'),
+            child: const Text('إلغاء'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -617,7 +617,7 @@ class _MerchantServicesScreenState
               backgroundColor: Colors.orange,
               foregroundColor: Colors.white,
             ),
-            child: const Text('ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬'),
+            child: const Text('تسجيل الخروج'),
           ),
         ],
       ),
@@ -632,24 +632,24 @@ class _MerchantServicesScreenState
           children: [
             Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
             SizedBox(width: 8),
-            Text('Ø­Ø°Ù Ø§Ù„Ù…ØªØ¬Ø±'),
+            Text('حذف المتجر'),
           ],
         ),
         content: const Text(
-          'Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø­Ø°Ù Ø§Ù„Ù…ØªØ¬Ø±ØŸ\n\nÙ‡Ø°Ø§ Ø§Ù„Ø¥Ø¬Ø±Ø§Ø¡ Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø§Ù„ØªØ±Ø§Ø¬Ø¹ Ø¹Ù†Ù‡ ÙˆØ³ÙŠØªÙ… Ø­Ø°Ù Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª.',
+          'هل أنت متأكد من حذف المتجر؟\n\nهذا الإجراء لا يمكن التراجع عنه وسيتم حذف جميع البيانات.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Ø¥Ù„ØºØ§Ø¡'),
+            child: const Text('إلغاء'),
           ),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(dialogContext);
-              // TODO: ØªÙ†ÙÙŠØ° Ø­Ø°Ù Ø§Ù„Ù…ØªØ¬Ø±
+              // TODO: تنفيذ حذف المتجر
               MbuySnackBar.show(
                 context,
-                message: 'Ø³ÙŠØªÙ… ØªÙØ¹ÙŠÙ„ Ù‡Ø°Ù‡ Ø§Ù„Ù…ÙŠØ²Ø© Ù‚Ø±ÙŠØ¨Ø§Ù‹',
+                message: 'سيتم تفعيل هذه الميزة قريباً',
                 type: MbuySnackBarType.info,
               );
             },
@@ -657,7 +657,7 @@ class _MerchantServicesScreenState
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
             ),
-            child: const Text('Ø­Ø°Ù Ù†Ù‡Ø§Ø¦ÙŠØ§Ù‹'),
+            child: const Text('حذف نهائياً'),
           ),
         ],
       ),
@@ -667,7 +667,7 @@ class _MerchantServicesScreenState
   void _showComingSoon(String feature) {
     MbuySnackBar.show(
       context,
-      message: '$feature - Ù‚Ø±ÙŠØ¨Ø§Ù‹',
+      message: '$feature - قريباً',
       type: MbuySnackBarType.info,
     );
   }

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,25 +10,25 @@ import '../../../../shared/widgets/app_icon.dart';
 import '../../../products/data/products_controller.dart';
 import 'product_settings_view.dart';
 
-// â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
-// â•‘                    âš ï¸ ØªØ­Ø°ÙŠØ± Ù…Ù‡Ù… - DESIGN FROZEN âš ï¸                        â•‘
-// â•‘                                                                           â•‘
-// â•‘   ØµÙØ­Ø© Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª - Ø§Ù„ØªØµÙ…ÙŠÙ… Ù…Ø«Ø¨Øª ÙˆÙ…Ø¹ØªÙ…Ø¯                                    â•‘
-// â•‘   ØªØ§Ø±ÙŠØ® Ø§Ù„ØªØ«Ø¨ÙŠØª: 14 Ø¯ÙŠØ³Ù…Ø¨Ø± 2025                                           â•‘
-// â•‘                                                                           â•‘
-// â•‘   Ø§Ù„Ø¹Ù†Ø§ØµØ± Ø§Ù„Ù…Ø«Ø¨ØªØ©:                                                        â•‘
-// â•‘   â€¢ ØªØ¨ÙˆÙŠØ¨Ø§Øª: Ù…Ù†ØªØ¬Ø§ØªÙŠØŒ Ø¯Ø±ÙˆØ¨ Ø´ÙˆØ¨ÙŠÙ†Ù‚ØŒ Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª                       â•‘
-// â•‘   â€¢ Ø¹Ø±Ø¶ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø¨Ø´ÙƒÙ„ Ù‚Ø§Ø¦Ù…Ø© ÙˆØ´Ø¨ÙƒØ©                                       â•‘
-// â•‘   â€¢ Ø£Ø²Ø±Ø§Ø± Ø§Ù„ØªØµÙÙŠØ© ÙˆØ§Ù„Ø¨Ø­Ø«                                                  â•‘
-// â•‘                                                                           â•‘
-// â•‘   â›” Ù…Ù…Ù†ÙˆØ¹ ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„ØªØµÙ…ÙŠÙ… Ø¥Ù„Ø§ Ø¨Ø·Ù„Ø¨ ØµØ±ÙŠØ­ ÙˆÙˆØ§Ø¶Ø­ Ù…Ù† Ø§Ù„Ù…Ø§Ù„Ùƒ                     â•‘
-// â•‘   â›” DO NOT MODIFY design without EXPLICIT owner request                  â•‘
-// â•‘                                                                           â•‘
-// â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║                    ⚠️ تحذير مهم - DESIGN FROZEN ⚠️                        ║
+// ║                                                                           ║
+// ║   صفحة المنتجات - التصميم مثبت ومعتمد                                    ║
+// ║   تاريخ التثبيت: 14 ديسمبر 2025                                           ║
+// ║                                                                           ║
+// ║   العناصر المثبتة:                                                        ║
+// ║   • تبويبات: منتجاتي، دروب شوبينق، إعدادات المنتجات                       ║
+// ║   • عرض المنتجات بشكل قائمة وشبكة                                       ║
+// ║   • أزرار التصفية والبحث                                                  ║
+// ║                                                                           ║
+// ║   ⛔ ممنوع تعديل التصميم إلا بطلب صريح وواضح من المالك                     ║
+// ║   ⛔ DO NOT MODIFY design without EXPLICIT owner request                  ║
+// ║                                                                           ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
 
-/// Ø´Ø§Ø´Ø© Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª - Products Tab
-/// ØªØ¹Ø±Ø¶ Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø®Ø§ØµØ© Ø¨Ø§Ù„ØªØ§Ø¬Ø±
-/// ØªØµÙ…ÙŠÙ… Ø¬Ø¯ÙŠØ¯ Ù…Ø·Ø§Ø¨Ù‚ Ù„ØµÙØ­Ø© Ø§Ø®ØªØµØ§Ø±Ø§ØªÙŠ
+/// شاشة المنتجات - Products Tab
+/// تعرض قائمة المنتجات الخاصة بالتاجر
+/// تصميم جديد مطابق لصفحة اختصاراتي
 class ProductsTab extends ConsumerStatefulWidget {
   const ProductsTab({super.key});
 
@@ -71,7 +71,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
               borderRadius: AppDimensions.borderRadiusS,
             ),
             action: SnackBarAction(
-              label: 'Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø©',
+              label: 'إعادة المحاولة',
               textColor: Colors.white,
               onPressed: () {
                 ref.read(productsControllerProvider.notifier).loadProducts();
@@ -86,14 +86,14 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
     return Scaffold(
       body: Column(
         children: [
-          // Ø§Ù„ØªØ¨ÙˆÙŠØ¨Ø§Øª
+          // التبويبات
           _buildTabs(),
-          // Ø§Ù„Ù…Ø­ØªÙˆÙ‰
+          // المحتوى
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
-                // 1. Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª
+                // 1. المنتجات
                 RefreshIndicator(
                   onRefresh: () => ref
                       .read(productsControllerProvider.notifier)
@@ -109,27 +109,27 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                           _filterProducts(products),
                         ),
                 ),
-                // 2. Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª
+                // 2. إعدادات المنتجات
                 const ProductSettingsView(),
-                // 3. Ø§Ù„Ù…Ø®Ø²ÙˆÙ†
+                // 3. المخزون
                 _buildQuickAccessPage(
                   context,
-                  title: 'Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…Ø®Ø²ÙˆÙ†',
-                  subtitle: 'ØªØ§Ø¨Ø¹ Ù…Ø®Ø²ÙˆÙ†ÙƒØŒ Ø¹Ø¯Ù‘Ù„ Ø§Ù„ÙƒÙ…ÙŠØ§ØªØŒ ÙˆØªÙ„Ù‚ÙŽÙ‘ ØªÙ†Ø¨ÙŠÙ‡Ø§Øª Ø§Ù„Ù†Ù‚Øµ',
+                  title: 'إدارة المخزون',
+                  subtitle: 'تابع مخزونك، عدّل الكميات، وتلقَ تنبيهات النقص',
                   icon: AppIcons.inventory2,
-                  buttonText: 'ÙØªØ­ Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…Ø®Ø²ÙˆÙ†',
+                  buttonText: 'فتح إدارة المخزون',
                   onPressed: () => context.push('/dashboard/inventory'),
                 ),
-                // 4. Ø§Ù„Ø³Ø¬Ù„Ø§Øª
+                // 4. السجلات
                 _buildQuickAccessPage(
                   context,
-                  title: 'Ø³Ø¬Ù„Ø§Øª Ø§Ù„Ù†Ø¸Ø§Ù…',
-                  subtitle: 'Ø³Ø¬Ù„Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª ÙˆØ§Ù„Ù…Ø®Ø²ÙˆÙ† ÙˆØ¬Ù…ÙŠØ¹ Ø§Ù„Ø¹Ù…Ù„ÙŠØ§Øª',
+                  title: 'سجلات النظام',
+                  subtitle: 'سجلات المنتجات والمخزون وجميع العمليات',
                   icon: AppIcons.history,
-                  buttonText: 'ÙØªØ­ Ø§Ù„Ø³Ø¬Ù„Ø§Øª',
+                  buttonText: 'فتح السجلات',
                   onPressed: () => context.push('/dashboard/audit-logs'),
                 ),
-                // 5. Ø§Ù„Ù…Ø­Ø°ÙˆÙØ§Øª
+                // 5. المحذوفات
                 _buildDeletedProductsTab(),
               ],
             ),
@@ -154,7 +154,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
             setState(() => _searchQuery = value);
           },
           decoration: InputDecoration(
-            hintText: 'Ø§Ù„Ø¨Ø­Ø« ÙÙŠ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª...',
+            hintText: 'البحث في المنتجات...',
             hintStyle: TextStyle(color: AppTheme.textHintColor),
             prefixIcon: AppIcon(AppIcons.search, color: AppTheme.textHintColor),
             border: InputBorder.none,
@@ -176,11 +176,11 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
       labelColor: AppTheme.primaryColor,
       unselectedLabelColor: AppTheme.textSecondaryColor,
       tabs: const [
-        Tab(text: 'Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª'),
-        Tab(text: 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª'),
-        Tab(text: 'Ø§Ù„Ù…Ø®Ø²ÙˆÙ†'),
-        Tab(text: 'Ø§Ù„Ø³Ø¬Ù„Ø§Øª'),
-        Tab(text: 'Ø§Ù„Ù…Ø­Ø°ÙˆÙØ§Øª'),
+        Tab(text: 'المنتجات'),
+        Tab(text: 'إعدادات المنتجات'),
+        Tab(text: 'المخزون'),
+        Tab(text: 'السجلات'),
+        Tab(text: 'المحذوفات'),
       ],
     );
   }
@@ -192,9 +192,9 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
         .toList();
   }
 
-  /// ØªØ¨ÙˆÙŠØ¨ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ø­Ø°ÙˆÙØ©
+  /// تبويب المنتجات المحذوفة
   Widget _buildDeletedProductsTab() {
-    // Ù‚Ø§Ø¦Ù…Ø© Ù…Ø­Ø§ÙƒØ§Ø© Ù„Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ø­Ø°ÙˆÙØ©
+    // قائمة محاكاة للمنتجات المحذوفة
     final deletedProducts = <Map<String, dynamic>>[];
 
     if (deletedProducts.isEmpty) {
@@ -216,7 +216,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
             ),
             const SizedBox(height: 24),
             const Text(
-              'Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª Ù…Ø­Ø°ÙˆÙØ©',
+              'لا توجد منتجات محذوفة',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -225,7 +225,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
             ),
             const SizedBox(height: 8),
             Text(
-              'Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ø­Ø°ÙˆÙØ© Ø³ØªØ¸Ù‡Ø± Ù‡Ù†Ø§\nÙŠÙ…ÙƒÙ†Ùƒ Ø§Ø³ØªØ¹Ø§Ø¯ØªÙ‡Ø§ Ø®Ù„Ø§Ù„ 30 ÙŠÙˆÙ…',
+              'المنتجات المحذوفة ستظهر هنا\nيمكنك استعادتها خلال 30 يوم',
               style: TextStyle(
                 color: AppTheme.textSecondaryColor,
                 fontSize: AppDimensions.fontBody,
@@ -253,7 +253,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ø­Ø°ÙˆÙØ© ØªÙØ­Ø°Ù Ù†Ù‡Ø§Ø¦ÙŠØ§Ù‹ Ø¨Ø¹Ø¯ 30 ÙŠÙˆÙ…',
+                      'المنتجات المحذوفة تُحذف نهائياً بعد 30 يوم',
                       style: TextStyle(
                         color: AppTheme.infoColor,
                         fontSize: AppDimensions.fontBody2,
@@ -286,7 +286,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
               child: AppIcon(AppIcons.image, color: AppTheme.slate400),
             ),
             title: Text(product['name'] ?? ''),
-            subtitle: Text('Ù…Ø­Ø°ÙˆÙ Ù…Ù†Ø° ${product['deletedAt'] ?? ''}'),
+            subtitle: Text('محذوف منذ ${product['deletedAt'] ?? ''}'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -298,12 +298,12 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('ØªÙ… Ø§Ø³ØªØ¹Ø§Ø¯Ø© Ø§Ù„Ù…Ù†ØªØ¬'),
+                        content: Text('تم استعادة المنتج'),
                         backgroundColor: AppTheme.successColor,
                       ),
                     );
                   },
-                  tooltip: 'Ø§Ø³ØªØ¹Ø§Ø¯Ø©',
+                  tooltip: 'استعادة',
                 ),
                 IconButton(
                   icon: const AppIcon(
@@ -316,7 +316,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                       product['name'] ?? '',
                     );
                   },
-                  tooltip: 'Ø­Ø°Ù Ù†Ù‡Ø§Ø¦ÙŠ',
+                  tooltip: 'حذف نهائي',
                 ),
               ],
             ),
@@ -333,21 +333,21 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Ø­Ø°Ù Ù†Ù‡Ø§Ø¦ÙŠ'),
+        title: const Text('حذف نهائي'),
         content: Text(
-          'Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø­Ø°Ù "$productName" Ù†Ù‡Ø§Ø¦ÙŠØ§Ù‹ØŸ\nÙ„Ø§ ÙŠÙ…ÙƒÙ† Ø§Ù„ØªØ±Ø§Ø¬Ø¹ Ø¹Ù† Ù‡Ø°Ø§ Ø§Ù„Ø¥Ø¬Ø±Ø§Ø¡.',
+          'هل أنت متأكد من حذف "$productName" نهائياً؟\nلا يمكن التراجع عن هذا الإجراء.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Ø¥Ù„ØºØ§Ø¡'),
+            child: const Text('إلغاء'),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('ØªÙ… Ø§Ù„Ø­Ø°Ù Ù†Ù‡Ø§Ø¦ÙŠØ§Ù‹'),
+                  content: Text('تم الحذف نهائياً'),
                   backgroundColor: AppTheme.errorColor,
                 ),
               );
@@ -356,7 +356,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
               backgroundColor: AppTheme.errorColor,
             ),
             child: const Text(
-              'Ø­Ø°Ù Ù†Ù‡Ø§Ø¦ÙŠ',
+              'حذف نهائي',
               style: TextStyle(color: AppTheme.surfaceColor),
             ),
           ),
@@ -365,7 +365,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
     );
   }
 
-  /// ØµÙØ­Ø© Ø§Ù†ØªÙ‚Ø§Ù„ Ø³Ø±ÙŠØ¹ Ù„Ù„Ø´Ø§Ø´Ø§Øª Ø§Ù„Ù…Ø¹Ù‚Ø¯Ø©
+  /// صفحة انتقال سريع للشاشات المعقدة
   Widget _buildQuickAccessPage(
     BuildContext context, {
     required String title,
@@ -452,7 +452,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
             ),
             const SizedBox(height: AppDimensions.spacing24),
             Text(
-              'Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª',
+              'لا توجد منتجات',
               style: TextStyle(
                 fontSize: AppDimensions.fontDisplay3,
                 fontWeight: FontWeight.bold,
@@ -461,7 +461,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
             ),
             const SizedBox(height: AppDimensions.spacing8),
             Text(
-              'Ø§Ø¨Ø¯Ø£ Ø¨Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬Ùƒ Ø§Ù„Ø£ÙˆÙ„',
+              'ابدأ بإضافة منتجك الأول',
               style: TextStyle(
                 fontSize: AppDimensions.fontBody,
                 color: AppTheme.textSecondaryColor,
@@ -488,7 +488,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                   color: AppTheme.surfaceColor,
                 ),
                 label: const Text(
-                  'Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬',
+                  'إضافة منتج',
                   style: TextStyle(
                     fontSize: AppDimensions.fontBody,
                     fontWeight: FontWeight.bold,
@@ -543,7 +543,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ØµÙˆØ±Ø© Ø§Ù„Ù…Ù†ØªØ¬ Ù…Ø¹ Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø¥Ø¬Ø±Ø§Ø¡Ø§Øª
+          // صورة المنتج مع قائمة الإجراءات
           Stack(
             children: [
               GestureDetector(
@@ -565,7 +565,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                   ),
                 ),
               ),
-              // Ø²Ø± Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©
+              // زر القائمة
               Positioned(
                 top: 8,
                 left: 8,
@@ -587,14 +587,14 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                         _handleMenuAction(context, ref, value, product),
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<String>>[
-                          _buildMenuItem('edit', AppIcons.edit, 'ØªØ¹Ø¯ÙŠÙ„'),
-                          _buildMenuItem('duplicate', AppIcons.copy, 'ØªÙƒØ±Ø§Ø±'),
+                          _buildMenuItem('edit', AppIcons.edit, 'تعديل'),
+                          _buildMenuItem('duplicate', AppIcons.copy, 'تكرار'),
                           _buildMenuItem(
                             'hide',
                             AppIcons.visibilityOff,
-                            'Ø¥Ø®ÙØ§Ø¡',
+                            'إخفاء',
                           ),
-                          _buildMenuItem('share', AppIcons.share, 'Ù…Ø´Ø§Ø±ÙƒØ©'),
+                          _buildMenuItem('share', AppIcons.share, 'مشاركة'),
                           const PopupMenuDivider(),
                           const PopupMenuItem<String>(
                             value: 'delete',
@@ -607,7 +607,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                                 ),
                                 SizedBox(width: 8),
                                 Text(
-                                  'Ø­Ø°Ù',
+                                  'حذف',
                                   style: TextStyle(color: AppTheme.errorColor),
                                 ),
                               ],
@@ -619,14 +619,14 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
               ),
             ],
           ),
-          // Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬
+          // معلومات المنتج
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬
+                  // اسم المنتج
                   Text(
                     product.name,
                     style: const TextStyle(
@@ -638,11 +638,11 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 6),
-                  // Ø­Ù‚Ù„ ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„Ø³Ø¹Ø±
+                  // حقل تعديل السعر
                   _buildEditableField(
-                    label: 'Ø§Ù„Ø³Ø¹Ø±',
+                    label: 'السعر',
                     value: product.price.toStringAsFixed(2),
-                    suffix: 'Ø±.Ø³',
+                    suffix: 'ر.س',
                     onChanged: (newValue) {
                       final newPrice = double.tryParse(newValue);
                       if (newPrice != null) {
@@ -651,9 +651,9 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                     },
                   ),
                   const SizedBox(height: 4),
-                  // Ø­Ù‚Ù„ ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„ÙƒÙ…ÙŠØ©
+                  // حقل تعديل الكمية
                   _buildEditableField(
-                    label: 'Ø§Ù„ÙƒÙ…ÙŠØ©',
+                    label: 'الكمية',
                     value: product.stock.toString(),
                     suffix: '',
                     onChanged: (newValue) {
@@ -763,7 +763,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
   ) {
     switch (value) {
       case 'edit':
-        // Ø§Ù„ØªÙ†Ù‚Ù„ Ù„ØµÙØ­Ø© ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„Ù…Ù†ØªØ¬
+        // التنقل لصفحة تعديل المنتج
         context.push('/dashboard/products/${product.id}');
         break;
       case 'duplicate':
@@ -796,7 +796,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
     ref
         .read(productsControllerProvider.notifier)
         .addProduct(
-          name: '${product.name} (Ù†Ø³Ø®Ø©)',
+          name: '${product.name} (نسخة)',
           price: product.price,
           stock: product.stock,
           description: product.description,
@@ -816,7 +816,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
         );
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('ØªÙ… ØªÙƒØ±Ø§Ø± Ø§Ù„Ù…Ù†ØªØ¬ Ø¨Ù†Ø¬Ø§Ø­')));
+    ).showSnackBar(const SnackBar(content: Text('تم تكرار المنتج بنجاح')));
   }
 
   void _hideProduct(BuildContext context, WidgetRef ref, dynamic product) {
@@ -826,7 +826,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
         .updateProduct(productId: product.id, isActive: false);
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('ØªÙ… Ø¥Ø®ÙØ§Ø¡ Ø§Ù„Ù…Ù†ØªØ¬')));
+    ).showSnackBar(const SnackBar(content: Text('تم إخفاء المنتج')));
   }
 
   void _shareProduct(BuildContext context, dynamic product) {
@@ -835,7 +835,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
     _copyProductLink(context, product);
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('ØªÙ… Ù†Ø³Ø® Ø±Ø§Ø¨Ø· Ø§Ù„Ù…Ø´Ø§Ø±ÙƒØ©')));
+    ).showSnackBar(const SnackBar(content: Text('تم نسخ رابط المشاركة')));
   }
 
   void _copyProductLink(BuildContext context, dynamic product) {
@@ -843,7 +843,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
     Clipboard.setData(ClipboardData(text: link));
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('ØªÙ… Ù†Ø³Ø® Ø§Ù„Ø±Ø§Ø¨Ø·')));
+    ).showSnackBar(const SnackBar(content: Text('تم نسخ الرابط')));
   }
 
   void _showMarketingTools(BuildContext context, dynamic product) {
@@ -860,7 +860,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Ø£Ø¯ÙˆØ§Øª Ø§Ù„ØªØ³ÙˆÙŠÙ‚',
+                'أدوات التسويق',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -868,14 +868,14 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                 ),
               ),
               const SizedBox(height: 20),
-              _buildMarketingOption(context, 'ØªØ«Ø¨ÙŠØª Ø§Ù„Ù…Ù†ØªØ¬', AppIcons.pin),
+              _buildMarketingOption(context, 'تثبيت المنتج', AppIcons.pin),
               _buildMarketingOption(
                 context,
-                'Ø¯Ø¹Ù… Ø¸Ù‡ÙˆØ± Ø§Ù„Ù…Ù†ØªØ¬',
+                'دعم ظهور المنتج',
                 AppIcons.trendingUp,
               ),
-              _buildMarketingOption(context, 'Ø¯Ø¹Ù… Ø¸Ù‡ÙˆØ± Ø§Ù„Ù…ØªØ¬Ø±', AppIcons.store),
-              _buildMarketingOption(context, 'ØªØ«Ø¨ÙŠØª Ø§Ù„Ù…ØªØ¬Ø±', AppIcons.star),
+              _buildMarketingOption(context, 'دعم ظهور المتجر', AppIcons.store),
+              _buildMarketingOption(context, 'تثبيت المتجر', AppIcons.star),
             ],
           ),
         );
@@ -918,7 +918,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '$title - Ø§Ù„Ù…Ø¯Ø©: ${duration.round()} ÙŠÙˆÙ…',
+                    '$title - المدة: ${duration.round()} يوم',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -944,12 +944,12 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'ØªÙ… ØªÙØ¹ÙŠÙ„ $title Ù„Ù…Ø¯Ø© ${duration.round()} ÙŠÙˆÙ…',
+                            'تم تفعيل $title لمدة ${duration.round()} يوم',
                           ),
                         ),
                       );
                     },
-                    child: const Text('ØªØ£ÙƒÙŠØ¯'),
+                    child: const Text('تأكيد'),
                   ),
                 ],
               ),
@@ -969,16 +969,16 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„Ù…Ø®Ø²ÙˆÙ†'),
+        title: const Text('تعديل المخزون'),
         content: TextField(
           controller: controller,
           keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Ø§Ù„ÙƒÙ…ÙŠØ©'),
+          decoration: const InputDecoration(labelText: 'الكمية'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Ø¥Ù„ØºØ§Ø¡'),
+            child: const Text('إلغاء'),
           ),
           TextButton(
             onPressed: () {
@@ -990,7 +990,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                 Navigator.pop(context);
               }
             },
-            child: const Text('Ø­ÙØ¸'),
+            child: const Text('حفظ'),
           ),
         ],
       ),
@@ -1005,12 +1005,12 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Ø­Ø°Ù Ø§Ù„Ù…Ù†ØªØ¬'),
-        content: Text('Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø­Ø°Ù "${product.name}"ØŸ'),
+        title: const Text('حذف المنتج'),
+        content: Text('هل أنت متأكد من حذف "${product.name}"؟'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Ø¥Ù„ØºØ§Ø¡'),
+            child: const Text('إلغاء'),
           ),
           TextButton(
             onPressed: () {
@@ -1019,7 +1019,7 @@ class _ProductsTabState extends ConsumerState<ProductsTab>
                   .read(productsControllerProvider.notifier)
                   .deleteProduct(product.id);
             },
-            child: const Text('Ø­Ø°Ù', style: TextStyle(color: Colors.red)),
+            child: const Text('حذف', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),

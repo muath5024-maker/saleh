@@ -56,12 +56,14 @@ export default function OnboardingStep2({ onNext, onBack, storeData }: Step2Prop
         <button
           onClick={onBack}
           className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+          aria-label="العودة للخطوة السابقة"
         >
           السابق
         </button>
         <button
           onClick={onNext}
           className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          aria-label="الانتقال للخطوة التالية"
         >
           التالي
         </button>

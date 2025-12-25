@@ -211,6 +211,8 @@ export default function OnboardingStep1({ onNext, initialData }: Step1Props) {
           type="submit"
           disabled={loading || slugAvailable === false}
           className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          aria-label={loading ? 'جاري التحقق من البيانات' : 'الانتقال للخطوة التالية'}
+          aria-busy={loading}
         >
           {loading ? 'جاري التحقق...' : 'التالي'}
         </button>

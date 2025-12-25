@@ -143,7 +143,10 @@ class _FlashSalesScreenState extends ConsumerState<FlashSalesScreen>
         children: [
           Icon(Icons.error_outline, size: 64, color: Colors.red.shade300),
           SizedBox(height: AppDimensions.spacing16),
-          Text(_error ?? 'Ø­Ø¯Ø« Ø®Ø·Ø£', style: const TextStyle(color: Colors.red)),
+          Text(
+            _error ?? 'Ø­Ø¯Ø« Ø®Ø·Ø£',
+            style: const TextStyle(color: Colors.red),
+          ),
           SizedBox(height: AppDimensions.spacing16),
           ElevatedButton.icon(
             onPressed: _loadFlashSales,
@@ -175,7 +178,9 @@ class _FlashSalesScreenState extends ConsumerState<FlashSalesScreen>
               ),
             ),
             SizedBox(height: AppDimensions.spacing8),
-            const Text('Ø£Ù†Ø´Ø¦ Ø¹Ø±Ø¶Ø§Ù‹ Ø®Ø§Ø·ÙØ§Ù‹ Ù„Ø²ÙŠØ§Ø¯Ø© Ù…Ø¨ÙŠØ¹Ø§ØªÙƒ'),
+            const Text(
+              'Ø£Ù†Ø´Ø¦ Ø¹Ø±Ø¶Ø§Ù‹ Ø®Ø§Ø·ÙØ§Ù‹ Ù„Ø²ÙŠØ§Ø¯Ø© Ù…Ø¨ÙŠØ¹Ø§ØªÙƒ',
+            ),
           ],
         ),
       );
@@ -666,10 +671,12 @@ class _CreateFlashSaleSheetState extends State<_CreateFlashSaleSheet> {
                       controller: _titleController,
                       decoration: const InputDecoration(
                         labelText: 'Ø§Ø³Ù… Ø§Ù„Ø¹Ø±Ø¶ *',
-                        hintText: 'Ù…Ø«Ø§Ù„: ØªØ®ÙÙŠØ¶Ø§Øª Ù†Ù‡Ø§ÙŠØ© Ø§Ù„Ø£Ø³Ø¨ÙˆØ¹',
+                        hintText:
+                            'Ù…Ø«Ø§Ù„: ØªØ®ÙÙŠØ¶Ø§Øª Ù†Ù‡Ø§ÙŠØ© Ø§Ù„Ø£Ø³Ø¨ÙˆØ¹',
                         prefixIcon: Icon(Icons.title),
                       ),
-                      validator: (v) => v?.isEmpty ?? true ? 'Ù…Ø·Ù„ÙˆØ¨' : null,
+                      validator: (v) =>
+                          v?.isEmpty ?? true ? 'Ù…Ø·Ù„ÙˆØ¨' : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -780,7 +787,9 @@ class _CreateFlashSaleSheetState extends State<_CreateFlashSaleSheet> {
                       value: _isFeatured,
                       onChanged: (v) => setState(() => _isFeatured = v),
                       title: const Text('Ø¹Ø±Ø¶ Ù…Ù…ÙŠØ²'),
-                      subtitle: const Text('ÙŠØ¸Ù‡Ø± ÙÙŠ Ø£Ø¹Ù„Ù‰ Ø§Ù„ØµÙØ­Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©'),
+                      subtitle: const Text(
+                        'ÙŠØ¸Ù‡Ø± ÙÙŠ Ø£Ø¹Ù„Ù‰ Ø§Ù„ØµÙØ­Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©',
+                      ),
                       secondary: const Icon(Icons.star_outline),
                     ),
                   ],
@@ -880,7 +889,10 @@ class _FlashSaleDetailsSheet extends StatelessWidget {
                     'Ø§Ù„Ù†Ù‡Ø§ÙŠØ©',
                     '${sale.endsAt.day}/${sale.endsAt.month}/${sale.endsAt.year}',
                   ),
-                  _buildInfoRow('Ø¹Ø¯Ø¯ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª', '${sale.productsCount}'),
+                  _buildInfoRow(
+                    'Ø¹Ø¯Ø¯ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª',
+                    '${sale.productsCount}',
+                  ),
                   _buildInfoRow('Ø§Ù„Ù…Ø´Ø§Ù‡Ø¯Ø§Øª', '${sale.viewsCount}'),
                   const SizedBox(height: 24),
                   const Text(
@@ -889,7 +901,9 @@ class _FlashSaleDetailsSheet extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   if (sale.products.isEmpty)
-                    const Text('Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª - Ø£Ø¶Ù Ù…Ù†ØªØ¬Ø§Øª Ù„Ù„Ø¹Ø±Ø¶')
+                    const Text(
+                      'Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù†ØªØ¬Ø§Øª - Ø£Ø¶Ù Ù…Ù†ØªØ¬Ø§Øª Ù„Ù„Ø¹Ø±Ø¶',
+                    )
                   else
                     ...sale.products.map((p) => _buildProductTile(p)),
                 ],
@@ -1020,7 +1034,9 @@ class _FlashSaleDetailsSheet extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Ø­Ø°Ù Ø§Ù„Ø¹Ø±Ø¶'),
-        content: const Text('Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø­Ø°Ù Ù‡Ø°Ø§ Ø§Ù„Ø¹Ø±Ø¶ØŸ'),
+        content: const Text(
+          'Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø­Ø°Ù Ù‡Ø°Ø§ Ø§Ù„Ø¹Ø±Ø¶ØŸ',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),

@@ -47,22 +47,36 @@ export default function OnboardingStep4({ onNext, onBack, storeData }: Step4Prop
       if (response.ok && response.data) {
         setSuggestions(response.data);
       } else {
-        // Fallback to default suggestions
+        // Fallback to default suggestions with generated SVG logos
+        const generateLogoSVG = (letter: string, color: string) => {
+          return `data:image/svg+xml,${encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+              <rect width="200" height="200" fill="${color}" rx="20"/>
+              <text x="100" y="130" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="white" text-anchor="middle">${letter}</text>
+            </svg>
+          `)}`;
+        };
+        
+        const storeLetter = storeData.name?.charAt(0)?.toUpperCase() || 'M';
+        
         setSuggestions({
           logos: [
-            'https://via.placeholder.com/200x200/2563EB/FFFFFF?text=Logo+1',
-            'https://via.placeholder.com/200x200/7C3AED/FFFFFF?text=Logo+2',
-            'https://via.placeholder.com/200x200/059669/FFFFFF?text=Logo+3',
+            generateLogoSVG(storeLetter, '#2563EB'),
+            generateLogoSVG(storeLetter, '#7C3AED'),
+            generateLogoSVG(storeLetter, '#059669'),
           ],
           gradients: [
             { name: 'أزرق كلاسيكي', colors: ['#2563EB', '#1D4ED8'] },
             { name: 'بنفسجي عصري', colors: ['#7C3AED', '#9333EA'] },
             { name: 'أخضر طبيعي', colors: ['#059669', '#047857'] },
+            { name: 'برتقالي دافئ', colors: ['#EA580C', '#C2410C'] },
+            { name: 'وردي أنيق', colors: ['#DB2777', '#BE185D'] },
+            { name: 'رمادي محايد', colors: ['#4B5563', '#374151'] },
           ],
           themes: [
-            { id: 'modern', name: 'عصري', preview: 'modern-preview.jpg' },
-            { id: 'classic', name: 'كلاسيكي', preview: 'classic-preview.jpg' },
-            { id: 'minimal', name: 'بسيط', preview: 'minimal-preview.jpg' },
+            { id: 'modern', name: 'عصري', preview: '' },
+            { id: 'classic', name: 'كلاسيكي', preview: '' },
+            { id: 'minimal', name: 'بسيط', preview: '' },
           ],
         });
       }
@@ -179,18 +193,29 @@ export default function OnboardingStep4({ onNext, onBack, storeData }: Step4Prop
         </div>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-4">
+          <button
+            onClick={onBack}
+            className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors min-h-[48px]"
+            aria-label="العودة للخطوة السابقة"
+          >
+            السابق
+          </button>
+          <button
+            onClick={handleNext}
+            className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors min-h-[48px]"
+            aria-label="الانتقال للخطوة التالية"
+          >
+            التالي
+          </button>
+        </div>
         <button
-          onClick={onBack}
-          className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+          onClick={() => onNext({ branding: {}, skipped: true })}
+          className="text-gray-500 dark:text-gray-400 text-sm hover:text-gray-700 dark:hover:text-gray-200 py-2 transition-colors"
+          aria-label="تخطي هذه الخطوة"
         >
-          السابق
-        </button>
-        <button
-          onClick={handleNext}
-          className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-        >
-          التالي
+          تخطي →
         </button>
       </div>
     </div>

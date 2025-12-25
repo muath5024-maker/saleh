@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/constants/app_dimensions.dart';
@@ -6,8 +6,8 @@ import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/skeleton_loading.dart';
 
-/// Ø´Ø§Ø´Ø© Ø§Ù„Ø·Ù„Ø¨Ø§Øª - Orders Tab
-/// ØªØ¹Ø±Ø¶ Ù‚Ø§Ø¦Ù…Ø© Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡
+/// شاشة الطلبات - Orders Tab
+/// تعرض قائمة طلبات العملاء
 class OrdersTab extends StatefulWidget {
   const OrdersTab({super.key});
 
@@ -20,39 +20,39 @@ class _OrdersTabState extends State<OrdersTab> {
   String _selectedFilter = 'all';
   DateTimeRange? _selectedDateRange;
 
-  // Ø¨ÙŠØ§Ù†Ø§Øª ØªØ¬Ø±ÙŠØ¨ÙŠØ© Ù„Ù„Ø·Ù„Ø¨Ø§Øª
+  // بيانات تجريبية للطلبات
   final List<Map<String, dynamic>> _allOrders = [
     {
       'id': '1001',
-      'customer': 'Ø£Ø­Ù…Ø¯ Ù…Ø­Ù…Ø¯',
+      'customer': 'أحمد محمد',
       'total': 250.0,
       'status': 'new',
       'date': DateTime.now(),
     },
     {
       'id': '1002',
-      'customer': 'Ø³Ø§Ø±Ø© Ø¹Ù„ÙŠ',
+      'customer': 'سارة علي',
       'total': 180.0,
       'status': 'processing',
       'date': DateTime.now().subtract(const Duration(hours: 2)),
     },
     {
       'id': '1003',
-      'customer': 'Ø®Ø§Ù„Ø¯ Ø§Ù„Ø¹Ù…Ø±ÙŠ',
+      'customer': 'خالد العمري',
       'total': 520.0,
       'status': 'completed',
       'date': DateTime.now().subtract(const Duration(days: 1)),
     },
     {
       'id': '1004',
-      'customer': 'Ù†ÙˆØ±Ø© Ø§Ù„Ø³Ø§Ù„Ù…',
+      'customer': 'نورة السالم',
       'total': 95.0,
       'status': 'cancelled',
       'date': DateTime.now().subtract(const Duration(days: 2)),
     },
     {
       'id': '1005',
-      'customer': 'Ø¹Ø¨Ø¯Ø§Ù„Ù„Ù‡ Ø§Ù„Ø­Ø±Ø¨ÙŠ',
+      'customer': 'عبدالله الحربي',
       'total': 340.0,
       'status': 'new',
       'date': DateTime.now().subtract(const Duration(days: 3)),
@@ -61,11 +61,11 @@ class _OrdersTabState extends State<OrdersTab> {
 
   List<Map<String, dynamic>> get _filteredOrders {
     var orders = _allOrders.where((order) {
-      // ÙÙ„ØªØ±Ø© Ø¨Ø§Ù„Ø­Ø§Ù„Ø©
+      // فلترة بالحالة
       if (_selectedFilter != 'all' && order['status'] != _selectedFilter) {
         return false;
       }
-      // ÙÙ„ØªØ±Ø© Ø¨Ø§Ù„ØªØ§Ø±ÙŠØ®
+      // فلترة بالتاريخ
       if (_selectedDateRange != null) {
         final orderDate = order['date'] as DateTime;
         if (orderDate.isBefore(_selectedDateRange!.start) ||
@@ -83,7 +83,7 @@ class _OrdersTabState extends State<OrdersTab> {
   Future<void> _refreshOrders() async {
     setState(() => _isLoading = true);
     HapticFeedback.lightImpact();
-    // Ù…Ø­Ø§ÙƒØ§Ø© ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª
+    // محاكاة تحميل البيانات
     await Future.delayed(const Duration(seconds: 1));
     if (mounted) {
       setState(() => _isLoading = false);
@@ -97,7 +97,7 @@ class _OrdersTabState extends State<OrdersTab> {
       child: Scaffold(
         body: Column(
           children: [
-            // Ø§Ù„ØªØ¨ÙˆÙŠØ¨Ø§Øª Ù…Ù„ØªØµÙ‚Ø© Ø¨Ø§Ù„Ø¨Ø§Ø± Ø§Ù„Ø¹Ù„ÙˆÙŠ
+            // التبويبات ملتصقة بالبار العلوي
             Container(
               color: AppTheme.surfaceColor,
               child: TabBar(
@@ -107,22 +107,22 @@ class _OrdersTabState extends State<OrdersTab> {
                 unselectedLabelColor: AppTheme.textSecondaryColor,
                 labelStyle: const TextStyle(fontWeight: FontWeight.bold),
                 tabs: const [
-                  Tab(text: 'Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ø·Ù„Ø¨Ø§Øª'),
-                  Tab(text: 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø·Ù„Ø¨Ø§Øª'),
-                  Tab(text: 'ØªØ®ØµÙŠØµ Ø§Ù„ÙØ§ØªÙˆØ±Ø©'),
+                  Tab(text: 'إدارة الطلبات'),
+                  Tab(text: 'إعدادات الطلبات'),
+                  Tab(text: 'تخصيص الفاتورة'),
                 ],
               ),
             ),
-            // Ø§Ù„Ù…Ø­ØªÙˆÙ‰
+            // المحتوى
             Expanded(
               child: TabBarView(
                 children: [
-                  // 1) Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ø·Ù„Ø¨Ø§Øª (Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ø§Ù„Ø£ØµÙ„ÙŠ)
+                  // 1) إدارة الطلبات (المحتوى الأصلي)
                   _buildOrdersContent(),
-                  // 2) Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø·Ù„Ø¨Ø§Øª
-                  _buildPlaceholder('Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø·Ù„Ø¨Ø§Øª'),
-                  // 3) ØªØ®ØµÙŠØµ Ø§Ù„ÙØ§ØªÙˆØ±Ø©
-                  _buildPlaceholder('ØªØ®ØµÙŠØµ Ø§Ù„ÙØ§ØªÙˆØ±Ø©'),
+                  // 2) إعدادات الطلبات
+                  _buildPlaceholder('إعدادات الطلبات'),
+                  // 3) تخصيص الفاتورة
+                  _buildPlaceholder('تخصيص الفاتورة'),
                 ],
               ),
             ),
@@ -140,7 +140,7 @@ class _OrdersTabState extends State<OrdersTab> {
       color: AppTheme.accentColor,
       child: Column(
         children: [
-          // Ø´Ø±ÙŠØ· Ø§Ù„ÙÙ„ØªØ± Ø§Ù„Ù…Ø®ØªØ§Ø±
+          // شريط الفلتر المختار
           if (_selectedFilter != 'all' || _selectedDateRange != null)
             Container(
               padding: const EdgeInsets.symmetric(
@@ -190,14 +190,14 @@ class _OrdersTabState extends State<OrdersTab> {
                       _selectedDateRange = null;
                     }),
                     child: Text(
-                      'Ù…Ø³Ø­ Ø§Ù„ÙƒÙ„',
+                      'مسح الكل',
                       style: TextStyle(fontSize: AppDimensions.fontLabel),
                     ),
                   ),
                 ],
               ),
             ),
-          // Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø·Ù„Ø¨Ø§Øª
+          // قائمة الطلبات
           Expanded(
             child: _isLoading
                 ? const SkeletonOrdersList()
@@ -244,8 +244,8 @@ class _OrdersTabState extends State<OrdersTab> {
               const SizedBox(height: AppDimensions.spacing24),
               Text(
                 _selectedFilter != 'all'
-                    ? 'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø·Ù„Ø¨Ø§Øª Ø¨Ù‡Ø°Ù‡ Ø§Ù„Ø­Ø§Ù„Ø©'
-                    : 'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø·Ù„Ø¨Ø§Øª',
+                    ? 'لا توجد طلبات بهذه الحالة'
+                    : 'لا توجد طلبات',
                 style: TextStyle(
                   fontSize: AppDimensions.fontDisplay3,
                   fontWeight: FontWeight.bold,
@@ -254,7 +254,7 @@ class _OrdersTabState extends State<OrdersTab> {
               ),
               const SizedBox(height: AppDimensions.spacing8),
               Text(
-                'Ø³ØªØ¸Ù‡Ø± Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ù‡Ù†Ø§ Ø¹Ù†Ø¯ Ø§Ø³ØªÙ„Ø§Ù…Ù‡Ø§',
+                'ستظهر الطلبات هنا عند استلامها',
                 style: TextStyle(
                   fontSize: AppDimensions.fontBody,
                   color: AppTheme.textSecondaryColor,
@@ -343,7 +343,7 @@ class _OrdersTabState extends State<OrdersTab> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '${order['total'].toStringAsFixed(0)} Ø±.Ø³',
+                    '${order['total'].toStringAsFixed(0)} ر.س',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: AppTheme.primaryColor,
@@ -393,7 +393,7 @@ class _OrdersTabState extends State<OrdersTab> {
             Row(
               children: [
                 Text(
-                  'Ø·Ù„Ø¨ #${order['id']}',
+                  'طلب #${order['id']}',
                   style: TextStyle(
                     fontSize: AppDimensions.fontHeadline,
                     fontWeight: FontWeight.bold,
@@ -422,12 +422,12 @@ class _OrdersTabState extends State<OrdersTab> {
               ],
             ),
             const Divider(height: 24),
-            _buildDetailRow('Ø§Ù„Ø¹Ù…ÙŠÙ„', order['customer']),
+            _buildDetailRow('العميل', order['customer']),
             _buildDetailRow(
-              'Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹',
-              '${order['total'].toStringAsFixed(0)} Ø±.Ø³',
+              'المجموع',
+              '${order['total'].toStringAsFixed(0)} ر.س',
             ),
-            _buildDetailRow('Ø§Ù„ØªØ§Ø±ÙŠØ®', _formatDateTime(order['date'])),
+            _buildDetailRow('التاريخ', _formatDateTime(order['date'])),
             const SizedBox(height: 24),
             if (order['status'] == 'new') ...[
               Row(
@@ -439,7 +439,7 @@ class _OrdersTabState extends State<OrdersTab> {
                         setState(() => order['status'] = 'processing');
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('ØªÙ… Ù‚Ø¨ÙˆÙ„ Ø§Ù„Ø·Ù„Ø¨'),
+                            content: Text('تم قبول الطلب'),
                             backgroundColor: Colors.green,
                           ),
                         );
@@ -448,7 +448,7 @@ class _OrdersTabState extends State<OrdersTab> {
                         backgroundColor: AppTheme.successColor,
                       ),
                       child: const Text(
-                        'Ù‚Ø¨ÙˆÙ„ Ø§Ù„Ø·Ù„Ø¨',
+                        'قبول الطلب',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -461,7 +461,7 @@ class _OrdersTabState extends State<OrdersTab> {
                         setState(() => order['status'] = 'cancelled');
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('ØªÙ… Ø±ÙØ¶ Ø§Ù„Ø·Ù„Ø¨'),
+                            content: Text('تم رفض الطلب'),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -469,7 +469,7 @@ class _OrdersTabState extends State<OrdersTab> {
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.red,
                       ),
-                      child: const Text('Ø±ÙØ¶'),
+                      child: const Text('رفض'),
                     ),
                   ),
                 ],
@@ -483,12 +483,12 @@ class _OrdersTabState extends State<OrdersTab> {
                     setState(() => order['status'] = 'completed');
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('ØªÙ… Ø¥ÙƒÙ…Ø§Ù„ Ø§Ù„Ø·Ù„Ø¨'),
+                        content: Text('تم إكمال الطلب'),
                         backgroundColor: Colors.green,
                       ),
                     );
                   },
-                  child: const Text('ØªÙ… Ø§Ù„ØªÙˆØµÙŠÙ„'),
+                  child: const Text('تم التوصيل'),
                 ),
               ),
             ],
@@ -523,28 +523,28 @@ class _OrdersTabState extends State<OrdersTab> {
   String _getFilterLabel(String status) {
     switch (status) {
       case 'new':
-        return 'Ø¬Ø¯ÙŠØ¯Ø©';
+        return 'جديدة';
       case 'processing':
-        return 'Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°';
+        return 'قيد التنفيذ';
       case 'completed':
-        return 'Ù…ÙƒØªÙ…Ù„Ø©';
+        return 'مكتملة';
       case 'cancelled':
-        return 'Ù…Ù„ØºØ§Ø©';
+        return 'ملغاة';
       default:
-        return 'Ø§Ù„ÙƒÙ„';
+        return 'الكل';
     }
   }
 
   String _getStatusLabel(String status) {
     switch (status) {
       case 'new':
-        return 'Ø¬Ø¯ÙŠØ¯';
+        return 'جديد';
       case 'processing':
-        return 'Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°';
+        return 'قيد التنفيذ';
       case 'completed':
-        return 'Ù…ÙƒØªÙ…Ù„';
+        return 'مكتمل';
       case 'cancelled':
-        return 'Ù…Ù„ØºÙŠ';
+        return 'ملغي';
       default:
         return status;
     }
@@ -581,128 +581,128 @@ class _OrdersTabState extends State<OrdersTab> {
   }
 
   Widget _buildPlaceholder(String title) {
-    if (title == 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø·Ù„Ø¨Ø§Øª') {
+    if (title == 'إعدادات الطلبات') {
       return _buildOrderSettingsTab();
-    } else if (title == 'ØªØ®ØµÙŠØµ Ø§Ù„ÙØ§ØªÙˆØ±Ø©') {
+    } else if (title == 'تخصيص الفاتورة') {
       return _buildInvoiceCustomizationTab();
     }
     return const SizedBox();
   }
 
-  /// ØªØ¨ÙˆÙŠØ¨ Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø·Ù„Ø¨Ø§Øª
+  /// تبويب إعدادات الطلبات
   Widget _buildOrderSettingsTab() {
     return SingleChildScrollView(
       padding: AppDimensions.paddingM,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSettingsSection('Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ø·Ù„Ø¨Ø§Øª', [
+          _buildSettingsSection('إشعارات الطلبات', [
             _buildSwitchTile(
-              'Ø¥Ø´Ø¹Ø§Ø± Ø¹Ù†Ø¯ Ø·Ù„Ø¨ Ø¬Ø¯ÙŠØ¯',
-              'Ø§Ø³ØªÙ„Ø§Ù… Ø¥Ø´Ø¹Ø§Ø± ÙÙˆØ±ÙŠ Ø¹Ù†Ø¯ ÙˆØµÙˆÙ„ Ø·Ù„Ø¨ Ø¬Ø¯ÙŠØ¯',
+              'إشعار عند طلب جديد',
+              'استلام إشعار فوري عند وصول طلب جديد',
               AppIcons.notifications,
               true,
             ),
             _buildSwitchTile(
-              'Ø¥Ø´Ø¹Ø§Ø± ØµÙˆØªÙŠ',
-              'ØªØ´ØºÙŠÙ„ ØµÙˆØª Ø¹Ù†Ø¯ ÙˆØµÙˆÙ„ Ø·Ù„Ø¨',
+              'إشعار صوتي',
+              'تشغيل صوت عند وصول طلب',
               AppIcons.mic,
               true,
             ),
             _buildSwitchTile(
-              'Ø¥Ø´Ø¹Ø§Ø± Ø¨Ø±ÙŠØ¯ Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ',
-              'Ø¥Ø±Ø³Ø§Ù„ Ù†Ø³Ø®Ø© Ù…Ù† Ø§Ù„Ø·Ù„Ø¨ Ù„Ù„Ø¨Ø±ÙŠØ¯',
+              'إشعار بريد إلكتروني',
+              'إرسال نسخة من الطلب للبريد',
               AppIcons.email,
               false,
             ),
           ]),
           const SizedBox(height: AppDimensions.spacing24),
-          _buildSettingsSection('Ø­Ø§Ù„Ø§Øª Ø§Ù„Ø·Ù„Ø¨', [
+          _buildSettingsSection('حالات الطلب', [
             _buildOptionTile(
-              'Ø§Ù„Ø­Ø§Ù„Ø© Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ© Ù„Ù„Ø·Ù„Ø¨ Ø§Ù„Ø¬Ø¯ÙŠØ¯',
-              'Ù‚ÙŠØ¯ Ø§Ù„Ù…Ø±Ø§Ø¬Ø¹Ø©',
+              'الحالة الافتراضية للطلب الجديد',
+              'قيد المراجعة',
               AppIcons.orders,
             ),
             _buildOptionTile(
-              'ØªØ£ÙƒÙŠØ¯ Ø§Ù„Ø·Ù„Ø¨ ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹',
-              'Ù…Ø¹Ø·Ù„',
+              'تأكيد الطلب تلقائياً',
+              'معطل',
               AppIcons.checkCircle,
             ),
           ]),
           const SizedBox(height: AppDimensions.spacing24),
-          _buildSettingsSection('Ø®ÙŠØ§Ø±Ø§Øª Ø§Ù„Ø¥Ù„ØºØ§Ø¡', [
+          _buildSettingsSection('خيارات الإلغاء', [
             _buildSwitchTile(
-              'Ø§Ù„Ø³Ù…Ø§Ø­ Ù„Ù„Ø¹Ù…ÙŠÙ„ Ø¨Ø§Ù„Ø¥Ù„ØºØ§Ø¡',
-              'Ø§Ù„Ø³Ù…Ø§Ø­ Ø¨Ø¥Ù„ØºØ§Ø¡ Ø§Ù„Ø·Ù„Ø¨ Ù‚Ø¨Ù„ Ø§Ù„Ø´Ø­Ù†',
+              'السماح للعميل بالإلغاء',
+              'السماح بإلغاء الطلب قبل الشحن',
               AppIcons.close,
               true,
             ),
-            _buildOptionTile('Ù…Ø¯Ø© Ø§Ù„Ø³Ù…Ø§Ø­ Ø¨Ø§Ù„Ø¥Ù„ØºØ§Ø¡', '24 Ø³Ø§Ø¹Ø©', AppIcons.time),
+            _buildOptionTile('مدة السماح بالإلغاء', '24 ساعة', AppIcons.time),
           ]),
         ],
       ),
     );
   }
 
-  /// ØªØ¨ÙˆÙŠØ¨ ØªØ®ØµÙŠØµ Ø§Ù„ÙØ§ØªÙˆØ±Ø©
+  /// تبويب تخصيص الفاتورة
   Widget _buildInvoiceCustomizationTab() {
     return SingleChildScrollView(
       padding: AppDimensions.paddingM,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSettingsSection('Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„ÙØ§ØªÙˆØ±Ø©', [
+          _buildSettingsSection('معلومات الفاتورة', [
             _buildSwitchTile(
-              'Ø¥Ø¸Ù‡Ø§Ø± Ø´Ø¹Ø§Ø± Ø§Ù„Ù…ØªØ¬Ø±',
-              'Ø¹Ø±Ø¶ Ø§Ù„Ø´Ø¹Ø§Ø± ÙÙŠ Ø£Ø¹Ù„Ù‰ Ø§Ù„ÙØ§ØªÙˆØ±Ø©',
+              'إظهار شعار المتجر',
+              'عرض الشعار في أعلى الفاتورة',
               AppIcons.store,
               true,
             ),
             _buildSwitchTile(
-              'Ø¥Ø¸Ù‡Ø§Ø± Ø±Ù‚Ù… Ø§Ù„Ø¶Ø±ÙŠØ¨Ø©',
-              'Ø¹Ø±Ø¶ Ø§Ù„Ø±Ù‚Ù… Ø§Ù„Ø¶Ø±ÙŠØ¨ÙŠ ÙÙŠ Ø§Ù„ÙØ§ØªÙˆØ±Ø©',
+              'إظهار رقم الضريبة',
+              'عرض الرقم الضريبي في الفاتورة',
               AppIcons.document,
               false,
             ),
-            _buildOptionTile('Ø¹Ù†ÙˆØ§Ù† Ø§Ù„ÙØ§ØªÙˆØ±Ø©', 'ÙØ§ØªÙˆØ±Ø© Ø¶Ø±ÙŠØ¨ÙŠØ©', AppIcons.edit),
+            _buildOptionTile('عنوان الفاتورة', 'فاتورة ضريبية', AppIcons.edit),
           ]),
           const SizedBox(height: AppDimensions.spacing24),
-          _buildSettingsSection('ØªÙØ§ØµÙŠÙ„ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª', [
+          _buildSettingsSection('تفاصيل المنتجات', [
             _buildSwitchTile(
-              'Ø¥Ø¸Ù‡Ø§Ø± ØµÙˆØ±Ø© Ø§Ù„Ù…Ù†ØªØ¬',
-              'Ø¹Ø±Ø¶ ØµÙˆØ±Ø© Ù…ØµØºØ±Ø© Ù„Ù„Ù…Ù†ØªØ¬',
+              'إظهار صورة المنتج',
+              'عرض صورة مصغرة للمنتج',
               AppIcons.image,
               true,
             ),
             _buildSwitchTile(
-              'Ø¥Ø¸Ù‡Ø§Ø± Ø±Ù…Ø² SKU',
-              'Ø¹Ø±Ø¶ Ø±Ù…Ø² Ø§Ù„Ù…Ù†ØªØ¬ ÙÙŠ Ø§Ù„ÙØ§ØªÙˆØ±Ø©',
+              'إظهار رمز SKU',
+              'عرض رمز المنتج في الفاتورة',
               AppIcons.tag,
               false,
             ),
             _buildSwitchTile(
-              'Ø¥Ø¸Ù‡Ø§Ø± Ø§Ù„Ø®ØµÙˆÙ…Ø§Øª',
-              'Ø¹Ø±Ø¶ Ù‚ÙŠÙ…Ø© Ø§Ù„Ø®ØµÙ… Ù„ÙƒÙ„ Ù…Ù†ØªØ¬',
+              'إظهار الخصومات',
+              'عرض قيمة الخصم لكل منتج',
               AppIcons.discount,
               true,
             ),
           ]),
           const SizedBox(height: AppDimensions.spacing24),
-          _buildSettingsSection('Ø§Ù„ØªØ°ÙŠÙŠÙ„', [
+          _buildSettingsSection('التذييل', [
             _buildOptionTile(
-              'Ø±Ø³Ø§Ù„Ø© Ø´ÙƒØ±',
-              'Ø´ÙƒØ±Ø§Ù‹ Ù„ØªØ³ÙˆÙ‚ÙƒÙ… Ù…Ø¹Ù†Ø§!',
+              'رسالة شكر',
+              'شكراً لتسوقكم معنا!',
               AppIcons.heart,
             ),
             _buildSwitchTile(
-              'Ø¥Ø¸Ù‡Ø§Ø± Ø±Ù…Ø² QR',
-              'Ø±Ù…Ø² QR Ù„Ø±Ø§Ø¨Ø· Ø§Ù„Ù…ØªØ¬Ø±',
+              'إظهار رمز QR',
+              'رمز QR لرابط المتجر',
               AppIcons.qrCode,
               true,
             ),
           ]),
           const SizedBox(height: AppDimensions.spacing24),
-          // Ø²Ø± Ù…Ø¹Ø§ÙŠÙ†Ø© Ø§Ù„ÙØ§ØªÙˆØ±Ø©
+          // زر معاينة الفاتورة
           SizedBox(
             width: double.infinity,
             height: AppDimensions.buttonHeightL,
@@ -710,7 +710,7 @@ class _OrdersTabState extends State<OrdersTab> {
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Ø³ÙŠØªÙ… ÙØªØ­ Ù…Ø¹Ø§ÙŠÙ†Ø© Ø§Ù„ÙØ§ØªÙˆØ±Ø©'),
+                    content: Text('سيتم فتح معاينة الفاتورة'),
                     backgroundColor: AppTheme.primaryColor,
                   ),
                 );
@@ -724,7 +724,7 @@ class _OrdersTabState extends State<OrdersTab> {
                   BlendMode.srcIn,
                 ),
               ),
-              label: const Text('Ù…Ø¹Ø§ÙŠÙ†Ø© Ø§Ù„ÙØ§ØªÙˆØ±Ø©'),
+              label: const Text('معاينة الفاتورة'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primaryColor,
                 foregroundColor: Colors.white,
@@ -806,7 +806,7 @@ class _OrdersTabState extends State<OrdersTab> {
               setState(() {});
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(newValue ? 'ØªÙ… Ø§Ù„ØªÙØ¹ÙŠÙ„' : 'ØªÙ… Ø§Ù„ØªØ¹Ø·ÙŠÙ„'),
+                  content: Text(newValue ? 'تم التفعيل' : 'تم التعطيل'),
                   backgroundColor: AppTheme.primaryColor,
                   duration: const Duration(seconds: 1),
                 ),
@@ -855,7 +855,7 @@ class _OrdersTabState extends State<OrdersTab> {
       onTap: () {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('ØªØ¹Ø¯ÙŠÙ„: $title'),
+            content: Text('تعديل: $title'),
             backgroundColor: AppTheme.primaryColor,
           ),
         );

@@ -6,7 +6,10 @@
       "Bash(flutter test:*)",
       "Bash(flutter analyze:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(cat:*)",
+      "Bash(ls:*)"
     ]
   }
 }

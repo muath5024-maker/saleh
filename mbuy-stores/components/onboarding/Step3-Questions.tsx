@@ -97,7 +97,7 @@ export default function OnboardingStep3({ onNext, onBack, storeData }: Step3Prop
         </div>
       </div>
 
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
         {currentQuestion.question}
       </h2>
 
@@ -108,26 +108,46 @@ export default function OnboardingStep3({ onNext, onBack, storeData }: Step3Prop
             onClick={() => handleAnswer(currentQuestion.id, option)}
             className={`w-full text-right px-6 py-4 border-2 rounded-lg transition-all ${
               answers[currentQuestion.id] === option
-                ? 'border-blue-600 bg-blue-50 text-blue-900'
-                : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100'
+                : 'border-gray-200 dark:border-gray-700 hover:border-blue-300 hover:bg-gray-50 dark:hover:bg-gray-800'
             }`}
+            aria-pressed={answers[currentQuestion.id] === option}
           >
             {option}
           </button>
         ))}
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-4">
+          <button
+            onClick={handleBack}
+            className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors min-h-[48px]"
+            aria-label={currentQuestionIndex === 0 ? 'العودة للخطوة السابقة' : 'العودة للسؤال السابق'}
+          >
+            {currentQuestionIndex === 0 ? 'السابق' : 'السؤال السابق'}
+          </button>
+          <button
+            onClick={handleNext}
+            disabled={!isAnswered}
+            className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors min-h-[48px]"
+            aria-label={isLastQuestion ? 'الانتقال للخطوة التالية' : 'الانتقال للسؤال التالي'}
+            aria-disabled={!isAnswered}
+          >
+            {isLastQuestion ? 'التالي' : 'السؤال التالي'}
+          </button>
+        </div>
         <button
-          onClick={handleBack}
-          className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+          onClick={() => onNext({ answers: {}, skipped: true })}
+          className="text-gray-500 dark:text-gray-400 text-sm hover:text-gray-700 dark:hover:text-gray-200 py-2 transition-colors"
+          aria-label="تخطي هذه الخطوة"
         >
-          {currentQuestionIndex === 0 ? 'السابق' : 'السؤال السابق'}
+          تخطي →
         </button>
-        <button
-          onClick={handleNext}
-          disabled={!isAnswered}
+      </div>
           className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          aria-label={isLastQuestion ? 'الانتقال للخطوة التالية' : 'الانتقال للسؤال التالي'}
+          aria-disabled={!isAnswered}
         >
           {isLastQuestion ? 'التالي' : 'السؤال التالي'}
         </button>
