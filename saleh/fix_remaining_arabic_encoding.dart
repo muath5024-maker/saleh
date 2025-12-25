@@ -27,14 +27,14 @@ void main() async {
     }
 
     print('📄 معالجة: $filePath');
-    
+
     // قراءة المحتوى بترميز Latin1 (ISO-8859-1)
     final bytes = await file.readAsBytes();
     final latin1Content = latin1.decode(bytes);
-    
+
     // إعادة ترميزه كـ UTF-8
     final fixedContent = utf8.decode(latin1.encode(latin1Content));
-    
+
     // حساب عدد التغييرات
     int replacements = 0;
     for (int i = 0; i < latin1Content.length && i < fixedContent.length; i++) {
@@ -42,7 +42,7 @@ void main() async {
         replacements++;
       }
     }
-    
+
     if (replacements > 0) {
       // حفظ النسخة المصلحة
       await file.writeAsString(fixedContent, encoding: utf8, flush: true);
@@ -54,10 +54,10 @@ void main() async {
     }
   }
 
-  print('\n' + '='*50);
+  print('\n' + '=' * 50);
   print('🎉 اكتمل الإصلاح!');
   print('📊 الملفات المعالجة: ${files.length}');
   print('✅ الملفات المُصلحة: $totalFixed');
   print('🔢 إجمالي الأحرف المستبدلة: $totalReplacements');
-  print('='*50);
+  print('=' * 50);
 }

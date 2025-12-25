@@ -20,23 +20,27 @@ void main() async {
 
   for (final file in dartFiles) {
     final filePath = file.path.replaceAll('\\', '/');
-    
+
     try {
       // قراءة المحتوى بترميز Latin1
       final bytes = await file.readAsBytes();
       final latin1Content = latin1.decode(bytes);
-      
+
       // إعادة ترميزه كـ UTF-8
       final fixedContent = utf8.decode(latin1.encode(latin1Content));
-      
+
       // حساب عدد التغييرات
       int replacements = 0;
-      for (int i = 0; i < latin1Content.length && i < fixedContent.length; i++) {
+      for (
+        int i = 0;
+        i < latin1Content.length && i < fixedContent.length;
+        i++
+      ) {
         if (latin1Content[i] != fixedContent[i]) {
           replacements++;
         }
       }
-      
+
       if (replacements > 0) {
         // حفظ النسخة المصلحة
         await file.writeAsString(fixedContent, encoding: utf8, flush: true);
@@ -51,11 +55,11 @@ void main() async {
     }
   }
 
-  print('\n' + '='*60);
+  print('\n' + '=' * 60);
   print('🎉 اكتمل الفحص الشامل!');
   print('📊 إجمالي الملفات: ${dartFiles.length}');
   print('✅ الملفات المُصلحة: $totalFixed');
   print('✓  الملفات السليمة: $totalSkipped');
   print('🔢 إجمالي الأحرف المستبدلة: $totalReplacements');
-  print('='*60);
+  print('=' * 60);
 }
