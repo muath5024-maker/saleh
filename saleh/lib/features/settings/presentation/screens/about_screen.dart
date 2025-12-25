@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_dimensions.dart';
@@ -6,7 +6,7 @@ import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/app_icon.dart';
 
-/// Ø´Ø§Ø´Ø© Ù…Ù† Ù†Ø­Ù†
+/// Ø´Ø§Ø´Ø© من Ù†Ø­Ù†
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
@@ -19,7 +19,7 @@ class AboutScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
 
-            // Ø§Ù„Ø´Ø¹Ø§Ø±
+            // الØ´Ø¹Ø§Ø±
             Container(
               width: 100,
               height: 100,
@@ -41,7 +41,7 @@ class AboutScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Ø§Ø³Ù… Ø§Ù„ØªØ·Ø¨ÙŠÙ‚
+            // Ø§Ø³Ù… التطبيق
             const Text(
               'Mbuy',
               style: TextStyle(
@@ -53,15 +53,15 @@ class AboutScreen extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            // Ø§Ù„ÙˆØµÙ Ø§Ù„Ù‚ØµÙŠØ±
+            // الÙˆØµÙ القصير
             Text(
-              'Ù…Ù†ØµØ© Ø§Ù„ØªØ¬Ø§Ø±Ø© Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ© Ø§Ù„Ø°ÙƒÙŠØ©',
+              'منØµØ© الØªØ¬Ø§Ø±Ø© الØ¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ© الØ°ÙƒÙŠØ©',
               style: TextStyle(fontSize: 16, color: AppTheme.mutedSlate),
             ),
 
             const SizedBox(height: 8),
 
-            // Ø§Ù„Ø¥ØµØ¯Ø§Ø±
+            // الØ¥ØµØ¯Ø§Ø±
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
@@ -69,7 +69,7 @@ class AboutScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: const Text(
-                'Ø§Ù„Ø¥ØµØ¯Ø§Ø± 1.0.0',
+                'الØ¥ØµØ¯Ø§Ø± 1.0.0',
                 style: TextStyle(
                   fontSize: 12,
                   color: AppTheme.primaryColor,
@@ -84,11 +84,11 @@ class AboutScreen extends StatelessWidget {
             _buildSection(
               title: 'Ù‚ØµØªÙ†Ø§',
               content: '''
-Ø¨Ø¯Ø£Øª Mbuy Ù…Ù† ÙÙƒØ±Ø© Ø¨Ø³ÙŠØ·Ø©: ØªÙ…ÙƒÙŠÙ† ÙƒÙ„ Ø´Ø®Øµ Ù…Ù† Ø§Ù…ØªÙ„Ø§Ùƒ Ù…ØªØ¬Ø±Ù‡ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ Ø¨Ø³Ù‡ÙˆÙ„Ø©.
+Ø¨Ø¯Ø£Øª Mbuy من ÙÙƒØ±Ø© Ø¨Ø³ÙŠØ·Ø©: تمÙƒÙŠÙ† كل Ø´Ø®Øµ من Ø§Ù…ØªلاÙƒ Ù…ØªØ¬Ø±Ù‡ الØ¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ Ø¨Ø³Ù‡ÙˆÙ„Ø©.
 
-Ù†Ø¤Ù…Ù† Ø¨Ø£Ù† Ø§Ù„ØªØ¬Ø§Ø±Ø© Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ© ÙŠØ¬Ø¨ Ø£Ù† ØªÙƒÙˆÙ† Ù…ØªØ§Ø­Ø© Ù„Ù„Ø¬Ù…ÙŠØ¹ØŒ ÙˆÙ„ÙŠØ³ ÙÙ‚Ø· Ù„Ù„Ø´Ø±ÙƒØ§Øª Ø§Ù„ÙƒØ¨ÙŠØ±Ø©. Ù„Ø°Ù„Ùƒ Ø£Ù†Ø´Ø£Ù†Ø§ Ù…Ù†ØµØ© ØªØ¬Ù…Ø¹ Ø¨ÙŠÙ† Ø§Ù„Ø³Ù‡ÙˆÙ„Ø© ÙˆØ§Ù„Ù‚ÙˆØ©ØŒ Ù…Ø¹ Ø£Ø¯ÙˆØ§Øª Ø°ÙƒØ§Ø¡ Ø§ØµØ·Ù†Ø§Ø¹ÙŠ Ù…ØªÙ‚Ø¯Ù…Ø© Ù„Ù…Ø³Ø§Ø¹Ø¯Ø© Ø§Ù„ØªØ¬Ø§Ø± Ø¹Ù„Ù‰ Ø§Ù„Ù†Ø¬Ø§Ø­.
+Ù†Ø¤من Ø¨Ø£Ù† الØªØ¬Ø§Ø±Ø© الØ¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ© ÙŠØ¬Ø¨ Ø£Ù† ØªÙƒÙˆÙ† Ù…ØªØ§Ø­Ø© Ù„Ù„Ø¬Ù…ÙŠØ¹ØŒ ÙˆÙ„ÙŠØ³ ÙÙ‚Ø· Ù„Ù„Ø´Ø±ÙƒØ§Øª الÙƒØ¨ÙŠØ±Ø©. Ù„Ø°Ù„Ùƒ Ø£Ù†Ø´Ø£Ù†Ø§ منØµØ© ØªØ¬مع Ø¨ÙŠÙ† الØ³Ù‡ÙˆÙ„Ø© ÙˆالÙ‚ÙˆØ©ØŒ مع Ø£Ø¯ÙˆØ§Øª Ø°ÙƒØ§Ø¡ Ø§ØµØ·Ù†Ø§Ø¹ÙŠ Ù…ØªÙ‚Ø¯Ù…Ø© Ù„Ù…Ø³Ø§Ø¹Ø¯Ø© الØªØ¬Ø§Ø± على الÙ†Ø¬Ø§Ø­.
 
-Ø§Ù„ÙŠÙˆÙ…ØŒ ÙŠØ³ØªØ®Ø¯Ù… Ø¢Ù„Ø§Ù Ø§Ù„ØªØ¬Ø§Ø± Mbuy Ù„Ø¥Ø¯Ø§Ø±Ø© Ù…ØªØ§Ø¬Ø±Ù‡Ù… ÙˆØªÙ†Ù…ÙŠØ© Ø£Ø¹Ù…Ø§Ù„Ù‡Ù….
+اليومØŒ ÙŠØ³ØªØ®Ø¯Ù… Ø¢لاÙ الØªØ¬Ø§Ø± Mbuy Ù„Ø¥Ø¯Ø§Ø±Ø© Ù…ØªØ§Ø¬Ø±Ù‡Ù… ÙˆØªÙ†Ù…ÙŠØ© Ø£Ø¹Ù…الÙ‡Ù….
 ''',
             ),
 
@@ -96,7 +96,7 @@ class AboutScreen extends StatelessWidget {
             _buildSection(
               title: 'Ø±Ø¤ÙŠØªÙ†Ø§',
               content: '''
-Ø£Ù† Ù†ÙƒÙˆÙ† Ø§Ù„Ù…Ù†ØµØ© Ø§Ù„Ø£ÙˆÙ„Ù‰ Ù„Ù„ØªØ¬Ø§Ø±Ø© Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ© ÙÙŠ Ø§Ù„Ù…Ù†Ø·Ù‚Ø© Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©ØŒ ÙˆÙ†Ù…ÙƒÙ‘Ù† Ù…Ù„ÙŠÙˆÙ† ØªØ§Ø¬Ø± Ù…Ù† ØªØ­Ù‚ÙŠÙ‚ Ø£Ø­Ù„Ø§Ù…Ù‡Ù… Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ© Ø¨Ø­Ù„ÙˆÙ„ 2030.
+Ø£Ù† Ù†ÙƒÙˆÙ† المنØµØ© الØ£ÙˆÙ„Ù‰ Ù„Ù„ØªØ¬Ø§Ø±Ø© الØ¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ© ÙÙŠ المنØ·Ù‚Ø© الØ¹Ø±Ø¨ÙŠØ©ØŒ ÙˆÙ†Ù…ÙƒÙ‘Ù† Ù…Ù„ÙŠÙˆÙ† ØªØ§Ø¬Ø± من ØªØ­Ù‚ÙŠÙ‚ Ø£Ø­لاÙ…Ù‡Ù… الØªØ¬Ø§Ø±ÙŠØ© Ø¨Ø­Ù„ÙˆÙ„ 2030.
 ''',
             ),
 
@@ -114,19 +114,19 @@ class AboutScreen extends StatelessWidget {
             _buildFeatureCard(
               icon: AppIcons.bot,
               title: 'Ø°ÙƒØ§Ø¡ Ø§ØµØ·Ù†Ø§Ø¹ÙŠ Ù…ØªÙ‚Ø¯Ù…',
-              description: 'Ø£Ø¯ÙˆØ§Øª AI Ù„ØªÙˆÙ„ÙŠØ¯ Ø§Ù„ØµÙˆØ± ÙˆØ§Ù„Ù…Ø­ØªÙˆÙ‰ ÙˆØªØ­Ø³ÙŠÙ† Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª',
+              description: 'أدوات AI Ù„ØªÙˆÙ„ÙŠØ¯ الØµÙˆØ± ÙˆالÙ…Ø­ØªÙˆÙ‰ ÙˆØªØ­Ø³ÙŠÙ† الÙ…Ø¨ÙŠØ¹Ø§Øª',
               color: const Color(0xFF8B5CF6),
             ),
             _buildFeatureCard(
               icon: AppIcons.chart,
-              title: 'ØªØ­Ù„ÙŠÙ„Ø§Øª Ø´Ø§Ù…Ù„Ø©',
-              description: 'Ø±Ø¤Ù‰ Ø¹Ù…ÙŠÙ‚Ø© Ù„ÙÙ‡Ù… Ø¹Ù…Ù„Ø§Ø¦Ùƒ ÙˆØªØ­Ø³ÙŠÙ† Ø£Ø¯Ø§Ø¦Ùƒ',
+              title: 'ØªØ­Ù„ÙŠلاØª Ø´Ø§Ù…Ù„Ø©',
+              description: 'Ø±Ø¤Ù‰ Ø¹Ù…ÙŠÙ‚Ø© Ù„ÙÙ‡Ù… Ø¹Ù…لاØ¦Ùƒ ÙˆØªØ­Ø³ÙŠÙ† Ø£Ø¯Ø§Ø¦Ùƒ',
               color: const Color(0xFF10B981),
             ),
             _buildFeatureCard(
               icon: AppIcons.shield,
-              title: 'Ø£Ù…Ø§Ù† Ø¹Ø§Ù„ÙŠ',
-              description: 'Ø­Ù…Ø§ÙŠØ© Ø¨ÙŠØ§Ù†Ø§ØªÙƒ ÙˆÙ…Ø¹Ø§Ù…Ù„Ø§ØªÙƒ Ø¨Ø£Ø¹Ù„Ù‰ Ø§Ù„Ù…Ø¹Ø§ÙŠÙŠØ±',
+              title: 'Ø£Ù…Ø§Ù† Ø¹الÙŠ',
+              description: 'Ø­Ù…Ø§ÙŠØ© Ø¨ÙŠØ§Ù†Ø§ØªÙƒ ÙˆمعØ§Ù…لاØªÙƒ Ø¨Ø£على المعØ§ÙŠÙŠØ±',
               color: const Color(0xFFEF4444),
             ),
             _buildFeatureCard(
@@ -138,9 +138,9 @@ class AboutScreen extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            // ØªÙˆØ§ØµÙ„ Ù…Ø¹Ù†Ø§
+            // ØªÙˆØ§ØµÙ„ معÙ†Ø§
             const Text(
-              'ØªÙˆØ§ØµÙ„ Ù…Ø¹Ù†Ø§',
+              'ØªÙˆØ§ØµÙ„ معÙ†Ø§',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -154,7 +154,7 @@ class AboutScreen extends StatelessWidget {
               children: [
                 _buildSocialButton(
                   icon: AppIcons.globe,
-                  label: 'Ø§Ù„Ù…ÙˆÙ‚Ø¹',
+                  label: 'الÙ…ÙˆÙ‚Ø¹',
                   onTap: () => _launchUrl('https://mbuy.app'),
                 ),
                 const SizedBox(width: 16),
@@ -174,16 +174,16 @@ class AboutScreen extends StatelessWidget {
 
             const SizedBox(height: 40),
 
-            // Ø­Ù‚ÙˆÙ‚ Ø§Ù„Ù†Ø´Ø±
+            // Ø­Ù‚ÙˆÙ‚ الÙ†Ø´Ø±
             Text(
-              'Â© 2025 Mbuy. Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø­Ù‚ÙˆÙ‚ Ù…Ø­ÙÙˆØ¸Ø©.',
+              'Â© 2025 Mbuy. Ø¬Ù…ÙŠØ¹ الØ­Ù‚ÙˆÙ‚ Ù…Ø­ÙÙˆØ¸Ø©.',
               style: TextStyle(fontSize: 12, color: AppTheme.mutedSlate),
             ),
 
             const SizedBox(height: 8),
 
             Text(
-              'ØµÙ†Ø¹ Ø¨Ù€ â¤ï¸ ÙÙŠ Ø§Ù„Ù…Ù…Ù„ÙƒØ© Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© Ø§Ù„Ø³Ø¹ÙˆØ¯ÙŠØ©',
+              'ØµÙ†Ø¹ Ø¨Ù€ â¤ï¸ ÙÙŠ الÙ…Ù…Ù„ÙƒØ© الØ¹Ø±Ø¨ÙŠØ© الØ³Ø¹ودية',
               style: TextStyle(fontSize: 12, color: AppTheme.mutedSlate),
             ),
 

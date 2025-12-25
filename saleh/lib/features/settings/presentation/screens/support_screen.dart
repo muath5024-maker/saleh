@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,7 +7,7 @@ import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/app_icon.dart';
 
-/// Ø´Ø§Ø´Ø© Ø§Ù„Ø¯Ø¹Ù… ÙˆØ§Ù„Ù…Ø³Ø§Ø¹Ø¯Ø©
+/// Ø´Ø§Ø´Ø© الØ¯Ø¹Ù… ÙˆالÙ…Ø³Ø§Ø¹Ø¯Ø©
 class SupportScreen extends StatelessWidget {
   const SupportScreen({super.key});
 
@@ -17,18 +17,18 @@ class SupportScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Header Ø«Ø§Ø¨Øª ÙÙŠ Ø§Ù„Ø£Ø¹Ù„Ù‰
+            // Header Ø«Ø§Ø¨Øª ÙÙŠ الØ£على
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: _buildHeader(context),
             ),
             const SizedBox(height: 16),
-            // Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ø§Ù„Ù‚Ø§Ø¨Ù„ Ù„Ù„ØªÙ…Ø±ÙŠØ±
+            // الÙ…Ø­ØªÙˆÙ‰ الÙ‚Ø§Ø¨Ù„ Ù„Ù„تمØ±ÙŠØ±
             Expanded(
               child: ListView(
                 padding: AppDimensions.paddingM,
                 children: [
-                  // Ø¨Ø·Ø§Ù‚Ø© Ø§Ù„ØªØ±Ø­ÙŠØ¨
+                  // Ø¨Ø·Ø§Ù‚Ø© الØªØ±Ø­ÙŠØ¨
                   Container(
                     padding: AppDimensions.paddingL,
                     decoration: BoxDecoration(
@@ -53,7 +53,7 @@ class SupportScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'ÙØ±ÙŠÙ‚ Ø§Ù„Ø¯Ø¹Ù… Ù…ØªØ§Ø­ Ø¹Ù„Ù‰ Ù…Ø¯Ø§Ø± Ø§Ù„Ø³Ø§Ø¹Ø© Ù„Ù…Ø³Ø§Ø¹Ø¯ØªÙƒ',
+                          'ÙØ±ÙŠÙ‚ الØ¯Ø¹Ù… Ù…ØªØ§Ø­ على Ù…Ø¯Ø§Ø± الساعة Ù„Ù…Ø³Ø§Ø¹Ø¯ØªÙƒ',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withValues(alpha: 0.9),
@@ -66,9 +66,9 @@ class SupportScreen extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  // Ø·Ø±Ù‚ Ø§Ù„ØªÙˆØ§ØµÙ„
+                  // Ø·Ø±Ù‚ الØªÙˆØ§ØµÙ„
                   const Text(
-                    'ØªÙˆØ§ØµÙ„ Ù…Ø¹Ù†Ø§',
+                    'ØªÙˆØ§ØµÙ„ معÙ†Ø§',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class SupportScreen extends StatelessWidget {
                   _buildContactCard(
                     context,
                     icon: AppIcons.email,
-                    title: 'Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ',
+                    title: 'الØ¨Ø±ÙŠØ¯ الØ¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ',
                     subtitle: 'support@mbuy.app',
                     color: AppTheme.primaryColor,
                     onTap: () => _launchEmail(context),
@@ -102,7 +102,7 @@ class SupportScreen extends StatelessWidget {
                   _buildContactCard(
                     context,
                     icon: AppIcons.phone,
-                    title: 'Ø§Ù„Ù‡Ø§ØªÙ',
+                    title: 'الÙ‡Ø§ØªÙ',
                     subtitle: '+966 50 000 0000',
                     color: AppTheme.successColor,
                     onTap: () => _launchPhone(context),
@@ -110,9 +110,9 @@ class SupportScreen extends StatelessWidget {
 
                   const SizedBox(height: 32),
 
-                  // Ø§Ù„Ø£Ø³Ø¦Ù„Ø© Ø§Ù„Ø´Ø§Ø¦Ø¹Ø©
+                  // الØ£Ø³Ø¦Ù„Ø© الØ´Ø§Ø¦Ø¹Ø©
                   const Text(
-                    'Ø§Ù„Ø£Ø³Ø¦Ù„Ø© Ø§Ù„Ø´Ø§Ø¦Ø¹Ø©',
+                    'الØ£Ø³Ø¦Ù„Ø© الØ´Ø§Ø¦Ø¹Ø©',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -125,32 +125,32 @@ class SupportScreen extends StatelessWidget {
                     _FAQItem(
                       question: 'ÙƒÙŠÙ Ø£Ù†Ø´Ø¦ Ù…ØªØ¬Ø±ÙŠØŸ',
                       answer:
-                          'Ø¨Ø¹Ø¯ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ØŒ Ø§Ø°Ù‡Ø¨ Ø¥Ù„Ù‰ "Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…ØªØ¬Ø±" Ø«Ù… Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ "Ø¥Ù†Ø´Ø§Ø¡ Ù…ØªØ¬Ø±". Ø£Ø¯Ø®Ù„ Ø§Ø³Ù… Ø§Ù„Ù…ØªØ¬Ø± ÙˆØ§Ù„ÙˆØµÙ ÙˆØ§Ù„Ø´Ø¹Ø§Ø±ØŒ Ø«Ù… Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ "Ø¥Ù†Ø´Ø§Ø¡".',
+                          'Ø¨Ø¹Ø¯ ØªØ³Ø¬ÙŠÙ„ الØ¯Ø®ÙˆÙ„ØŒ Ø§Ø°Ù‡Ø¨ إلى "Ø¥Ø¯Ø§Ø±Ø© الÙ…ØªØ¬Ø±" Ø«Ù… Ø§Ø¶ØºØ· على "Ø¥Ù†Ø´Ø§Ø¡ Ù…ØªØ¬Ø±". Ø£Ø¯Ø®Ù„ Ø§Ø³Ù… الÙ…ØªØ¬Ø± ÙˆالÙˆØµÙ ÙˆالØ´Ø¹Ø§Ø±ØŒ Ø«Ù… Ø§Ø¶ØºØ· على "Ø¥Ù†Ø´Ø§Ø¡".',
                     ),
                     _FAQItem(
-                      question: 'ÙƒÙŠÙ Ø£Ø¶ÙŠÙ Ù…Ù†ØªØ¬Ø§ØªØŸ',
+                      question: 'ÙƒÙŠÙ Ø£Ø¶ÙŠÙ منØªØ¬Ø§ØªØŸ',
                       answer:
-                          'Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ Ø²Ø± + ÙÙŠ Ø§Ù„Ø´Ø±ÙŠØ· Ø§Ù„Ø³ÙÙ„ÙŠØŒ Ø«Ù… Ø£Ø¯Ø®Ù„ Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬ (Ø§Ù„Ø§Ø³Ù…ØŒ Ø§Ù„Ø³Ø¹Ø±ØŒ Ø§Ù„ØµÙˆØ±ØŒ Ø§Ù„ÙˆØµÙ) ÙˆØ§Ø¶ØºØ· Ø¹Ù„Ù‰ "Ø­ÙØ¸".',
+                          'Ø§Ø¶ØºØ· على Ø²Ø± + ÙÙŠ الØ´Ø±ÙŠØ· الØ³ÙÙ„ÙŠØŒ Ø«Ù… Ø£Ø¯Ø®Ù„ Ø¨ÙŠØ§Ù†Ø§Øª المنØªØ¬ (الØ§Ø³Ù…ØŒ الØ³Ø¹Ø±ØŒ الØµÙˆØ±ØŒ الÙˆØµÙ) ÙˆØ§Ø¶ØºØ· على "Ø­ÙØ¸".',
                     ),
                     _FAQItem(
                       question: 'ÙƒÙŠÙ Ø£Ø´ØªØ±ÙŠ Ù†Ù‚Ø§Ø·ØŸ',
                       answer:
-                          'Ø§Ø°Ù‡Ø¨ Ø¥Ù„Ù‰ ØµÙØ­Ø© "Ø§Ù„Ù†Ù‚Ø§Ø·" Ù…Ù† Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©ØŒ Ø«Ù… Ø§Ø®ØªØ± Ø§Ù„Ø¨Ø§Ù‚Ø© Ø§Ù„Ù…Ù†Ø§Ø³Ø¨Ø© ÙˆØ§ØªØ¨Ø¹ Ø®Ø·ÙˆØ§Øª Ø§Ù„Ø¯ÙØ¹.',
+                          'Ø§Ø°Ù‡Ø¨ إلى ØµÙØ­Ø© "الÙ†Ù‚Ø§Ø·" من الرئيسيةØŒ Ø«Ù… Ø§Ø®ØªØ± الØ¨Ø§Ù‚Ø© المنØ§Ø³Ø¨Ø© ÙˆØ§ØªØ¨Ø¹ Ø®Ø·ÙˆØ§Øª الØ¯ÙØ¹.',
                     ),
                     _FAQItem(
-                      question: 'Ù…Ø§ Ù‡ÙŠ Ø£Ø¯ÙˆØ§Øª AIØŸ',
+                      question: 'Ù…Ø§ Ù‡ÙŠ أدوات AIØŸ',
                       answer:
-                          'Ø£Ø¯ÙˆØ§Øª Ø§Ù„Ø°ÙƒØ§Ø¡ Ø§Ù„Ø§ØµØ·Ù†Ø§Ø¹ÙŠ ØªØ³Ø§Ø¹Ø¯Ùƒ ÙÙŠ ØªÙˆÙ„ÙŠØ¯ ØµÙˆØ± Ø§Ø­ØªØ±Ø§ÙÙŠØ© Ù„Ù„Ù…Ù†ØªØ¬Ø§ØªØŒ ÙˆÙƒØªØ§Ø¨Ø© Ø£ÙˆØµØ§Ù Ø¬Ø°Ø§Ø¨Ø©ØŒ ÙˆØªØ­Ø³ÙŠÙ† Ù…ØªØ¬Ø±Ùƒ.',
+                          'Ø£Ø¯ÙˆØ§Øª الØ°ÙƒØ§Ø¡ الØ§ØµØ·Ù†Ø§Ø¹ÙŠ ØªØ³Ø§Ø¹Ø¯Ùƒ ÙÙŠ ØªÙˆÙ„ÙŠØ¯ ØµÙˆØ± Ø§Ø­ØªØ±Ø§ÙÙŠØ© Ù„Ù„منØªØ¬Ø§ØªØŒ ÙˆÙƒØªØ§Ø¨Ø© Ø£ÙˆØµØ§Ù Ø¬Ø°Ø§Ø¨Ø©ØŒ ÙˆØªØ­Ø³ÙŠÙ† Ù…ØªØ¬Ø±Ùƒ.',
                     ),
                     _FAQItem(
                       question: 'ÙƒÙŠÙ Ø£Ø³Ø­Ø¨ Ø£Ø±Ø¨Ø§Ø­ÙŠØŸ',
                       answer:
-                          'Ø§Ø°Ù‡Ø¨ Ø¥Ù„Ù‰ "Ø§Ù„Ù…Ø­ÙØ¸Ø©"ØŒ Ø«Ù… Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ "Ø³Ø­Ø¨"ØŒ Ø£Ø¯Ø®Ù„ Ø§Ù„Ù…Ø¨Ù„Øº ÙˆØ¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø­Ø³Ø§Ø¨ Ø§Ù„Ø¨Ù†ÙƒÙŠØŒ ÙˆØ³ÙŠØªÙ… Ø§Ù„ØªØ­ÙˆÙŠÙ„ Ø®Ù„Ø§Ù„ 3-5 Ø£ÙŠØ§Ù… Ø¹Ù…Ù„.',
+                          'Ø§Ø°Ù‡Ø¨ إلى "الÙ…Ø­ÙØ¸Ø©"ØŒ Ø«Ù… Ø§Ø¶ØºØ· على "Ø³Ø­Ø¨"ØŒ Ø£Ø¯Ø®Ù„ الÙ…Ø¨Ù„Øº ÙˆØ¨ÙŠØ§Ù†Ø§Øª الØ­Ø³Ø§Ø¨ الØ¨Ù†ÙƒÙŠØŒ ÙˆØ³ÙŠتم الØªØ­ÙˆÙŠÙ„ Ø®Ù„ال 3-5 Ø£ÙŠØ§Ù… Ø¹Ù…Ù„.',
                     ),
                     _FAQItem(
                       question: 'ÙƒÙŠÙ Ø£Ù„ØºÙŠ Ø§Ø´ØªØ±Ø§ÙƒÙŠØŸ',
                       answer:
-                          'Ø§Ø°Ù‡Ø¨ Ø¥Ù„Ù‰ "Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø­Ø³Ø§Ø¨" Ø«Ù… "Ø§Ù„Ø§Ø´ØªØ±Ø§ÙƒØ§Øª"ØŒ ÙˆØ§Ø¶ØºØ· Ø¹Ù„Ù‰ "Ø¥Ù„ØºØ§Ø¡ Ø§Ù„Ø§Ø´ØªØ±Ø§Ùƒ". Ø³ÙŠØ¨Ù‚Ù‰ Ø­Ø³Ø§Ø¨Ùƒ ÙØ¹Ø§Ù„Ø§Ù‹ Ø­ØªÙ‰ Ù†Ù‡Ø§ÙŠØ© Ø§Ù„ÙØªØ±Ø© Ø§Ù„Ù…Ø¯ÙÙˆØ¹Ø©.',
+                          'Ø§Ø°Ù‡Ø¨ إلى "Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª الØ­Ø³Ø§Ø¨" Ø«Ù… "الØ§Ø´ØªØ±Ø§ÙƒØ§Øª"ØŒ ÙˆØ§Ø¶ØºØ· على "إلغاء الØ§Ø´ØªØ±Ø§Ùƒ". Ø³ÙŠØ¨Ù‚Ù‰ Ø­Ø³Ø§Ø¨Ùƒ ÙØ¹الØ§Ù‹ Ø­ØªÙ‰ Ù†Ù‡Ø§ÙŠØ© الÙØªØ±Ø© الÙ…Ø¯ÙÙˆØ¹Ø©.',
                     ),
                   ]),
 
@@ -169,7 +169,7 @@ class SupportScreen extends StatelessWidget {
 
                   _buildLinkTile(
                     icon: AppIcons.document,
-                    title: 'Ø¯Ù„ÙŠÙ„ Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…',
+                    title: 'Ø¯Ù„ÙŠÙ„ الÙ…Ø³ØªØ®Ø¯Ù…',
                     onTap: () {},
                   ),
                   _buildLinkTile(
@@ -179,7 +179,7 @@ class SupportScreen extends StatelessWidget {
                   ),
                   _buildLinkTile(
                     icon: AppIcons.info,
-                    title: 'Ø¹Ù† Ø§Ù„ØªØ·Ø¨ÙŠÙ‚',
+                    title: 'Ø¹Ù† التطبيق',
                     onTap: () => context.push('/dashboard/about'),
                   ),
 
@@ -355,7 +355,7 @@ class SupportScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Ù„Ø§ ÙŠÙ…ÙƒÙ† ÙØªØ­ ÙˆØ§ØªØ³Ø§Ø¨'),
+            content: Text('لا ÙŠÙ…ÙƒÙ† ÙØªØ­ ÙˆØ§ØªØ³Ø§Ø¨'),
             backgroundColor: AppTheme.errorColor,
           ),
         );
@@ -371,7 +371,7 @@ class SupportScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Ù„Ø§ ÙŠÙ…ÙƒÙ† ÙØªØ­ Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ'),
+            content: Text('لا ÙŠÙ…ÙƒÙ† ÙØªØ­ الØ¨Ø±ÙŠØ¯ الØ¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ'),
             backgroundColor: AppTheme.errorColor,
           ),
         );
@@ -387,7 +387,7 @@ class SupportScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Ù„Ø§ ÙŠÙ…ÙƒÙ† ÙØªØ­ ØªØ·Ø¨ÙŠÙ‚ Ø§Ù„Ù‡Ø§ØªÙ'),
+            content: Text('لا ÙŠÙ…ÙƒÙ† ÙØªØ­ ØªØ·Ø¨ÙŠÙ‚ الÙ‡Ø§ØªÙ'),
             backgroundColor: AppTheme.errorColor,
           ),
         );
@@ -415,7 +415,7 @@ class SupportScreen extends StatelessWidget {
         ),
         const Expanded(
           child: Text(
-            'Ø§Ù„Ø¯Ø¹Ù… ÙˆØ§Ù„Ù…Ø³Ø§Ø¹Ø¯Ø©',
+            'الØ¯Ø¹Ù… ÙˆالÙ…Ø³Ø§Ø¹Ø¯Ø©',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,

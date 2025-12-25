@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,8 +7,8 @@ import '../../../../core/constants/app_icons.dart';
 import '../../../../core/services/user_preferences_service.dart';
 import '../../../../shared/widgets/app_icon.dart';
 
-/// Ø´Ø§Ø´Ø© Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª
-/// ØªØªÙŠØ­ Ù„Ù„Ù…Ø³ØªØ®Ø¯Ù… Ø§Ù„ØªØ­ÙƒÙ… Ø§Ù„ÙƒØ§Ù…Ù„ ÙÙŠ Ø¥Ø´Ø¹Ø§Ø±Ø§ØªÙ‡
+/// Ø´Ø§Ø´Ø© Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª الØ¥Ø´Ø¹Ø§Ø±Ø§Øª
+/// ØªØªÙŠØ­ Ù„Ù„Ù…Ø³ØªØ®Ø¯Ù… الØªØ­ÙƒÙ… الÙƒØ§Ù…Ù„ ÙÙŠ Ø¥Ø´Ø¹Ø§Ø±Ø§ØªÙ‡
 class NotificationSettingsScreen extends ConsumerStatefulWidget {
   const NotificationSettingsScreen({super.key});
 
@@ -57,7 +57,7 @@ class _NotificationSettingsScreenState
             children: [
               AppIcon(AppIcons.checkCircle, color: AppTheme.surfaceColor),
               SizedBox(width: 12),
-              Text('ØªÙ… Ø­ÙØ¸ Ø§Ù„Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª'),
+              Text('تم Ø­ÙØ¸ الØ¥Ø¹Ø¯Ø§Ø¯Ø§Øª'),
             ],
           ),
           backgroundColor: AppTheme.successColor,
@@ -120,7 +120,7 @@ class _NotificationSettingsScreenState
           ),
           const Expanded(
             child: Text(
-              'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª',
+              'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª الØ¥Ø´Ø¹Ø§Ø±Ø§Øª',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -141,26 +141,26 @@ class _NotificationSettingsScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Ø§Ù„ØªÙØ¹ÙŠÙ„ Ø§Ù„Ø¹Ø§Ù…
+          // الØªÙØ¹ÙŠÙ„ الØ¹Ø§Ù…
           _buildMasterSwitch(),
           const SizedBox(height: 24),
 
-          // Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ø·Ù„Ø¨Ø§Øª
+          // Ø¥Ø´Ø¹Ø§Ø±Ø§Øª الØ·Ù„Ø¨Ø§Øª
           _buildSection(
-            title: 'Ø§Ù„Ø·Ù„Ø¨Ø§Øª',
+            title: 'الØ·Ù„Ø¨Ø§Øª',
             icon: AppIcons.shoppingBagOutlined,
             color: AppTheme.primaryColor,
             children: [
               _buildSwitchTile(
-                'Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø©',
-                'Ø¥Ø´Ø¹Ø§Ø± Ø¹Ù†Ø¯ Ø§Ø³ØªÙ„Ø§Ù… Ø·Ù„Ø¨ Ø¬Ø¯ÙŠØ¯',
-                AppIcons.add, // Ø£Ùˆ Ø£ÙŠÙ‚ÙˆÙ†Ø© Ù…Ù†Ø§Ø³Ø¨Ø© Ø£Ø®Ø±Ù‰
+                'الØ·Ù„Ø¨Ø§Øª الØ¬Ø¯ÙŠØ¯Ø©',
+                'Ø¥Ø´Ø¹Ø§Ø± Ø¹Ù†Ø¯ Ø§Ø³ØªلاÙ… Ø·Ù„Ø¨ Ø¬Ø¯ÙŠØ¯',
+                AppIcons.add, // Ø£Ùˆ Ø£ÙŠÙ‚ÙˆÙ†Ø© منØ§Ø³Ø¨Ø© Ø£Ø®Ø±Ù‰
                 _settings.newOrders,
                 (v) => _updateSetting(_settings.copyWith(newOrders: v)),
               ),
               _buildSwitchTile(
-                'Ø­Ø§Ù„Ø© Ø§Ù„Ø·Ù„Ø¨Ø§Øª',
-                'ØªØ­Ø¯ÙŠØ«Ø§Øª Ø­Ø§Ù„Ø© Ø§Ù„Ø·Ù„Ø¨Ø§Øª',
+                'Ø­الØ© الØ·Ù„Ø¨Ø§Øª',
+                'ØªØ­Ø¯ÙŠØ«Ø§Øª Ø­الØ© الØ·Ù„Ø¨Ø§Øª',
                 AppIcons.shipping,
                 _settings.orderStatus,
                 (v) => _updateSetting(_settings.copyWith(orderStatus: v)),
@@ -169,29 +169,29 @@ class _NotificationSettingsScreenState
           ),
           const SizedBox(height: 16),
 
-          // Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ù…Ø®Ø²ÙˆÙ† ÙˆØ§Ù„Ø¹Ù…Ù„Ø§Ø¡
+          // Ø¥Ø´Ø¹Ø§Ø±Ø§Øª الÙ…Ø®Ø²ÙˆÙ† ÙˆالØ¹Ù…لاØ¡
           _buildSection(
-            title: 'Ø§Ù„Ù…Ø®Ø²ÙˆÙ† ÙˆØ§Ù„Ø¹Ù…Ù„Ø§Ø¡',
+            title: 'الÙ…Ø®Ø²ÙˆÙ† ÙˆالØ¹Ù…لاØ¡',
             icon: AppIcons.inventory2,
             color: AppTheme.accentColor,
             children: [
               _buildSwitchTile(
-                'Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ø§Ù„Ù…Ù†Ø®ÙØ¶',
-                'ØªÙ†Ø¨ÙŠÙ‡ Ø¹Ù†Ø¯ Ø§Ù†Ø®ÙØ§Ø¶ ÙƒÙ…ÙŠØ© Ù…Ù†ØªØ¬',
+                'الÙ…Ø®Ø²ÙˆÙ† المنØ®ÙØ¶',
+                'ØªÙ†Ø¨ÙŠÙ‡ Ø¹Ù†Ø¯ Ø§Ù†Ø®ÙØ§Ø¶ ÙƒÙ…ÙŠØ© منØªØ¬',
                 AppIcons.warning,
                 _settings.lowStock,
                 (v) => _updateSetting(_settings.copyWith(lowStock: v)),
               ),
               _buildSwitchTile(
-                'Ø±Ø³Ø§Ø¦Ù„ Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡',
-                'Ø¥Ø´Ø¹Ø§Ø± Ø¹Ù†Ø¯ Ø§Ø³ØªÙ„Ø§Ù… Ø±Ø³Ø§Ù„Ø© Ø¬Ø¯ÙŠØ¯Ø©',
+                'Ø±Ø³Ø§Ø¦Ù„ الØ¹Ù…لاØ¡',
+                'Ø¥Ø´Ø¹Ø§Ø± Ø¹Ù†Ø¯ Ø§Ø³ØªلاÙ… Ø±Ø³الØ© Ø¬Ø¯ÙŠØ¯Ø©',
                 AppIcons.chat,
                 _settings.customerMessages,
                 (v) => _updateSetting(_settings.copyWith(customerMessages: v)),
               ),
               _buildSwitchTile(
-                'Ø§Ù„ØªÙ‚ÙŠÙŠÙ…Ø§Øª',
-                'Ø¥Ø´Ø¹Ø§Ø± Ø¹Ù†Ø¯ Ø§Ø³ØªÙ„Ø§Ù… ØªÙ‚ÙŠÙŠÙ… Ø¬Ø¯ÙŠØ¯',
+                'الØªÙ‚ÙŠÙŠÙ…Ø§Øª',
+                'Ø¥Ø´Ø¹Ø§Ø± Ø¹Ù†Ø¯ Ø§Ø³ØªلاÙ… ØªÙ‚ÙŠÙŠÙ… Ø¬Ø¯ÙŠØ¯',
                 AppIcons.star,
                 _settings.reviews,
                 (v) => _updateSetting(_settings.copyWith(reviews: v)),
@@ -200,28 +200,28 @@ class _NotificationSettingsScreenState
           ),
           const SizedBox(height: 16),
 
-          // Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„ØªØ³ÙˆÙŠÙ‚ ÙˆØ§Ù„Ù†Ø¸Ø§Ù…
+          // Ø¥Ø´Ø¹Ø§Ø±Ø§Øª الØªØ³ÙˆÙŠÙ‚ ÙˆالÙ†Ø¸Ø§Ù…
           _buildSection(
-            title: 'Ø§Ù„ØªØ³ÙˆÙŠÙ‚ ÙˆØ§Ù„Ù†Ø¸Ø§Ù…',
+            title: 'الØªØ³ÙˆÙŠÙ‚ ÙˆالÙ†Ø¸Ø§Ù…',
             icon: AppIcons.campaign,
             color: AppTheme.purpleColor,
             children: [
               _buildSwitchTile(
-                'Ø§Ù„Ø¹Ø±ÙˆØ¶ ÙˆØ§Ù„ØªØ±ÙˆÙŠØ¬',
-                'Ù†ØµØ§Ø¦Ø­ ÙˆØ¹Ø±ÙˆØ¶ Ù„ØªØ·ÙˆÙŠØ± Ù…ØªØ¬Ø±Ùƒ',
+                'الØ¹Ø±ÙˆØ¶ ÙˆالØªØ±ÙˆÙŠØ¬',
+                'نصØ§Ø¦Ø­ ÙˆØ¹Ø±ÙˆØ¶ Ù„ØªØ·ÙˆÙŠØ± Ù…ØªØ¬Ø±Ùƒ',
                 AppIcons.localOffer,
                 _settings.promotions,
                 (v) => _updateSetting(_settings.copyWith(promotions: v)),
               ),
               _buildSwitchTile(
-                'ØªØ­Ø¯ÙŠØ«Ø§Øª Ø§Ù„Ù†Ø¸Ø§Ù…',
+                'ØªØ­Ø¯ÙŠØ«Ø§Øª الÙ†Ø¸Ø§Ù…',
                 'Ù…ÙŠØ²Ø§Øª Ø¬Ø¯ÙŠØ¯Ø© ÙˆØªØ­Ø³ÙŠÙ†Ø§Øª',
                 AppIcons.sync,
                 _settings.systemUpdates,
                 (v) => _updateSetting(_settings.copyWith(systemUpdates: v)),
               ),
               _buildSwitchTile(
-                'Ø§Ù„ØªÙ‚Ø§Ø±ÙŠØ± Ø§Ù„Ø¯ÙˆØ±ÙŠØ©',
+                'الØªÙ‚Ø§Ø±ÙŠØ± الØ¯ÙˆØ±ÙŠØ©',
                 'Ù…Ù„Ø®Øµ Ø£Ø¯Ø§Ø¡ Ù…ØªØ¬Ø±Ùƒ',
                 AppIcons.analytics,
                 _settings.reports,
@@ -231,23 +231,23 @@ class _NotificationSettingsScreenState
           ),
           const SizedBox(height: 16),
 
-          // Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„ØµÙˆØª ÙˆØ§Ù„Ø§Ù‡ØªØ²Ø§Ø²
+          // Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª الØµÙˆØª ÙˆالØ§Ù‡ØªØ²Ø§Ø²
           _buildSection(
-            title: 'Ø§Ù„ØµÙˆØª ÙˆØ§Ù„Ø§Ù‡ØªØ²Ø§Ø²',
-            icon: AppIcons.notifications, // Ø£Ùˆ Ø£ÙŠÙ‚ÙˆÙ†Ø© Ù…Ù†Ø§Ø³Ø¨Ø©
+            title: 'الØµÙˆØª ÙˆالØ§Ù‡ØªØ²Ø§Ø²',
+            icon: AppIcons.notifications, // Ø£Ùˆ Ø£ÙŠÙ‚ÙˆÙ†Ø© منØ§Ø³Ø¨Ø©
             color: AppTheme.secondaryColor,
             children: [
               _buildSwitchTile(
-                'Ø§Ù„ØµÙˆØª',
-                'ØªØ´ØºÙŠÙ„ ØµÙˆØª Ø¹Ù†Ø¯ Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±',
+                'الØµÙˆØª',
+                'ØªØ´ØºÙŠÙ„ ØµÙˆØª Ø¹Ù†Ø¯ الØ¥Ø´Ø¹Ø§Ø±',
                 AppIcons.notifications,
                 _settings.sound,
                 (v) => _updateSetting(_settings.copyWith(sound: v)),
               ),
               _buildSwitchTile(
-                'Ø§Ù„Ø§Ù‡ØªØ²Ø§Ø²',
-                'Ø§Ù‡ØªØ²Ø§Ø² Ø§Ù„Ø¬Ù‡Ø§Ø² Ø¹Ù†Ø¯ Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±',
-                AppIcons.activity, // Ø£Ùˆ Ø£ÙŠÙ‚ÙˆÙ†Ø© Ù…Ù†Ø§Ø³Ø¨Ø©
+                'الØ§Ù‡ØªØ²Ø§Ø²',
+                'Ø§Ù‡ØªØ²Ø§Ø² الØ¬Ù‡Ø§Ø² Ø¹Ù†Ø¯ الØ¥Ø´Ø¹Ø§Ø±',
+                AppIcons.activity, // Ø£Ùˆ Ø£ÙŠÙ‚ÙˆÙ†Ø© منØ§Ø³Ø¨Ø©
                 _settings.vibration,
                 (v) => _updateSetting(_settings.copyWith(vibration: v)),
               ),
@@ -255,7 +255,7 @@ class _NotificationSettingsScreenState
           ),
           const SizedBox(height: 16),
 
-          // ÙˆÙ‚Øª Ø§Ù„Ù‡Ø¯ÙˆØ¡
+          // ÙˆÙ‚Øª الÙ‡Ø¯ÙˆØ¡
           _buildQuietModeSection(),
 
           const SizedBox(height: 100),
@@ -308,7 +308,7 @@ class _NotificationSettingsScreenState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª',
+                  'الØ¥Ø´Ø¹Ø§Ø±Ø§Øª',
                   style: TextStyle(
                     color: AppTheme.surfaceColor,
                     fontSize: 20,
@@ -506,7 +506,7 @@ class _NotificationSettingsScreenState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'ÙˆÙ‚Øª Ø§Ù„Ù‡Ø¯ÙˆØ¡',
+                          'ÙˆÙ‚Øª الÙ‡Ø¯ÙˆØ¡',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -514,7 +514,7 @@ class _NotificationSettingsScreenState
                           ),
                         ),
                         Text(
-                          'Ø¥ÙŠÙ‚Ø§Ù Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ù…Ø¤Ù‚ØªØ§Ù‹',
+                          'Ø¥ÙŠÙ‚Ø§Ù الØ¥Ø´Ø¹Ø§Ø±Ø§Øª Ù…Ø¤Ù‚ØªØ§Ù‹',
                           style: TextStyle(
                             fontSize: 12,
                             color: AppTheme.textSecondaryColor,
@@ -544,7 +544,7 @@ class _NotificationSettingsScreenState
                   children: [
                     Expanded(
                       child: _buildTimePicker(
-                        'Ù…Ù†',
+                        'من',
                         _settings.quietStartHour,
                         (hour) => _updateSetting(
                           _settings.copyWith(quietStartHour: hour),
@@ -557,10 +557,10 @@ class _NotificationSettingsScreenState
                         AppIcons.arrowForward,
                         color: AppTheme.textHintColor,
                       ),
-                    ), // ÙŠÙ…ÙƒÙ† Ø§Ø³ØªØ¨Ø¯Ø§Ù„Ù‡Ø§ Ø¨Ù€ AppIcon Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø¶Ù…Ù† Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª SVG
+                    ), // ÙŠÙ…ÙƒÙ† Ø§Ø³ØªØ¨Ø¯الÙ‡Ø§ Ø¨Ù€ AppIcon Ø¥Ø°Ø§ ÙƒØ§Ù†Øª Ø¶من أيقونات SVG
                     Expanded(
                       child: _buildTimePicker(
-                        'Ø¥Ù„Ù‰',
+                        'إلى',
                         _settings.quietEndHour,
                         (hour) => _updateSetting(
                           _settings.copyWith(quietEndHour: hour),
@@ -656,7 +656,7 @@ class _NotificationSettingsScreenState
               AppIcon(AppIcons.check, color: AppTheme.surfaceColor),
               SizedBox(width: 8),
               Text(
-                'Ø­ÙØ¸ Ø§Ù„ØªØºÙŠÙŠØ±Ø§Øª',
+                'Ø­ÙØ¸ الØªØºÙŠÙŠØ±Ø§Øª',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/theme/app_theme.dart';
@@ -6,13 +6,13 @@ import '../../core/constants/app_dimensions.dart';
 import '../../core/constants/app_icons.dart';
 
 /// ============================================================================
-/// Error Boundary - Ù…Ø¹Ø§Ù„Ø¬ Ø§Ù„Ø£Ø®Ø·Ø§Ø¡ Ø§Ù„Ø´Ø§Ù…Ù„
+/// Error Boundary - معالØ¬ الأخطاء الشامل
 /// ============================================================================
 ///
-/// ÙŠÙ„ØªÙ‚Ø· Ø§Ù„Ø£Ø®Ø·Ø§Ø¡ ØºÙŠØ± Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø© ÙÙŠ Ø§Ù„ØªØ·Ø¨ÙŠÙ‚ ÙˆÙŠØ¹Ø±Ø¶ ÙˆØ§Ø¬Ù‡Ø© Ø¨Ø¯ÙŠÙ„Ø©
-/// Ø¨Ø¯Ù„Ø§Ù‹ Ù…Ù† crash Ø§Ù„ØªØ·Ø¨ÙŠÙ‚
+/// يلتقط الأخطاء غير المعالØ¬Ø© ÙÙŠ التطبيق ويعرض واجهة بديلة
+/// بدلاً من crash التطبيق
 ///
-/// Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù…:
+/// الاستخدام:
 /// ```dart
 /// ErrorBoundary(
 ///   child: MyWidget(),
@@ -79,7 +79,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
   }
 }
 
-/// Error Widget Builder - ÙŠÙ„ØªÙ‚Ø· Ø§Ù„Ø£Ø®Ø·Ø§Ø¡ Ù…Ù† Ø§Ù„Ù€ Widget Tree
+/// Error Widget Builder - يلتقط الأخطاء من الÙ€ Widget Tree
 class ErrorWidgetBuilder extends StatefulWidget {
   final Widget child;
   final void Function(Object error, StackTrace? stackTrace) onError;
@@ -97,7 +97,7 @@ class ErrorWidgetBuilder extends StatefulWidget {
 class _ErrorWidgetBuilderState extends State<ErrorWidgetBuilder> {
   @override
   Widget build(BuildContext context) {
-    // ÙÙŠ Debug modeØŒ Ù„Ø§ Ù†Ù„ØªÙ‚Ø· Ø§Ù„Ø£Ø®Ø·Ø§Ø¡ Ù„Ù†Ø±Ù‰ Ø§Ù„Ù€ Red Screen
+    // ÙÙŠ Debug modeØŒ لا Ù†Ù„ØªÙ‚Ø· الأخطاء Ù„Ù†Ø±Ù‰ الÙ€ Red Screen
     if (kDebugMode) {
       return widget.child;
     }
@@ -109,7 +109,7 @@ class _ErrorWidgetBuilderState extends State<ErrorWidgetBuilder> {
         error: details.exception,
         stackTrace: details.stack,
         onRetry: () {
-          // ÙŠÙ…ÙƒÙ† Ù„Ù„Ù…Ø³ØªØ®Ø¯Ù… Ø§Ù„Ø¶ØºØ· Ù„Ù„Ø¹ÙˆØ¯Ø©
+          // ÙŠÙ…ÙƒÙ† Ù„Ù„Ù…Ø³ØªØ®Ø¯Ù… الØ¶ØºØ· Ù„Ù„Ø¹ÙˆØ¯Ø©
         },
       );
     };
@@ -118,7 +118,7 @@ class _ErrorWidgetBuilderState extends State<ErrorWidgetBuilder> {
   }
 }
 
-/// ÙˆØ§Ø¬Ù‡Ø© Ø§Ù„Ø®Ø·Ø£ Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠØ©
+/// واجهة الØ®Ø·Ø£ الØ§ÙØªØ±Ø§Ø¶ÙŠØ©
 class _DefaultErrorWidget extends StatelessWidget {
   final Object error;
   final StackTrace? stackTrace;
@@ -157,7 +157,7 @@ class _DefaultErrorWidget extends StatelessWidget {
               ),
               const SizedBox(height: AppDimensions.spacing24),
               const Text(
-                'Ø­Ø¯Ø« Ø®Ø·Ø£ ØºÙŠØ± Ù…ØªÙˆÙ‚Ø¹',
+                'حدث خطأ غير Ù…ØªÙˆÙ‚Ø¹',
                 style: TextStyle(
                   fontSize: AppDimensions.fontHeadline,
                   fontWeight: FontWeight.bold,
@@ -167,7 +167,7 @@ class _DefaultErrorWidget extends StatelessWidget {
               ),
               const SizedBox(height: AppDimensions.spacing12),
               const Text(
-                'Ù†Ø£Ø³Ù Ù„Ù‡Ø°Ø§ Ø§Ù„Ø®Ø·Ø£. ÙŠØ±Ø¬Ù‰ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù…Ø±Ø© Ø£Ø®Ø±Ù‰\nØ£Ùˆ Ø§Ù„ØªÙˆØ§ØµÙ„ Ù…Ø¹ Ø§Ù„Ø¯Ø¹Ù… Ø¥Ø°Ø§ Ø§Ø³ØªÙ…Ø±Øª Ø§Ù„Ù…Ø´ÙƒÙ„Ø©.',
+                'Ù†Ø£Ø³Ù Ù„هذا الØ®Ø·Ø£. ÙŠØ±Ø¬Ù‰ الÙ…Ø­Ø§ÙˆÙ„Ø© Ù…Ø±Ø© Ø£Ø®Ø±Ù‰\nØ£Ùˆ الØªÙˆØ§ØµÙ„ مع الØ¯Ø¹Ù… Ø¥Ø°Ø§ Ø§Ø³تمØ±Øª الÙ…Ø´كلØ©.',
                 style: TextStyle(
                   fontSize: AppDimensions.fontBody,
                   color: AppTheme.textSecondaryColor,
@@ -210,7 +210,7 @@ class _DefaultErrorWidget extends StatelessWidget {
                           BlendMode.srcIn,
                         ),
                       ),
-                      label: const Text('Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø©'),
+                      label: const Text('إعادة الÙ…Ø­Ø§ÙˆÙ„Ø©'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primaryColor,
                         foregroundColor: Colors.white,
@@ -237,7 +237,7 @@ class _DefaultErrorWidget extends StatelessWidget {
                         BlendMode.srcIn,
                       ),
                     ),
-                    label: const Text('Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©'),
+                    label: const Text('الرئيسية'),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppTheme.primaryColor,
                       side: const BorderSide(color: AppTheme.primaryColor),
@@ -260,8 +260,8 @@ class _DefaultErrorWidget extends StatelessWidget {
   }
 }
 
-/// Global Error Handler - Ù…Ø¹Ø§Ù„Ø¬ Ø£Ø®Ø·Ø§Ø¡ Ø¹Ø§Ù…
-/// ÙŠÙØ³ØªØ®Ø¯Ù… Ù„ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø£Ø®Ø·Ø§Ø¡ ÙˆØ¥Ø±Ø³Ø§Ù„Ù‡Ø§ Ù„Ø®Ø¯Ù…Ø© Ù…Ø±Ø§Ù‚Ø¨Ø©
+/// Global Error Handler - معالØ¬ Ø£Ø®Ø·Ø§Ø¡ Ø¹Ø§Ù…
+/// ÙŠÙØ³ØªØ®Ø¯Ù… Ù„ØªØ³Ø¬ÙŠÙ„ الأخطاء ÙˆØ¥Ø±Ø³الÙ‡Ø§ Ù„Ø®Ø¯Ù…Ø© Ù…Ø±Ø§Ù‚Ø¨Ø©
 class GlobalErrorHandler {
   static final GlobalErrorHandler _instance = GlobalErrorHandler._internal();
   factory GlobalErrorHandler() => _instance;
@@ -270,32 +270,32 @@ class GlobalErrorHandler {
   final List<void Function(Object error, StackTrace? stackTrace)> _listeners =
       [];
 
-  /// ØªÙ‡ÙŠØ¦Ø© Ù…Ø¹Ø§Ù„Ø¬ Ø§Ù„Ø£Ø®Ø·Ø§Ø¡
+  /// ØªÙ‡ÙŠØ¦Ø© معالØ¬ الأخطاء
   void initialize() {
-    // Ø§Ù„ØªÙ‚Ø§Ø· Ø£Ø®Ø·Ø§Ø¡ Flutter
+    // الØªÙ‚Ø§Ø· Ø£Ø®Ø·Ø§Ø¡ Flutter
     FlutterError.onError = (FlutterErrorDetails details) {
       _handleError(details.exception, details.stack);
-      // ÙÙŠ DebugØŒ Ù†Ø·Ø¨Ø¹ Ø§Ù„Ø®Ø·Ø£
+      // ÙÙŠ DebugØŒ Ù†Ø·Ø¨Ø¹ الØ®Ø·Ø£
       if (kDebugMode) {
         FlutterError.dumpErrorToConsole(details);
       }
     };
 
-    // Ø§Ù„ØªÙ‚Ø§Ø· Ø£Ø®Ø·Ø§Ø¡ Dart ØºÙŠØ± Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø©
+    // الØªÙ‚Ø§Ø· Ø£Ø®Ø·Ø§Ø¡ Dart غير المعالØ¬Ø©
     PlatformDispatcher.instance.onError = (error, stack) {
       _handleError(error, stack);
       return true;
     };
   }
 
-  /// Ø¥Ø¶Ø§ÙØ© Ù…Ø³ØªÙ…Ø¹ Ù„Ù„Ø£Ø®Ø·Ø§Ø¡
+  /// Ø¥Ø¶Ø§ÙØ© Ù…Ø³تمØ¹ Ù„Ù„Ø£Ø®Ø·Ø§Ø¡
   void addListener(
     void Function(Object error, StackTrace? stackTrace) listener,
   ) {
     _listeners.add(listener);
   }
 
-  /// Ø¥Ø²Ø§Ù„Ø© Ù…Ø³ØªÙ…Ø¹
+  /// Ø¥Ø²الØ© Ù…Ø³تمØ¹
   void removeListener(
     void Function(Object error, StackTrace? stackTrace) listener,
   ) {
@@ -303,25 +303,25 @@ class GlobalErrorHandler {
   }
 
   void _handleError(Object error, StackTrace? stackTrace) {
-    // ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø·Ø£
+    // ØªØ³Ø¬ÙŠÙ„ الØ®Ø·Ø£
     debugPrint('ðŸ”´ Error: $error');
     if (stackTrace != null) {
       debugPrint('ðŸ“ StackTrace: $stackTrace');
     }
 
-    // Ø¥Ø®Ø·Ø§Ø± Ø§Ù„Ù…Ø³ØªÙ…Ø¹ÙŠÙ†
+    // Ø¥Ø®Ø·Ø§Ø± الÙ…Ø³تمØ¹ÙŠÙ†
     for (final listener in _listeners) {
       listener(error, stackTrace);
     }
 
-    // NOTE: ÙŠÙ…ÙƒÙ† Ø¥Ø¶Ø§ÙØ© ØªÙƒØ§Ù…Ù„ Ù…Ø¹ Ø®Ø¯Ù…Ø§Øª Ø§Ù„Ù…Ø±Ø§Ù‚Ø¨Ø© Ù…Ø«Ù„:
+    // NOTE: ÙŠÙ…ÙƒÙ† Ø¥Ø¶Ø§ÙØ© ØªÙƒØ§Ù…Ù„ مع Ø®Ø¯Ù…Ø§Øª الÙ…Ø±Ø§Ù‚Ø¨Ø© Ù…Ø«Ù„:
     // - Firebase Crashlytics
     // - Sentry
     // _sendToMonitoringService(error, stackTrace);
   }
 }
 
-/// App Error Reporter - Ù„ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø£Ø®Ø·Ø§Ø¡ Ø§Ù„Ù…Ø®ØµØµØ©
+/// App Error Reporter - Ù„ØªØ³Ø¬ÙŠÙ„ الأخطاء الÙ…Ø®ØµØµØ©
 class AppErrorReporter {
   /// ØªØ³Ø¬ÙŠÙ„ Ø®Ø·Ø£ Ù…Ø®ØµØµ
   static void reportError(
@@ -339,10 +339,10 @@ class AppErrorReporter {
       debugPrint('   Stack: $stackTrace');
     }
 
-    // NOTE: ÙŠÙ…ÙƒÙ† Ø¥Ø¶Ø§ÙØ© ØªÙƒØ§Ù…Ù„ Ù…Ø¹ Ø®Ø¯Ù…Ø§Øª Ø§Ù„Ù…Ø±Ø§Ù‚Ø¨Ø© Ù‡Ù†Ø§
+    // NOTE: ÙŠÙ…ÙƒÙ† Ø¥Ø¶Ø§ÙØ© ØªÙƒØ§Ù…Ù„ مع Ø®Ø¯Ù…Ø§Øª الÙ…Ø±Ø§Ù‚Ø¨Ø© هنا
   }
 
-  /// ØªØ³Ø¬ÙŠÙ„ ØªØ­Ø°ÙŠØ±
+  /// ØªØ³Ø¬ÙŠÙ„ ØªحذفŠØ±
   static void reportWarning(String message, {Map<String, dynamic>? extras}) {
     debugPrint('ðŸŸ¡ [Warning] $message');
     if (extras != null) {
@@ -350,7 +350,7 @@ class AppErrorReporter {
     }
   }
 
-  /// ØªØ³Ø¬ÙŠÙ„ Ù…Ø¹Ù„ÙˆÙ…Ø©
+  /// ØªØ³Ø¬ÙŠÙ„ معÙ„ÙˆÙ…Ø©
   static void reportInfo(String message, {Map<String, dynamic>? extras}) {
     debugPrint('ðŸ”µ [Info] $message');
     if (extras != null) {

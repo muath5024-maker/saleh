@@ -9,7 +9,7 @@ import '../../../../core/constants/app_icons.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/services/api_service.dart';
 
-/// Ù†Ù…ÙˆØ°Ø¬ Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±
+/// نموذج الإشعار
 class NotificationItem {
   final String id;
   final String title;
@@ -82,7 +82,7 @@ class NotificationItem {
   }
 }
 
-/// Ø´Ø§Ø´Ø© Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª
+/// شاشة الإشعارات
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
 
@@ -124,7 +124,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
         }
       }
     } catch (e) {
-      _error = 'Ø­Ø¯Ø« Ø®Ø·Ø£ ÙÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª';
+      _error = 'حدث خطأ في تحميل الإشعارات';
     }
 
     if (mounted) {
@@ -178,7 +178,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('ØªÙ… ØªØ¹ÙŠÙŠÙ† Ø§Ù„ÙƒÙ„ ÙƒÙ…Ù‚Ø±ÙˆØ¡'),
+            content: const Text('تم تعيين الكل كمقروء'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: AppTheme.successColor,
             shape: RoundedRectangleBorder(
@@ -191,7 +191,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Ø­Ø¯Ø« Ø®Ø·Ø£'),
+            content: const Text('حدث خطأ'),
             backgroundColor: AppTheme.errorColor,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
@@ -353,10 +353,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     final now = DateTime.now();
     final diff = now.difference(date);
 
-    if (diff.inMinutes < 1) return 'Ø§Ù„Ø¢Ù†';
-    if (diff.inMinutes < 60) return 'Ù…Ù†Ø° ${diff.inMinutes} Ø¯Ù‚ÙŠÙ‚Ø©';
-    if (diff.inHours < 24) return 'Ù…Ù†Ø° ${diff.inHours} Ø³Ø§Ø¹Ø©';
-    if (diff.inDays < 7) return 'Ù…Ù†Ø° ${diff.inDays} ÙŠÙˆÙ…';
+    if (diff.inMinutes < 1) return 'الآن';
+    if (diff.inMinutes < 60) return 'منذ ${diff.inMinutes} دقيقة';
+    if (diff.inHours < 24) return 'منذ ${diff.inHours} ساعة';
+    if (diff.inDays < 7) return 'منذ ${diff.inDays} يوم';
 
     return DateFormat('dd/MM/yyyy').format(date);
   }
@@ -380,7 +380,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                'Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª',
+                'الإشعارات',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -442,7 +442,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                     BlendMode.srcIn,
                   ),
                 ),
-                label: const Text('Ù‚Ø±Ø§Ø¡Ø© Ø§Ù„ÙƒÙ„'),
+                label: const Text('قراءة الكل'),
                 style: TextButton.styleFrom(
                   foregroundColor: AppTheme.primaryColor,
                 ),
@@ -463,10 +463,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               fontSize: 14,
             ),
             tabs: const [
-              Tab(text: 'Ø§Ù„Ø­Ø¯ÙŠØ«Ø©'),
-              Tab(text: 'Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ù…Ù†ØµØ©'),
-              Tab(text: 'Ø£Ù†Ø´Ø·Ø© Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡'),
-              Tab(text: 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª'),
+              Tab(text: 'الحديثة'),
+              Tab(text: 'إشعارات المنصة'),
+              Tab(text: 'أنشطة العملاء'),
+              Tab(text: 'إعدادات الإشعارات'),
             ],
           ),
         ),
@@ -534,7 +534,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                     BlendMode.srcIn,
                   ),
                 ),
-                label: const Text('Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø©'),
+                label: const Text('إعادة المحاولة'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryColor,
                   foregroundColor: Colors.white,
@@ -590,8 +590,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               const SizedBox(height: 24),
               Text(
                 filter == 'all'
-                    ? 'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¥Ø´Ø¹Ø§Ø±Ø§Øª'
-                    : 'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¥Ø´Ø¹Ø§Ø±Ø§Øª ÙÙŠ Ù‡Ø°Ø§ Ø§Ù„Ù‚Ø³Ù…',
+                    ? 'لا توجد إشعارات'
+                    : 'لا توجد إشعارات في هذا القسم',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -601,7 +601,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Ø³ØªØ¸Ù‡Ø± Ø¥Ø´Ø¹Ø§Ø±Ø§ØªÙƒ Ù‡Ù†Ø§',
+                'ستظهر إشعاراتك هنا',
                 style: TextStyle(
                   color: AppTheme.textSecondaryColor,
                   fontSize: 14,
@@ -655,7 +655,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             ),
             const SizedBox(height: 24),
             const Text(
-              'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª',
+              'إعدادات الإشعارات',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -664,7 +664,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'ØªØ®ØµÙŠØµ Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„ØªÙŠ ØªØ±ÙŠØ¯ Ø§Ø³ØªÙ„Ø§Ù…Ù‡Ø§',
+              'تخصيص الإشعارات التي تريد استلامها',
               style: TextStyle(
                 color: AppTheme.textSecondaryColor,
                 fontSize: 14,
@@ -681,12 +681,12 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   Widget _buildNotificationSettingsContent() {
     return Column(
       children: [
-        _buildSettingSwitch('Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø©', true, (value) {}),
-        _buildSettingSwitch('Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ø¯ÙØ¹', true, (value) {}),
-        _buildSettingSwitch('ØªØ­Ø¯ÙŠØ«Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª', false, (value) {}),
-        _buildSettingSwitch('Ø±Ø³Ø§Ø¦Ù„ Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡', true, (value) {}),
-        _buildSettingSwitch('Ø§Ù„ØªÙ‚Ø§Ø±ÙŠØ± Ø§Ù„Ø£Ø³Ø¨ÙˆØ¹ÙŠØ©', false, (value) {}),
-        _buildSettingSwitch('Ø§Ù„Ø¹Ø±ÙˆØ¶ ÙˆØ§Ù„ØªØ®ÙÙŠØ¶Ø§Øª', true, (value) {}),
+        _buildSettingSwitch('إشعارات الطلبات الجديدة', true, (value) {}),
+        _buildSettingSwitch('إشعارات الدفع', true, (value) {}),
+        _buildSettingSwitch('تحديثات المنتجات', false, (value) {}),
+        _buildSettingSwitch('رسائل العملاء', true, (value) {}),
+        _buildSettingSwitch('التقارير الأسبوعية', false, (value) {}),
+        _buildSettingSwitch('العروض والتخفيضات', true, (value) {}),
         const SizedBox(height: 16),
         SizedBox(
           width: double.infinity,
@@ -694,12 +694,12 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('ØªÙ… Ø­ÙØ¸ Ø§Ù„Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª'),
+                  content: Text('تم حفظ الإعدادات'),
                   backgroundColor: Colors.green,
                 ),
               );
             },
-            child: const Text('Ø­ÙØ¸ Ø§Ù„Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª'),
+            child: const Text('حفظ الإعدادات'),
           ),
         ),
       ],

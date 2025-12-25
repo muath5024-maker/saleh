@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
@@ -10,12 +10,12 @@ import '../../../../core/constants/app_dimensions.dart';
 import '../../../ai_studio/data/mbuy_studio_service.dart';
 import '../../../auth/data/auth_controller.dart';
 
-/// ØµÙØ­Ø© Ø§Ø®ØªØµØ§Ø±Ø§ØªÙŠ Ø§Ù„Ù…ÙØ¹Ø§Ø¯ ØªØµÙ…ÙŠÙ…Ù‡Ø§
-/// - ØµÙØ­Ø© ÙØ§Ø±ØºØ© Ù…Ø¹ Ù†Øµ ØªÙˆØ¶ÙŠØ­ÙŠ ÙÙŠ Ø§Ù„Ø¨Ø¯Ø§ÙŠØ©
-/// - Ø¥Ø¶Ø§ÙØ© Ø§Ø®ØªØµØ§Ø±Ø§Øª ÙƒÙ…Ø±Ø¨Ø¹Ø§Øª Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª Ø¨Ù†ÙØ³ Ù…Ù‚Ø§Ø³ Ø§Ù„ØµÙØ­Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©
-/// - Ø­ÙØ¸ Ø§Ù„ØªØ¹Ø¯ÙŠÙ„Ø§Øª ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹
-/// - Ø¨Ø¯ÙˆÙ† Ø®Ù„ÙÙŠØ© Ø¨ÙŠØ¶Ø§Ø¡ Ø®Ù„Ù Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª
-/// - Ø¥Ø¹Ø§Ø¯Ø© ØªØ±ØªÙŠØ¨ Ø§Ù„Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª Ø¨Ø§Ù„Ø³Ø­Ø¨ ÙˆØ§Ù„Ø¥ÙÙ„Ø§Øª
+/// ØµÙØ­Ø© اختصاراتي الÙ…ÙØ¹Ø§Ø¯ تصميمها
+/// - ØµÙØ­Ø© ÙØ§Ø±ØºØ© مع نص توضيحي ÙÙŠ البداية
+/// - Ø¥Ø¶Ø§ÙØ© اختصارات كمربعات أيقونات Ø¨Ù†ÙØ³ مقاس الØµÙØ­Ø© الرئيسية
+/// - Ø­ÙØ¸ التعديلات تلقائياً
+/// - بدون خلفÙŠØ© بيضاء خلف الأيقونات
+/// - إعادة ترتيب الأيقونات بالسحب ÙˆالØ¥ÙلاØª
 class ShortcutsScreen extends ConsumerStatefulWidget {
   const ShortcutsScreen({super.key});
 
@@ -78,7 +78,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('ØªÙ… Ø­ÙØ¸ Ø§Ù„Ø§Ø®ØªØµØ§Ø±Ø§Øª'),
+            content: Text('تم Ø­ÙØ¸ الاختصارات'),
             backgroundColor: AppTheme.accentColor,
             duration: Duration(seconds: 1),
           ),
@@ -121,14 +121,14 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
             _buildHeader(context),
             // TabBar
             _buildTabBar(),
-            // Ø§Ù„Ù…Ø­ØªÙˆÙ‰
+            // الÙ…Ø­ØªÙˆÙ‰
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  // ØªØ¨ÙˆÙŠØ¨ Ø§Ø®ØªØµØ§Ø±Ø§ØªÙŠ
+                  // ØªØ¨ÙˆÙŠØ¨ اختصاراتي
                   _buildShortcutsTab(),
-                  // ØªØ¨ÙˆÙŠØ¨ Ø£Ø¯ÙˆØ§Øª AI
+                  // ØªØ¨ÙˆÙŠØ¨ أدوات AI
                   _buildAiToolsTab(),
                 ],
               ),
@@ -189,7 +189,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
           ),
           const Spacer(),
           const Text(
-            'Ø§Ø®ØªØµØ§Ø±Ø§ØªÙŠ',
+            'اختصاراتي',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: AppDimensions.fontHeadline,
@@ -197,7 +197,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
             ),
           ),
           const Spacer(),
-          // Ø²Ø± Ø§Ù„ØªØ¹Ø¯ÙŠÙ„
+          // Ø²Ø± التعديل
           GestureDetector(
             onTap: () {
               if (_isEditing) {
@@ -217,7 +217,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
                 borderRadius: AppDimensions.borderRadiusS,
               ),
               child: Text(
-                _isEditing ? 'ØªÙ…' : 'ØªØ¹Ø¯ÙŠÙ„',
+                _isEditing ? 'تم' : 'تعديل',
                 style: TextStyle(
                   color: _isEditing ? Colors.white : AppTheme.primaryColor,
                   fontWeight: FontWeight.bold,
@@ -257,14 +257,14 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
           fontSize: AppDimensions.fontBody,
         ),
         tabs: const [
-          Tab(text: 'Ø§Ø®ØªØµØ§Ø±Ø§ØªÙŠ'),
+          Tab(text: 'اختصاراتي'),
           Tab(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.auto_awesome, size: AppDimensions.iconS),
                 SizedBox(width: AppDimensions.spacing4),
-                Text('Ø£Ø¯ÙˆØ§Øª AI'),
+                Text('أدوات AI'),
               ],
             ),
           ),
@@ -306,7 +306,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
             setState(() => _searchQuery = value);
           },
           decoration: InputDecoration(
-            hintText: 'Ø§Ù„Ø¨Ø­Ø« ÙÙŠ Ø§Ù„Ø§Ø®ØªØµØ§Ø±Ø§Øª...',
+            hintText: 'الØ¨Ø­Ø« ÙÙŠ الاختصارات...',
             hintStyle: TextStyle(color: AppTheme.textHintColor),
             prefixIcon: Icon(Icons.search, color: AppTheme.textHintColor),
             border: InputBorder.none,
@@ -342,7 +342,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
             ),
             const SizedBox(height: 32),
             Text(
-              'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø§Ø®ØªØµØ§Ø±Ø§Øª',
+              'لا ØªÙˆØ¬Ø¯ اختصارات',
               style: TextStyle(
                 fontSize: AppDimensions.fontDisplay2,
                 fontWeight: FontWeight.bold,
@@ -351,7 +351,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
             ),
             const SizedBox(height: 12),
             Text(
-              'Ø£Ø¶Ù Ø§Ø®ØªØµØ§Ø±Ø§ØªÙƒ Ø§Ù„Ù…ÙØ¶Ù„Ø© Ù„Ù„ÙˆØµÙˆÙ„ Ø§Ù„Ø³Ø±ÙŠØ¹\nØ¥Ù„Ù‰ Ø£Ù‡Ù… Ø§Ù„ØµÙØ­Ø§Øª ÙˆØ§Ù„Ø£Ø¯ÙˆØ§Øª',
+              'Ø£Ø¶Ù اختصاراتÙƒ الÙ…ÙØ¶Ù„Ø© Ù„Ù„ÙˆØµÙˆÙ„ الØ³Ø±ÙŠØ¹\nإلى Ø£Ù‡Ù… الØµÙØ­Ø§Øª ÙˆالØ£Ø¯ÙˆØ§Øª',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: AppDimensions.fontTitle,
@@ -386,7 +386,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
   }
 
   Widget _buildShortcutsGrid() {
-    // ÙÙ„ØªØ±Ø© Ø§Ù„Ø§Ø®ØªØµØ§Ø±Ø§Øª Ø­Ø³Ø¨ Ø§Ù„Ø¨Ø­Ø«
+    // ÙÙ„ØªØ±Ø© الاختصارات Ø­Ø³Ø¨ الØ¨Ø­Ø«
     final filteredShortcuts = _searchQuery.isEmpty
         ? _savedShortcuts
         : _savedShortcuts
@@ -421,7 +421,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Ø§Ø³Ø­Ø¨ Ø§Ù„Ø§Ø®ØªØµØ§Ø± Ù„ØªØºÙŠÙŠØ± Ù…ÙƒØ§Ù†Ù‡ØŒ Ø£Ùˆ Ø§Ø¶ØºØ· Ø¹Ù„ÙŠÙ‡ Ù„Ø­Ø°ÙÙ‡',
+                        'Ø§Ø³Ø­Ø¨ الØ§Ø®ØªØµØ§Ø± Ù„ØªØºÙŠÙŠØ± Ù…ÙƒØ§Ù†Ù‡ØŒ Ø£Ùˆ Ø§Ø¶ØºØ· Ø¹Ù„ÙŠÙ‡ Ù„حذفÙ‡',
                         style: TextStyle(
                           color: AppTheme.primaryColor,
                           fontSize: AppDimensions.fontBody2,
@@ -481,7 +481,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
     );
   }
 
-  /// Ø¨Ù†Ø§Ø¡ Ø¹Ù†ØµØ± Ø§Ù„Ø§Ø®ØªØµØ§Ø± - Ø¨Ù†ÙØ³ ØªØµÙ…ÙŠÙ… Ø§Ù„ØµÙØ­Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ© Ø¨Ø¯ÙˆÙ† Ø®Ù„ÙÙŠØ© Ø¨ÙŠØ¶Ø§Ø¡
+  /// Ø¨Ù†Ø§Ø¡ Ø¹نصØ± الØ§Ø®ØªØµØ§Ø± - Ø¨Ù†ÙØ³ ØªØµÙ…ÙŠÙ… الØµÙØ­Ø© الرئيسية بدون خلفÙŠØ© بيضاء
   Widget _buildShortcutItem(ShortcutItemData shortcut, {Key? key}) {
     return GestureDetector(
       key: key,
@@ -506,7 +506,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø¨Ù†ÙØ³ Ø­Ø¬Ù… Ø§Ù„ØµÙØ­Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©
+                // Ø£ÙŠÙ‚ÙˆÙ†Ø© Ø¨Ù†ÙØ³ Ø­Ø¬Ù… الØµÙØ­Ø© الرئيسية
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -526,7 +526,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
                     child: Center(
                       child: Icon(
                         shortcut.icon,
-                        size: 36, // Ù†ÙØ³ Ø­Ø¬Ù… Ø£ÙŠÙ‚ÙˆÙ†Ø§Øª Ø§Ù„ØµÙØ­Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©
+                        size: 36, // Ù†ÙØ³ Ø­Ø¬Ù… أيقونات الØµÙØ­Ø© الرئيسية
                         color: AppTheme.darkSlate,
                       ),
                     ),
@@ -576,12 +576,12 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Ø­Ø°Ù Ø§Ù„Ø§Ø®ØªØµØ§Ø±'),
-        content: Text('Ù‡Ù„ ØªØ±ÙŠØ¯ Ø­Ø°Ù "${shortcut.title}" Ù…Ù† Ø§Ø®ØªØµØ§Ø±Ø§ØªÙƒØŸ'),
+        title: const Text('حذف الØ§Ø®ØªØµØ§Ø±'),
+        content: Text('هل ØªØ±ÙŠØ¯ حذف "${shortcut.title}" من اختصاراتÙƒØŸ'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Ø¥Ù„ØºØ§Ø¡'),
+            child: const Text('إلغاء'),
           ),
           TextButton(
             onPressed: () {
@@ -589,7 +589,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
               _removeShortcut(shortcut);
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Ø­Ø°Ù'),
+            child: const Text('حذف'),
           ),
         ],
       ),
@@ -679,9 +679,9 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
                   ? null
                   : () {
                       _addShortcut(shortcut);
-                      setSheetState(() {}); // ØªØ­Ø¯ÙŠØ« Ø­Ø§Ù„Ø© Ø§Ù„Ù€ sheet
-                      setState(() {}); // ØªØ­Ø¯ÙŠØ« Ø­Ø§Ù„Ø© Ø§Ù„Ø´Ø§Ø´Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©
-                      // Ù„Ø§ Ù†ØºÙ„Ù‚ Ø§Ù„Ù€ sheet - Ù†Ø³Ù…Ø­ Ø¨Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ù…Ø²ÙŠØ¯
+                      setSheetState(() {}); // ØªØ­Ø¯ÙŠØ« Ø­الØ© الÙ€ sheet
+                      setState(() {}); // ØªØ­Ø¯ÙŠØ« Ø­الØ© الØ´Ø§Ø´Ø© الرئيسية
+                      // لا Ù†ØºÙ„Ù‚ الÙ€ sheet - Ù†Ø³Ù…Ø­ Ø¨Ø¥Ø¶Ø§ÙØ© الÙ…Ø²ÙŠØ¯
                     },
               child: Container(
                 width: 80,
@@ -739,7 +739,7 @@ class _ShortcutsScreenState extends ConsumerState<ShortcutsScreen>
 }
 
 // =============================================================================
-// Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø§Ø®ØªØµØ§Ø±Ø§Øª
+// Ø¨ÙŠØ§Ù†Ø§Øª الاختصارات
 // =============================================================================
 
 class ShortcutItemData {
@@ -765,69 +765,69 @@ class ShortcutCategory {
   const ShortcutCategory({required this.title, required this.shortcuts});
 }
 
-// Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø§Ø®ØªØµØ§Ø±Ø§Øª Ø§Ù„Ù…ØªØ§Ø­Ø©
-// Ù…Ù„Ø§Ø­Ø¸Ø©: ØªÙ… Ø¥Ø²Ø§Ù„Ø© ØµÙØ­Ø§Øª Ø§Ù„Ø¨Ø§Ø± Ø§Ù„Ø³ÙÙ„ÙŠ (Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©ØŒ Ø§Ù„Ø·Ù„Ø¨Ø§ØªØŒ Ø§Ù„Ù…Ø­Ø§Ø¯Ø«Ø§ØªØŒ Ø¯Ø±ÙˆØ¨ Ø´ÙŠØ¨)
+// Ø¬Ù…ÙŠØ¹ الاختصارات الÙ…ØªØ§Ø­Ø©
+// Ù…لاØ­Ø¸Ø©: تم Ø¥Ø²الØ© ØµÙØ­Ø§Øª الØ¨Ø§Ø± الØ³ÙÙ„ÙŠ (الرئيسيةØŒ الØ·Ù„Ø¨Ø§ØªØŒ الÙ…Ø­Ø§Ø¯Ø«Ø§ØªØŒ Ø¯Ø±ÙˆØ¨ Ø´ÙŠØ¨)
 final List<ShortcutItemData> _availableShortcuts = [
   const ShortcutItemData(
     key: 'products',
-    title: 'Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª',
+    title: 'المنØªØ¬Ø§Øª',
     route: '/dashboard/products',
     icon: Icons.shopping_bag_outlined,
     color: Color(0xFF10B981),
   ),
   const ShortcutItemData(
     key: 'add_product',
-    title: 'Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬',
+    title: 'Ø¥Ø¶Ø§ÙØ© منØªØ¬',
     route: '/dashboard/products/add',
     icon: Icons.add_box_outlined,
     color: Color(0xFF8B5CF6),
   ),
   const ShortcutItemData(
     key: 'inventory',
-    title: 'Ø§Ù„Ù…Ø®Ø²ÙˆÙ†',
+    title: 'الÙ…Ø®Ø²ÙˆÙ†',
     route: '/dashboard/inventory',
     icon: Icons.inventory_2_outlined,
     color: Color(0xFFEC4899),
   ),
   const ShortcutItemData(
     key: 'customers',
-    title: 'Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡',
+    title: 'الØ¹Ù…لاØ¡',
     route: '/dashboard/customers',
     icon: Icons.people_outline,
     color: Color(0xFF06B6D4),
   ),
   const ShortcutItemData(
     key: 'wallet',
-    title: 'Ø§Ù„Ù…Ø­ÙØ¸Ø©',
+    title: 'الÙ…Ø­ÙØ¸Ø©',
     route: '/dashboard/wallet',
     icon: Icons.account_balance_wallet_outlined,
     color: Color(0xFF14B8A6),
   ),
   const ShortcutItemData(
     key: 'marketing',
-    title: 'Ø§Ù„ØªØ³ÙˆÙŠÙ‚',
+    title: 'الØªØ³ÙˆÙŠÙ‚',
     route: '/dashboard/marketing',
     icon: Icons.campaign_outlined,
     color: Color(0xFFEF4444),
   ),
   const ShortcutItemData(
     key: 'coupons',
-    title: 'Ø§Ù„ÙƒÙˆØ¨ÙˆÙ†Ø§Øª',
+    title: 'الÙƒÙˆØ¨ÙˆÙ†Ø§Øª',
     route: '/dashboard/coupons',
     icon: Icons.local_offer_outlined,
     color: Color(0xFFF97316),
   ),
-  // Ø§Ù„Ù…ØªØ¬Ø± (ØªÙ…Øª Ø¥Ø²Ø§Ù„Ø© Ø§Ù„Ù…Ø­Ø§Ø¯Ø«Ø§Øª - Ù…ÙˆØ¬ÙˆØ¯Ø© ÙÙŠ Ø§Ù„Ø¨Ø§Ø± Ø§Ù„Ø³ÙÙ„ÙŠ)
+  // الÙ…ØªØ¬Ø± (تمØª Ø¥Ø²الØ© الÙ…Ø­Ø§Ø¯Ø«Ø§Øª - Ù…ÙˆØ¬ÙˆØ¯Ø© ÙÙŠ الØ¨Ø§Ø± الØ³ÙÙ„ÙŠ)
   const ShortcutItemData(
     key: 'store_settings',
-    title: 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ù…ØªØ¬Ø±',
+    title: 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª الÙ…ØªØ¬Ø±',
     route: '/dashboard/store-management',
     icon: Icons.store_outlined,
     color: Color(0xFF6366F1),
   ),
   const ShortcutItemData(
     key: 'webstore',
-    title: 'Ø§Ù„Ù…ØªØ¬Ø± Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ',
+    title: 'الÙ…ØªØ¬Ø± الØ¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ',
     route: '/dashboard/webstore',
     icon: Icons.language_outlined,
     color: Color(0xFF0EA5E9),
@@ -846,36 +846,36 @@ final List<ShortcutItemData> _availableShortcuts = [
     icon: Icons.qr_code_outlined,
     color: AppTheme.slate500,
   ),
-  // Ø§Ù„Ø´Ø­Ù† ÙˆØ§Ù„Ø¯ÙØ¹
+  // الØ´Ø­Ù† ÙˆالØ¯ÙØ¹
   const ShortcutItemData(
     key: 'shipping',
-    title: 'Ø§Ù„Ø´Ø­Ù†',
+    title: 'الØ´Ø­Ù†',
     route: '/dashboard/shipping-integration',
     icon: Icons.local_shipping_outlined,
     color: Color(0xFF8B5CF6),
   ),
   const ShortcutItemData(
     key: 'delivery',
-    title: 'Ø§Ù„ØªÙˆØµÙŠÙ„',
+    title: 'الØªÙˆØµÙŠÙ„',
     route: '/dashboard/delivery-options',
     icon: Icons.delivery_dining_outlined,
     color: Color(0xFFD946EF),
   ),
   const ShortcutItemData(
     key: 'payments',
-    title: 'Ø§Ù„Ù…Ø¯ÙÙˆØ¹Ø§Øª',
+    title: 'الÙ…Ø¯ÙÙˆØ¹Ø§Øª',
     route: '/dashboard/payment-methods',
     icon: Icons.payment_outlined,
     color: Color(0xFF059669),
   ),
   const ShortcutItemData(
     key: 'cod',
-    title: 'Ø§Ù„Ø¯ÙØ¹ Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù…',
+    title: 'الØ¯ÙØ¹ Ø¹Ù†Ø¯ الØ§Ø³ØªلاÙ…',
     route: '/dashboard/cod-settings',
     icon: Icons.attach_money_outlined,
     color: Color(0xFFCA8A04),
   ),
-  // Ø§Ù„Ø°ÙƒØ§Ø¡ Ø§Ù„Ø§ØµØ·Ù†Ø§Ø¹ÙŠ
+  // الØ°ÙƒØ§Ø¡ الØ§ØµØ·Ù†Ø§Ø¹ÙŠ
   const ShortcutItemData(
     key: 'ai_studio',
     title: 'Ø§Ø³ØªØ¯ÙŠÙˆ AI',
@@ -885,66 +885,66 @@ final List<ShortcutItemData> _availableShortcuts = [
   ),
   const ShortcutItemData(
     key: 'ai_tools',
-    title: 'Ø£Ø¯ÙˆØ§Øª AI',
+    title: 'أدوات AI',
     route: '/dashboard/tools',
     icon: Icons.psychology_outlined,
     color: Color(0xFF7C3AED),
   ),
-  // Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø±Ù‚Ù…ÙŠØ©
+  // المنØªØ¬Ø§Øª الØ±Ù‚Ù…ÙŠØ©
   const ShortcutItemData(
     key: 'digital_products',
-    title: 'Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø±Ù‚Ù…ÙŠØ©',
+    title: 'المنØªØ¬Ø§Øª الØ±Ù‚Ù…ÙŠØ©',
     route: '/dashboard/digital-products',
     icon: Icons.cloud_download_outlined,
     color: Color(0xFF0891B2),
   ),
-  // Ø§Ù„ØªÙ‚Ø§Ø±ÙŠØ±
+  // الØªÙ‚Ø§Ø±ÙŠØ±
   const ShortcutItemData(
     key: 'reports',
-    title: 'Ø§Ù„ØªÙ‚Ø§Ø±ÙŠØ±',
+    title: 'الØªÙ‚Ø§Ø±ÙŠØ±',
     route: '/dashboard/audit-logs',
     icon: Icons.analytics_outlined,
     color: Color(0xFF4F46E5),
   ),
   const ShortcutItemData(
     key: 'sales',
-    title: 'Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª',
+    title: 'الÙ…Ø¨ÙŠØ¹Ø§Øª',
     route: '/dashboard/sales',
     icon: Icons.trending_up_outlined,
     color: Color(0xFF16A34A),
   ),
-  // === Ø§Ù„Ø§Ø®ØªØµØ§Ø±Ø§Øª Ø§Ù„Ù…Ø±Ø¬Ø¹Ø© Ù…Ù† Ø§Ù„ØªØ³ÙˆÙŠÙ‚ ===
+  // === الاختصارات الÙ…Ø±Ø¬Ø¹Ø© من الØªØ³ÙˆÙŠÙ‚ ===
   const ShortcutItemData(
     key: 'flash_sales',
-    title: 'Ø§Ù„Ø¹Ø±ÙˆØ¶ Ø§Ù„Ø®Ø§Ø·ÙØ©',
+    title: 'الØ¹Ø±ÙˆØ¶ الØ®Ø§Ø·ÙØ©',
     route: '/dashboard/flash-sales',
     icon: Icons.flash_on_outlined,
     color: Color(0xFFEF4444),
   ),
   const ShortcutItemData(
     key: 'abandoned_cart',
-    title: 'Ø§Ù„Ø³Ù„Ø§Øª Ø§Ù„Ù…ØªØ±ÙˆÙƒØ©',
+    title: 'الØ³لاØª الÙ…ØªØ±ÙˆÙƒØ©',
     route: '/dashboard/abandoned-cart',
     icon: Icons.shopping_cart_outlined,
     color: Color(0xFFF59E0B),
   ),
   const ShortcutItemData(
     key: 'referral',
-    title: 'Ø¨Ø±Ù†Ø§Ù…Ø¬ Ø§Ù„Ø¥Ø­Ø§Ù„Ø©',
+    title: 'Ø¨Ø±Ù†Ø§Ù…Ø¬ الØ¥Ø­الØ©',
     route: '/dashboard/referral',
     icon: Icons.share_outlined,
     color: Color(0xFF10B981),
   ),
   const ShortcutItemData(
     key: 'loyalty_program',
-    title: 'Ø¨Ø±Ù†Ø§Ù…Ø¬ Ø§Ù„ÙˆÙ„Ø§Ø¡',
+    title: 'Ø¨Ø±Ù†Ø§Ù…Ø¬ الÙˆلاØ¡',
     route: '/dashboard/loyalty-program',
     icon: Icons.loyalty_outlined,
     color: Color(0xFF8B5CF6),
   ),
   const ShortcutItemData(
     key: 'smart_analytics',
-    title: 'ØªØ­Ù„ÙŠÙ„Ø§Øª Ø°ÙƒÙŠØ©',
+    title: 'ØªØ­Ù„ÙŠلاØª Ø°ÙƒÙŠØ©',
     route: '/dashboard/smart-analytics',
     icon: Icons.insights_outlined,
     color: Color(0xFF06B6D4),
@@ -958,7 +958,7 @@ final List<ShortcutItemData> _availableShortcuts = [
   ),
   const ShortcutItemData(
     key: 'heatmap',
-    title: 'Ø®Ø±ÙŠØ·Ø© Ø§Ù„Ø­Ø±Ø§Ø±Ø©',
+    title: 'Ø®Ø±ÙŠØ·Ø© الØ­Ø±Ø§Ø±Ø©',
     route: '/dashboard/heatmap',
     icon: Icons.grid_view_outlined,
     color: Color(0xFFEC4899),
@@ -972,7 +972,7 @@ final List<ShortcutItemData> _availableShortcuts = [
   ),
   const ShortcutItemData(
     key: 'content_generator',
-    title: 'Ù…ÙˆÙ„Ø¯ Ø§Ù„Ù…Ø­ØªÙˆÙ‰',
+    title: 'Ù…ÙˆÙ„Ø¯ الÙ…Ø­ØªÙˆÙ‰',
     route: '/dashboard/content-generator',
     icon: Icons.auto_fix_high_outlined,
     color: Color(0xFFA855F7),
@@ -986,7 +986,7 @@ final List<ShortcutItemData> _availableShortcuts = [
   ),
   const ShortcutItemData(
     key: 'customer_segments',
-    title: 'Ø´Ø±Ø§Ø¦Ø­ Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡',
+    title: 'Ø´Ø±Ø§Ø¦Ø­ الØ¹Ù…لاØ¡',
     route: '/dashboard/customer-segments',
     icon: Icons.group_work_outlined,
     color: Color(0xFF3B82F6),
@@ -1000,25 +1000,25 @@ final List<ShortcutItemData> _availableShortcuts = [
   ),
   const ShortcutItemData(
     key: 'product_variants',
-    title: 'Ù…ØªØºÙŠØ±Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬',
+    title: 'Ù…ØªغيرØ§Øª المنØªØ¬',
     route: '/dashboard/product-variants',
     icon: Icons.style_outlined,
     color: Color(0xFF6366F1),
   ),
   const ShortcutItemData(
     key: 'product_bundles',
-    title: 'Ø­Ø²Ù… Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª',
+    title: 'Ø­Ø²Ù… المنØªØ¬Ø§Øª',
     route: '/dashboard/product-bundles',
     icon: Icons.inventory_outlined,
     color: Color(0xFFD946EF),
   ),
 ];
 
-// ØªØµÙ†ÙŠÙØ§Øª Ø§Ù„Ø§Ø®ØªØµØ§Ø±Ø§Øª
-// Ù…Ù„Ø§Ø­Ø¸Ø©: ØªÙ… Ø¥Ø²Ø§Ù„Ø© ØµÙØ­Ø§Øª Ø§Ù„Ø¨Ø§Ø± Ø§Ù„Ø³ÙÙ„ÙŠ Ù…Ù† Ø§Ù„ØªØµÙ†ÙŠÙØ§Øª
+// ØªØµÙ†ÙŠÙØ§Øª الاختصارات
+// Ù…لاØ­Ø¸Ø©: تم Ø¥Ø²الØ© ØµÙØ­Ø§Øª الØ¨Ø§Ø± الØ³ÙÙ„ÙŠ من الØªØµÙ†ÙŠÙØ§Øª
 final List<ShortcutCategory> _shortcutCategories = [
   ShortcutCategory(
-    title: 'Ø§Ù„Ø£Ø³Ø§Ø³ÙŠØ©',
+    title: 'الØ£Ø³Ø§Ø³ÙŠØ©',
     shortcuts: _availableShortcuts
         .where(
           (s) => [
@@ -1031,7 +1031,7 @@ final List<ShortcutCategory> _shortcutCategories = [
         .toList(),
   ),
   ShortcutCategory(
-    title: 'Ø§Ù„Ù…Ø§Ù„ÙŠØ© ÙˆØ§Ù„ØªØ³ÙˆÙŠÙ‚',
+    title: 'الÙ…الÙŠØ© ÙˆالØªØ³ÙˆÙŠÙ‚',
     shortcuts: _availableShortcuts
         .where(
           (s) => [
@@ -1048,7 +1048,7 @@ final List<ShortcutCategory> _shortcutCategories = [
         .toList(),
   ),
   ShortcutCategory(
-    title: 'Ø§Ù„Ù…ØªØ¬Ø± ÙˆØ§Ù„ØªÙˆØ§ØµÙ„',
+    title: 'الÙ…ØªØ¬Ø± ÙˆالØªÙˆØ§ØµÙ„',
     shortcuts: _availableShortcuts
         .where(
           (s) => [
@@ -1061,7 +1061,7 @@ final List<ShortcutCategory> _shortcutCategories = [
         .toList(),
   ),
   ShortcutCategory(
-    title: 'Ø§Ù„Ø´Ø­Ù† ÙˆØ§Ù„Ø¯ÙØ¹',
+    title: 'الØ´Ø­Ù† ÙˆالØ¯ÙØ¹',
     shortcuts: _availableShortcuts
         .where(
           (s) => ['shipping', 'delivery', 'payments', 'cod'].contains(s.key),
@@ -1069,7 +1069,7 @@ final List<ShortcutCategory> _shortcutCategories = [
         .toList(),
   ),
   ShortcutCategory(
-    title: 'Ø§Ù„Ø°ÙƒØ§Ø¡ Ø§Ù„Ø§ØµØ·Ù†Ø§Ø¹ÙŠ',
+    title: 'الØ°ÙƒØ§Ø¡ الØ§ØµØ·Ù†Ø§Ø¹ÙŠ',
     shortcuts: _availableShortcuts
         .where(
           (s) => [
@@ -1083,7 +1083,7 @@ final List<ShortcutCategory> _shortcutCategories = [
         .toList(),
   ),
   ShortcutCategory(
-    title: 'Ø§Ù„ØªØ­Ù„ÙŠÙ„Ø§Øª ÙˆØ§Ù„ØªÙ‚Ø§Ø±ÙŠØ±',
+    title: 'الØªØ­Ù„ÙŠلاØª ÙˆالØªÙ‚Ø§Ø±ÙŠØ±',
     shortcuts: _availableShortcuts
         .where(
           (s) => [
@@ -1096,13 +1096,13 @@ final List<ShortcutCategory> _shortcutCategories = [
         .toList(),
   ),
   ShortcutCategory(
-    title: 'Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡',
+    title: 'Ø¥Ø¯Ø§Ø±Ø© الØ¹Ù…لاØ¡',
     shortcuts: _availableShortcuts
         .where((s) => ['customer_segments', 'custom_messages'].contains(s.key))
         .toList(),
   ),
   ShortcutCategory(
-    title: 'Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…ØªÙ‚Ø¯Ù…Ø©',
+    title: 'المنØªØ¬Ø§Øª الÙ…ØªÙ‚Ø¯Ù…Ø©',
     shortcuts: _availableShortcuts
         .where(
           (s) => [
@@ -1119,7 +1119,7 @@ final List<ShortcutCategory> _shortcutCategories = [
 // ReorderableGridView Widget
 // =============================================================================
 
-/// Ø¹Ù†ØµØ± GridView Ù‚Ø§Ø¨Ù„ Ù„Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„ØªØ±ØªÙŠØ¨
+/// Ø¹نصØ± GridView Ù‚Ø§Ø¨Ù„ Ù„إعادة الترتيب
 class ReorderableGridView extends StatefulWidget {
   final SliverGridDelegate gridDelegate;
   final int itemCount;
@@ -1193,7 +1193,7 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
 }
 
 // =============================================================================
-// AI Tools Test Tab - ØªØ¨ÙˆÙŠØ¨ Ø§Ø®ØªØ¨Ø§Ø± Ø£Ø¯ÙˆØ§Øª Ø§Ù„Ø°ÙƒØ§Ø¡ Ø§Ù„Ø§ØµØ·Ù†Ø§Ø¹ÙŠ
+// AI Tools Test Tab - ØªØ¨ÙˆÙŠØ¨ Ø§Ø®ØªØ¨Ø§Ø± Ø£Ø¯ÙˆØ§Øª الØ°ÙƒØ§Ø¡ الØ§ØµØ·Ù†Ø§Ø¹ÙŠ
 // =============================================================================
 
 class _AiToolsTestTab extends StatefulWidget {
@@ -1209,14 +1209,14 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
   final TextEditingController _promptController = TextEditingController();
   String _result = '';
   bool _isLoading = false;
-  String _selectedTool = 'text'; // Ø§Ù„Ø£Ø¯Ø§Ø© Ø§Ù„Ù…Ø­Ø¯Ø¯Ø© Ø­Ø§Ù„ÙŠØ§Ù‹
-  String? _generatedImageUrl; // Ø±Ø§Ø¨Ø· Ø§Ù„ØµÙˆØ±Ø© Ø§Ù„Ù…ÙˆÙ„Ø¯Ø©
-  String? _currentTaskId; // Ù…Ø¹Ø±Ù Ù…Ù‡Ù…Ø© NanoBanana
+  String _selectedTool = 'text'; // الØ£Ø¯Ø§Ø© الÙ…Ø­Ø¯Ø¯Ø© Ø­الÙŠØ§Ù‹
+  String? _generatedImageUrl; // Ø±Ø§Ø¨Ø· الØµÙˆØ±Ø© الÙ…ÙˆÙ„Ø¯Ø©
+  String? _currentTaskId; // معØ±Ù Ù…Ù‡Ù…Ø© NanoBanana
 
-  // Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø¥Ø¶Ø§ÙÙŠØ© Ù„ÙƒÙ„ Ø£Ø¯Ø§Ø©
-  String _textTone = 'marketing'; // ØªØ³ÙˆÙŠÙ‚ÙŠ / Ø±Ø³Ù…ÙŠ / Ù…Ø®ØªØµØ±
-  String _textLength = 'medium'; // Ù‚ØµÙŠØ± / Ù…ØªÙˆØ³Ø· / Ø·ÙˆÙŠÙ„
-  String _productTone = 'friendly'; // ÙˆØ¯ÙŠØ© / Ø§Ø­ØªØ±Ø§ÙÙŠØ©
+  // Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø¥Ø¶Ø§ÙÙŠØ© Ù„كل Ø£Ø¯Ø§Ø©
+  String _textTone = 'marketing'; // تسويقي / رسمي / مختصر
+  String _textLength = 'medium'; // قصير / متوسط / طويل
+  String _productTone = 'friendly'; // ودية / Ø§Ø­ØªØ±Ø§ÙÙŠØ©
 
   @override
   void dispose() {
@@ -1228,7 +1228,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
     final isAuthenticated = widget.ref.read(isAuthenticatedProvider);
     if (!isAuthenticated) {
       setState(() {
-        _result = 'âŒ ÙŠØ¬Ø¨ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ø£ÙˆÙ„Ø§Ù‹ Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø£Ø¯ÙˆØ§Øª AI';
+        _result = 'âŒ ÙŠØ¬Ø¨ ØªØ³Ø¬ÙŠÙ„ الØ¯Ø®ÙˆÙ„ Ø£ÙˆلاÙ‹ لاØ³ØªØ®Ø¯Ø§Ù… أدوات AI';
       });
       return false;
     }
@@ -1238,22 +1238,22 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
   Future<void> _testGenerateText() async {
     if (!_checkAuth()) return;
     if (_promptController.text.isEmpty) {
-      setState(() => _result = 'âš ï¸ Ø£Ø¯Ø®Ù„ Ù…ÙˆØ¶ÙˆØ¹ Ø§Ù„Ù†Øµ Ø£ÙˆÙ„Ø§Ù‹');
+      setState(() => _result = 'âš ï¸ Ø£Ø¯Ø®Ù„ Ù…ÙˆØ¶ÙˆØ¹ النص Ø£ÙˆلاÙ‹');
       return;
     }
 
     setState(() {
       _isLoading = true;
-      _result = 'â³ Ø¬Ø§Ø±ÙŠ ØªÙˆÙ„ÙŠØ¯ Ø§Ù„Ù†Øµ...';
+      _result = 'â³ Ø¬Ø§Ø±ÙŠ ØªÙˆÙ„ÙŠØ¯ النص...';
     });
 
     try {
       final service = widget.ref.read(mbuyStudioServiceProvider);
-      // Ø¨Ù†Ø§Ø¡ prompt Ù…Ù†Ø§Ø³Ø¨ Ù„ØªÙˆÙ„ÙŠØ¯ Ù†Øµ Ø¹Ø§Ù…
+      // Ø¨Ù†Ø§Ø¡ prompt منØ§Ø³Ø¨ Ù„ØªÙˆÙ„ÙŠØ¯ نص Ø¹Ø§Ù…
       final toneMap = {
-        'marketing': 'ØªØ³ÙˆÙŠÙ‚ÙŠ Ø¬Ø°Ø§Ø¨',
-        'formal': 'Ø±Ø³Ù…ÙŠ ÙˆØ§Ø­ØªØ±Ø§ÙÙŠ',
-        'short': 'Ù…Ø®ØªØµØ± ÙˆÙ…Ø¨Ø§Ø´Ø±',
+        'marketing': 'تسويقي Ø¬Ø°Ø§Ø¨',
+        'formal': 'رسمي ÙˆØ§Ø­ØªØ±Ø§ÙÙŠ',
+        'short': 'مختصر ÙˆÙ…Ø¨Ø§Ø´Ø±',
       };
       final lengthMap = {
         'short': 'Ø¬Ù…Ù„ØªÙŠÙ†',
@@ -1262,13 +1262,13 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
       };
 
       final fullPrompt =
-          'Ø§ÙƒØªØ¨ Ù†Øµ ${toneMap[_textTone]} Ø¹Ù† "${_promptController.text}" Ø¨Ø·ÙˆÙ„ ${lengthMap[_textLength]}';
+          'Ø§ÙƒØªØ¨ نص ${toneMap[_textTone]} Ø¹Ù† "${_promptController.text}" Ø¨Ø·ÙˆÙ„ ${lengthMap[_textLength]}';
 
       final response = await service.generateText(fullPrompt);
       setState(() {
         final text =
             response['text'] ?? response['content'] ?? response['data'];
-        _result = 'âœ… Ø§Ù„Ù†Øµ Ø§Ù„Ù…ÙˆÙ„Ù‘Ø¯:\n\n$text';
+        _result = 'âœ… النص الÙ…ÙˆÙ„Ù‘Ø¯:\n\n$text';
       });
     } catch (e) {
       setState(() {
@@ -1284,14 +1284,14 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
     if (_promptController.text.isEmpty) {
       setState(
         () => _result =
-            'âš ï¸ Ø£Ø¯Ø®Ù„ Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ ÙˆÙ…Ù…ÙŠØ²Ø§ØªÙ‡\n(Ù…Ø«Ø§Ù„: Ø³Ø§Ø¹Ø© Ø°ÙƒÙŠØ© - Ù…Ù‚Ø§ÙˆÙ…Ø© Ù„Ù„Ù…Ø§Ø¡ - Ø¨Ø·Ø§Ø±ÙŠØ© Ø·ÙˆÙŠÙ„Ø© - Ø´Ø§Ø´Ø© AMOLED)',
+            'âš ï¸ Ø£Ø¯Ø®Ù„ Ø§Ø³Ù… المنØªØ¬ ÙˆÙ…Ù…ÙŠØ²Ø§ØªÙ‡\n(Ù…Ø«ال: ساعة Ø°ÙƒÙŠØ© - Ù…Ù‚Ø§ÙˆÙ…Ø© Ù„Ù„Ù…Ø§Ø¡ - Ø¨Ø·Ø§Ø±ÙŠØ© طويلØ© - Ø´Ø§Ø´Ø© AMOLED)',
       );
       return;
     }
 
     setState(() {
       _isLoading = true;
-      _result = 'â³ Ø¬Ø§Ø±ÙŠ ØªÙˆÙ„ÙŠØ¯ ÙˆØµÙ Ø§Ù„Ù…Ù†ØªØ¬...';
+      _result = 'â³ Ø¬Ø§Ø±ÙŠ ØªÙˆÙ„ÙŠØ¯ ÙˆØµÙ المنØªØ¬...';
     });
 
     try {
@@ -1308,7 +1308,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
           response['text'] ??
           response['data'];
       setState(() {
-        _result = 'âœ… ÙˆØµÙ Ø§Ù„Ù…Ù†ØªØ¬:\n\n$description';
+        _result = 'âœ… ÙˆØµÙ المنØªØ¬:\n\n$description';
       });
     } catch (e) {
       setState(() {
@@ -1323,14 +1323,14 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
     if (!_checkAuth()) return;
     if (_promptController.text.isEmpty) {
       setState(
-        () => _result = 'âš ï¸ Ø£Ø¯Ø®Ù„ Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ Ø£Ùˆ Ø§Ù„ÙØ¦Ø©\n(Ù…Ø«Ø§Ù„: Ø­Ù‚ÙŠØ¨Ø© Ø¬Ù„Ø¯ Ù†Ø³Ø§Ø¦ÙŠØ©)',
+        () => _result = 'âš ï¸ Ø£Ø¯Ø®Ù„ Ø§Ø³Ù… المنØªØ¬ Ø£Ùˆ الÙØ¦Ø©\n(Ù…Ø«ال: Ø­Ù‚ÙŠØ¨Ø© Ø¬Ù„Ø¯ Ù†Ø³Ø§Ø¦ÙŠØ©)',
       );
       return;
     }
 
     setState(() {
       _isLoading = true;
-      _result = 'â³ Ø¬Ø§Ø±ÙŠ ØªÙˆÙ„ÙŠØ¯ Ø§Ù„ÙƒÙ„Ù…Ø§Øª Ø§Ù„Ù…ÙØªØ§Ø­ÙŠØ©...';
+      _result = 'â³ Ø¬Ø§Ø±ÙŠ ØªÙˆÙ„ÙŠØ¯ الكلÙ…Ø§Øª الÙ…ÙØªØ§Ø­ÙŠØ©...';
     });
 
     try {
@@ -1344,7 +1344,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
       setState(() {
         if (keywords is List && keywords.isNotEmpty) {
           _result =
-              'âœ… Ø§Ù„ÙƒÙ„Ù…Ø§Øª Ø§Ù„Ù…ÙØªØ§Ø­ÙŠØ©:\n\n${keywords.map((k) => 'â€¢ $k').join('\n')}';
+              'âœ… الكلÙ…Ø§Øª الÙ…ÙØªØ§Ø­ÙŠØ©:\n\n${keywords.map((k) => 'â€¢ $k').join('\n')}';
         } else {
           _result = 'âœ… ${response['data'] ?? response}';
         }
@@ -1364,14 +1364,14 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
     if (_promptController.text.isEmpty) {
       setState(
         () => _result =
-            'âš ï¸ Ø£Ø¯Ø®Ù„ ÙˆØµÙ Ø§Ù„ØµÙˆØ±Ø© Ø¨Ø§Ù„Ø¥Ù†Ø¬Ù„ÙŠØ²ÙŠØ©\n(Ù…Ø«Ø§Ù„: Professional product photo of a smartwatch on white background)',
+            'âš ï¸ Ø£Ø¯Ø®Ù„ ÙˆØµÙ الØµÙˆØ±Ø© Ø¨الØ¥Ù†Ø¬Ù„ÙŠØ²ÙŠØ©\n(Ù…Ø«ال: Professional product photo of a smartwatch on white background)',
       );
       return;
     }
 
     setState(() {
       _isLoading = true;
-      _result = 'â³ Ø¬Ø§Ø±ÙŠ ØªÙˆÙ„ÙŠØ¯ Ø§Ù„ØµÙˆØ±Ø© Ø¹Ø¨Ø± NanoBanana...';
+      _result = 'â³ Ø¬Ø§Ø±ÙŠ ØªÙˆÙ„ÙŠØ¯ الØµÙˆØ±Ø© Ø¹Ø¨Ø± NanoBanana...';
       _generatedImageUrl = null;
       _currentTaskId = null;
     });
@@ -1379,22 +1379,22 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
     try {
       final service = widget.ref.read(mbuyStudioServiceProvider);
 
-      // ØªÙˆÙ„ÙŠØ¯ Ø§Ù„ØµÙˆØ±Ø©
+      // ØªÙˆÙ„ÙŠØ¯ الØµÙˆØ±Ø©
       final response = await service.nanoBananaGenerate(_promptController.text);
 
-      // Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø§Ù„Ù†ØªÙŠØ¬Ø©
+      // الØªØ­Ù‚Ù‚ من الÙ†ØªÙŠØ¬Ø©
       final status = response['status'];
       final imageUrl = response['image_url'] ?? response['imageUrl'];
 
       if (status == 'completed' && imageUrl != null) {
         setState(() {
           _generatedImageUrl = imageUrl;
-          _result = 'âœ… ØªÙ… ØªÙˆÙ„ÙŠØ¯ Ø§Ù„ØµÙˆØ±Ø© Ø¨Ù†Ø¬Ø§Ø­!';
+          _result = 'âœ… تم ØªÙˆÙ„ÙŠØ¯ الØµÙˆØ±Ø© Ø¨Ù†Ø¬Ø§Ø­!';
         });
       } else {
         setState(() {
           _result =
-              'âŒ ÙØ´Ù„: ${response['error'] ?? response['details'] ?? 'Ø§Ø³ØªØ¬Ø§Ø¨Ø© ØºÙŠØ± Ù…ØªÙˆÙ‚Ø¹Ø©'}';
+              'âŒ ÙØ´Ù„: ${response['error'] ?? response['details'] ?? 'Ø§Ø³ØªØ¬Ø§Ø¨Ø© غير Ù…ØªÙˆÙ‚Ø¹Ø©'}';
         });
       }
     } catch (e) {
@@ -1406,11 +1406,11 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
     }
   }
 
-  // ignore: unused_element - Ù…Ø­ÙÙˆØ¸Ø© Ù„Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„Ù…Ø³ØªÙ‚Ø¨Ù„ÙŠ
+  // ignore: unused_element - Ù…Ø­ÙÙˆØ¸Ø© Ù„لاØ³ØªØ®Ø¯Ø§Ù… الÙ…Ø³ØªÙ‚Ø¨Ù„ÙŠ
   Future<void> _pollTaskStatus(String taskId) async {
     final service = widget.ref.read(mbuyStudioServiceProvider);
     int attempts = 0;
-    const maxAttempts = 30; // 30 Ù…Ø­Ø§ÙˆÙ„Ø© Ã— 2 Ø«Ø§Ù†ÙŠØ© = Ø¯Ù‚ÙŠÙ‚Ø© ÙˆØ§Ø­Ø¯Ø© ÙƒØ­Ø¯ Ø£Ù‚ØµÙ‰
+    const maxAttempts = 30; // 30 Ù…Ø­Ø§ÙˆÙ„Ø© Ã— 2 Ø«Ø§Ù†ÙŠØ© = دقيقة ÙˆØ§Ø­Ø¯Ø© ÙƒØ­Ø¯ Ø£Ù‚ØµÙ‰
 
     while (attempts < maxAttempts) {
       attempts++;
@@ -1421,7 +1421,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
         final status = taskResponse['status']?.toString().toLowerCase();
 
         if (status == 'completed' || status == 'success') {
-          // Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ø±Ø§Ø¨Ø· Ø§Ù„ØµÙˆØ±Ø© ÙÙŠ Ø§Ù„Ù†ØªÙŠØ¬Ø©
+          // الØ¨Ø­Ø« Ø¹Ù† Ø±Ø§Ø¨Ø· الØµÙˆØ±Ø© ÙÙŠ الÙ†ØªÙŠØ¬Ø©
           final result = taskResponse['result'];
           String? imageUrl;
 
@@ -1433,7 +1433,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
             imageUrl = result;
           }
 
-          // Ø£ÙŠØ¶Ø§Ù‹ ØªØ­Ù‚Ù‚ Ù…Ù† Ø§Ù„Ù…Ø³ØªÙˆÙ‰ Ø§Ù„Ø£Ø¹Ù„Ù‰
+          // Ø£ÙŠØ¶Ø§Ù‹ ØªØ­Ù‚Ù‚ من الÙ…Ø³ØªÙˆÙ‰ الØ£على
           imageUrl ??=
               taskResponse['url'] ??
               taskResponse['image_url'] ??
@@ -1442,46 +1442,46 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
           setState(() {
             _generatedImageUrl = imageUrl;
             _result = imageUrl != null
-                ? 'âœ… ØªÙ… ØªÙˆÙ„ÙŠØ¯ Ø§Ù„ØµÙˆØ±Ø© Ø¨Ù†Ø¬Ø§Ø­!'
-                : 'âœ… Ø§ÙƒØªÙ…Ù„Øª Ø§Ù„Ù…Ù‡Ù…Ø© Ù„ÙƒÙ† Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ø±Ø§Ø¨Ø· Ø§Ù„ØµÙˆØ±Ø©\n\nØ§Ù„Ù†ØªÙŠØ¬Ø©: $taskResponse';
+                ? 'âœ… تم ØªÙˆÙ„ÙŠØ¯ الØµÙˆØ±Ø© Ø¨Ù†Ø¬Ø§Ø­!'
+                : 'âœ… Ø§ÙƒتمÙ„Øª الÙ…Ù‡Ù…Ø© Ù„ÙƒÙ† Ù„Ù… ÙŠتم الØ¹Ø«ÙˆØ± على Ø±Ø§Ø¨Ø· الØµÙˆØ±Ø©\n\nالÙ†ØªÙŠØ¬Ø©: $taskResponse';
           });
           return;
         } else if (status == 'failed' || status == 'error') {
           final error =
               taskResponse['error'] ??
               taskResponse['message'] ??
-              'Ø®Ø·Ø£ ØºÙŠØ± Ù…Ø¹Ø±ÙˆÙ';
+              'Ø®Ø·Ø£ غير معØ±ÙˆÙ';
           setState(() {
-            _result = 'âŒ ÙØ´Ù„Øª Ø§Ù„Ù…Ù‡Ù…Ø©: $error';
+            _result = 'âŒ ÙØ´Ù„Øª الÙ…Ù‡Ù…Ø©: $error';
           });
           return;
         } else {
-          // Ù„Ø§ Ø²Ø§Ù„Øª Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°
+          // لا Ø²الØª Ù‚ÙŠØ¯ الØªÙ†ÙÙŠØ°
           setState(() {
             _result =
-                'â³ Ø­Ø§Ù„Ø© Ø§Ù„Ù…Ù‡Ù…Ø©: ${status ?? 'processing'}\nØ§Ù„Ù…Ø­Ø§ÙˆÙ„Ø©: $attempts/$maxAttempts';
+                'â³ Ø­الØ© الÙ…Ù‡Ù…Ø©: ${status ?? 'processing'}\nالÙ…Ø­Ø§ÙˆÙ„Ø©: $attempts/$maxAttempts';
           });
         }
       } catch (e) {
         debugPrint('[NanoBanana] Poll error: $e');
-        // Ø§Ø³ØªÙ…Ø± ÙÙŠ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø©
+        // Ø§Ø³تمØ± ÙÙŠ الÙ…Ø­Ø§ÙˆÙ„Ø©
       }
     }
 
     setState(() {
-      _result = 'âš ï¸ Ø§Ù†ØªÙ‡Øª Ø§Ù„Ù…Ù‡Ù„Ø©. ÙŠÙ…ÙƒÙ†Ùƒ Ø§Ù„ØªØ­Ù‚Ù‚ Ù„Ø§Ø­Ù‚Ø§Ù‹ Ù…Ù† Ø§Ù„Ù…Ù‡Ù…Ø©: $taskId';
+      _result = 'âš ï¸ Ø§Ù†ØªÙ‡Øª الÙ…هلØ©. ÙŠÙ…ÙƒÙ†Ùƒ الØªØ­Ù‚Ù‚ لاØ­Ù‚Ø§Ù‹ من الÙ…Ù‡Ù…Ø©: $taskId';
     });
   }
 
   Future<void> _checkTaskStatus() async {
     if (_currentTaskId == null) {
-      setState(() => _result = 'âš ï¸ Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù‡Ù…Ø© Ù„Ù„ØªØ­Ù‚Ù‚ Ù…Ù†Ù‡Ø§');
+      setState(() => _result = 'âš ï¸ لا ØªÙˆØ¬Ø¯ Ù…Ù‡Ù…Ø© Ù„Ù„ØªØ­Ù‚Ù‚ منÙ‡Ø§');
       return;
     }
 
     setState(() {
       _isLoading = true;
-      _result = 'â³ Ø¬Ø§Ø±ÙŠ Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø­Ø§Ù„Ø© Ø§Ù„Ù…Ù‡Ù…Ø©...';
+      _result = 'â³ Ø¬Ø§Ø±ÙŠ الØªØ­Ù‚Ù‚ من Ø­الØ© الÙ…Ù‡Ù…Ø©...';
     });
 
     try {
@@ -1493,9 +1493,9 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
 
       setState(() {
         _result =
-            'ðŸ“‹ Ø­Ø§Ù„Ø© Ø§Ù„Ù…Ù‡Ù…Ø©: $status\n\nØ§Ù„ØªÙØ§ØµÙŠÙ„:\n${_formatJson(response)}';
+            'ðŸ“‹ Ø­الØ© الÙ…Ù‡Ù…Ø©: $status\n\nالØªÙØ§ØµÙŠÙ„:\n${_formatJson(response)}';
 
-        // Ø¥Ø°Ø§ Ø§ÙƒØªÙ…Ù„ØªØŒ Ø­Ø§ÙˆÙ„ Ø§Ø³ØªØ®Ø±Ø§Ø¬ Ø§Ù„ØµÙˆØ±Ø©
+        // Ø¥Ø°Ø§ Ø§ÙƒتمÙ„ØªØŒ Ø­Ø§ÙˆÙ„ Ø§Ø³ØªØ®Ø±Ø§Ø¬ الØµÙˆØ±Ø©
         if (status == 'completed' || status == 'success') {
           String? imageUrl;
           if (result is List && result.isNotEmpty) {
@@ -1508,7 +1508,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
         }
       });
     } catch (e) {
-      setState(() => _result = 'âŒ ÙØ´Ù„ Ø§Ù„ØªØ­Ù‚Ù‚: $e');
+      setState(() => _result = 'âŒ ÙØ´Ù„ الØªØ­Ù‚Ù‚: $e');
     } finally {
       setState(() => _isLoading = false);
     }
@@ -1529,7 +1529,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Ø­Ø§Ù„Ø© ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„
+          // Ø­الØ© ØªØ³Ø¬ÙŠÙ„ الØ¯Ø®ÙˆÙ„
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -1556,8 +1556,8 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
                 const SizedBox(width: 8),
                 Text(
                   widget.ref.watch(isAuthenticatedProvider)
-                      ? 'ØªÙ… ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ âœ“'
-                      : 'ØºÙŠØ± Ù…Ø³Ø¬Ù„ Ø§Ù„Ø¯Ø®ÙˆÙ„ - Ø³Ø¬Ù„ Ø¯Ø®ÙˆÙ„Ùƒ Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø£Ø¯ÙˆØ§Øª AI',
+                      ? 'تم ØªØ³Ø¬ÙŠÙ„ الØ¯Ø®ÙˆÙ„ âœ“'
+                      : 'غير Ù…Ø³Ø¬Ù„ الØ¯Ø®ÙˆÙ„ - Ø³Ø¬Ù„ Ø¯Ø®ÙˆÙ„Ùƒ لاØ³ØªØ®Ø¯Ø§Ù… أدوات AI',
                   style: TextStyle(
                     color: widget.ref.watch(isAuthenticatedProvider)
                         ? Colors.green[800]
@@ -1570,9 +1570,9 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
           ),
           const SizedBox(height: 16),
 
-          // Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø£Ø¯Ø§Ø©
+          // Ø§Ø®ØªÙŠØ§Ø± الØ£Ø¯Ø§Ø©
           Text(
-            'Ø§Ø®ØªØ± Ø§Ù„Ø£Ø¯Ø§Ø©:',
+            'Ø§Ø®ØªØ± الØ£Ø¯Ø§Ø©:',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: AppDimensions.fontTitle,
@@ -1587,19 +1587,19 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
             children: [
               _buildToolChip(
                 'text',
-                'ØªÙˆÙ„ÙŠØ¯ Ù†Øµ',
+                'ØªÙˆÙ„ÙŠØ¯ نص',
                 Icons.text_fields,
                 Colors.blue,
               ),
               _buildToolChip(
                 'description',
-                'ÙˆØµÙ Ù…Ù†ØªØ¬',
+                'ÙˆØµÙ منØªØ¬',
                 Icons.description,
                 Colors.teal,
               ),
               _buildToolChip(
                 'keywords',
-                'ÙƒÙ„Ù…Ø§Øª Ù…ÙØªØ§Ø­ÙŠØ©',
+                'كلÙ…Ø§Øª Ù…ÙØªØ§Ø­ÙŠØ©',
                 Icons.key,
                 Colors.indigo,
               ),
@@ -1613,7 +1613,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
           ),
           const SizedBox(height: 16),
 
-          // Ø­Ù‚Ù„ Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„ Ù…Ø¹ ØªÙ„Ù…ÙŠØ­ Ù…Ø®ØµØµ
+          // Ø­Ù‚Ù„ الØ¥Ø¯Ø®ال مع ØªÙ„Ù…ÙŠØ­ Ù…Ø®ØµØµ
           TextField(
             controller: _promptController,
             maxLines: 3,
@@ -1629,11 +1629,11 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
           ),
           const SizedBox(height: 12),
 
-          // Ø®ÙŠØ§Ø±Ø§Øª Ø¥Ø¶Ø§ÙÙŠØ© Ø­Ø³Ø¨ Ø§Ù„Ø£Ø¯Ø§Ø©
+          // Ø®ÙŠØ§Ø±Ø§Øª Ø¥Ø¶Ø§ÙÙŠØ© Ø­Ø³Ø¨ الØ£Ø¯Ø§Ø©
           _buildToolOptions(),
           const SizedBox(height: 16),
 
-          // Ø²Ø± Ø§Ù„ØªÙˆÙ„ÙŠØ¯
+          // Ø²Ø± الØªÙˆÙ„ÙŠØ¯
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
@@ -1648,7 +1648,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
                       ),
                     )
                   : const Icon(Icons.auto_awesome),
-              label: Text(_isLoading ? 'Ø¬Ø§Ø±ÙŠ Ø§Ù„ØªÙˆÙ„ÙŠØ¯...' : 'ØªÙˆÙ„ÙŠØ¯'),
+              label: Text(_isLoading ? 'Ø¬Ø§Ø±ÙŠ الØªÙˆÙ„ÙŠØ¯...' : 'ØªÙˆÙ„ÙŠØ¯'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: _getToolColor(),
                 foregroundColor: Colors.white,
@@ -1661,7 +1661,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
           ),
           const SizedBox(height: 24),
 
-          // Ø¹Ø±Ø¶ Ø§Ù„ØµÙˆØ±Ø© Ø§Ù„Ù…ÙˆÙ„Ø¯Ø© (NanoBanana)
+          // Ø¹Ø±Ø¶ الØµÙˆØ±Ø© الÙ…ÙˆÙ„Ø¯Ø© (NanoBanana)
           if (_generatedImageUrl != null) ...[
             Container(
               decoration: BoxDecoration(
@@ -1694,7 +1694,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'ÙØ´Ù„ ØªØ­Ù…ÙŠÙ„ Ø§Ù„ØµÙˆØ±Ø©',
+                          'ÙØ´Ù„ ØªØ­Ù…ÙŠÙ„ الØµÙˆØ±Ø©',
                           style: TextStyle(color: Colors.grey[600]),
                         ),
                         const SizedBox(height: 4),
@@ -1719,11 +1719,11 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: _generatedImageUrl!));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('ØªÙ… Ù†Ø³Ø® Ø§Ù„Ø±Ø§Ø¨Ø·')),
+                      const SnackBar(content: Text('تم Ù†Ø³Ø® الØ±Ø§Ø¨Ø·')),
                     );
                   },
                   icon: const Icon(Icons.copy, size: 16),
-                  label: const Text('Ù†Ø³Ø® Ø§Ù„Ø±Ø§Ø¨Ø·'),
+                  label: const Text('Ù†Ø³Ø® الØ±Ø§Ø¨Ø·'),
                 ),
                 const SizedBox(width: 16),
                 TextButton.icon(
@@ -1739,7 +1739,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
             const SizedBox(height: 16),
           ],
 
-          // Ø²Ø± Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø§Ù„Ù…Ù‡Ù…Ø© (NanoBanana)
+          // Ø²Ø± الØªØ­Ù‚Ù‚ من الÙ…Ù‡Ù…Ø© (NanoBanana)
           if (_selectedTool == 'nano_banana' &&
               _currentTaskId != null &&
               !_isLoading)
@@ -1749,7 +1749,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
                 onPressed: _checkTaskStatus,
                 icon: const Icon(Icons.refresh),
                 label: Text(
-                  'ØªØ­Ù‚Ù‚ Ù…Ù† Ø§Ù„Ù…Ù‡Ù…Ø©: ${_currentTaskId!.substring(0, 8)}...',
+                  'ØªØ­Ù‚Ù‚ من الÙ…Ù‡Ù…Ø©: ${_currentTaskId!.substring(0, 8)}...',
                 ),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.orange,
@@ -1772,7 +1772,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
                 Row(
                   children: [
                     const Text(
-                      'Ø§Ù„Ù†ØªÙŠØ¬Ø©:',
+                      'الÙ†ØªÙŠØ¬Ø©:',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: AppDimensions.fontTitle,
@@ -1789,7 +1789,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
                 ),
                 const SizedBox(height: 12),
                 SelectableText(
-                  _result.isEmpty ? 'Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ Ø£ÙŠ Ø£Ø¯Ø§Ø© Ù„Ù„ØªØ¬Ø±Ø¨Ø©' : _result,
+                  _result.isEmpty ? 'Ø§Ø¶ØºØ· على Ø£ÙŠ Ø£Ø¯Ø§Ø© Ù„Ù„ØªØ¬Ø±Ø¨Ø©' : _result,
                   style: TextStyle(
                     fontSize: AppDimensions.fontBody,
                     height: 1.6,
@@ -1808,32 +1808,32 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
     );
   }
 
-  // Ø¯ÙˆØ§Ù„ Ù…Ø³Ø§Ø¹Ø¯Ø© Ù„Ù„Ø£Ø¯Ø§Ø© Ø§Ù„Ù…Ø®ØªØ§Ø±Ø©
+  // Ø¯Ùˆال Ù…Ø³Ø§Ø¹Ø¯Ø© Ù„Ù„Ø£Ø¯Ø§Ø© الÙ…Ø®ØªØ§Ø±Ø©
   String _getInputLabel() {
     switch (_selectedTool) {
       case 'text':
-        return 'Ù…ÙˆØ¶ÙˆØ¹ Ø§Ù„Ù†Øµ (Ø¹Ø±Ø¨ÙŠ)';
+        return 'Ù…ÙˆØ¶ÙˆØ¹ النص (Ø¹Ø±Ø¨ÙŠ)';
       case 'description':
-        return 'Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ ÙˆÙ…Ù…ÙŠØ²Ø§ØªÙ‡ (Ø¹Ø±Ø¨ÙŠ)';
+        return 'Ø§Ø³Ù… المنØªØ¬ ÙˆÙ…Ù…ÙŠØ²Ø§ØªÙ‡ (Ø¹Ø±Ø¨ÙŠ)';
       case 'keywords':
-        return 'Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬/Ø§Ù„ÙØ¦Ø© (Ø¹Ø±Ø¨ÙŠ)';
+        return 'Ø§Ø³Ù… المنØªØ¬/الÙØ¦Ø© (Ø¹Ø±Ø¨ÙŠ)';
       case 'nano_banana':
-        return 'ÙˆØµÙ Ø§Ù„ØµÙˆØ±Ø© (Ø¥Ù†Ø¬Ù„ÙŠØ²ÙŠ Ø£ÙØ¶Ù„)';
+        return 'ÙˆØµÙ الØµÙˆØ±Ø© (Ø¥Ù†Ø¬Ù„ÙŠØ²ÙŠ Ø£ÙØ¶Ù„)';
       default:
-        return 'Ø§Ù„Ø¥Ø¯Ø®Ø§Ù„';
+        return 'الØ¥Ø¯Ø®ال';
     }
   }
 
   String _getInputHint() {
     switch (_selectedTool) {
       case 'text':
-        return 'Ù…Ø«Ø§Ù„: Ù…Ù†Ø´ÙˆØ± ØªØ±Ø­ÙŠØ¨ÙŠ Ø¨Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡ Ø§Ù„Ø¬Ø¯Ø¯';
+        return 'Ù…Ø«ال: منØ´ÙˆØ± ØªØ±Ø­ÙŠØ¨ÙŠ Ø¨الØ¹Ù…لاØ¡ الØ¬Ø¯Ø¯';
       case 'description':
-        return 'Ù…Ø«Ø§Ù„: Ø³Ø§Ø¹Ø© Ø°ÙƒÙŠØ© - Ù…Ù‚Ø§ÙˆÙ…Ø© Ù„Ù„Ù…Ø§Ø¡ - Ø´Ø§Ø´Ø© AMOLED';
+        return 'Ù…Ø«ال: ساعة Ø°ÙƒÙŠØ© - Ù…Ù‚Ø§ÙˆÙ…Ø© Ù„Ù„Ù…Ø§Ø¡ - Ø´Ø§Ø´Ø© AMOLED';
       case 'keywords':
-        return 'Ù…Ø«Ø§Ù„: Ø­Ù‚ÙŠØ¨Ø© Ø¬Ù„Ø¯ Ù†Ø³Ø§Ø¦ÙŠØ©';
+        return 'Ù…Ø«ال: Ø­Ù‚ÙŠØ¨Ø© Ø¬Ù„Ø¯ Ù†Ø³Ø§Ø¦ÙŠØ©';
       case 'nano_banana':
-        return 'Ù…Ø«Ø§Ù„: Professional product photo of a smartwatch on white background';
+        return 'Ù…Ø«ال: Professional product photo of a smartwatch on white background';
       default:
         return '';
     }
@@ -1902,7 +1902,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Ù†ÙˆØ¹ Ø§Ù„Ù†Øµ:',
+              'Ù†ÙˆØ¹ النص:',
               style: TextStyle(fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 8),
@@ -1910,40 +1910,40 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
               spacing: 8,
               children: [
                 ChoiceChip(
-                  label: const Text('ØªØ³ÙˆÙŠÙ‚ÙŠ'),
+                  label: const Text('تسويقي'),
                   selected: _textTone == 'marketing',
                   onSelected: (_) => setState(() => _textTone = 'marketing'),
                 ),
                 ChoiceChip(
-                  label: const Text('Ø±Ø³Ù…ÙŠ'),
+                  label: const Text('رسمي'),
                   selected: _textTone == 'formal',
                   onSelected: (_) => setState(() => _textTone = 'formal'),
                 ),
                 ChoiceChip(
-                  label: const Text('Ù…Ø®ØªØµØ±'),
+                  label: const Text('مختصر'),
                   selected: _textTone == 'short',
                   onSelected: (_) => setState(() => _textTone = 'short'),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            const Text('Ø§Ù„Ø·ÙˆÙ„:', style: TextStyle(fontWeight: FontWeight.w500)),
+            const Text('الØ·ÙˆÙ„:', style: TextStyle(fontWeight: FontWeight.w500)),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               children: [
                 ChoiceChip(
-                  label: const Text('Ù‚ØµÙŠØ±'),
+                  label: const Text('قصير'),
                   selected: _textLength == 'short',
                   onSelected: (_) => setState(() => _textLength = 'short'),
                 ),
                 ChoiceChip(
-                  label: const Text('Ù…ØªÙˆØ³Ø·'),
+                  label: const Text('متوسط'),
                   selected: _textLength == 'medium',
                   onSelected: (_) => setState(() => _textLength = 'medium'),
                 ),
                 ChoiceChip(
-                  label: const Text('Ø·ÙˆÙŠÙ„'),
+                  label: const Text('طويل'),
                   selected: _textLength == 'long',
                   onSelected: (_) => setState(() => _textLength = 'long'),
                 ),
@@ -1956,7 +1956,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Ù†Ø¨Ø±Ø© Ø§Ù„ÙˆØµÙ:',
+              'Ù†Ø¨Ø±Ø© الÙˆØµÙ:',
               style: TextStyle(fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 8),
@@ -1964,7 +1964,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
               spacing: 8,
               children: [
                 ChoiceChip(
-                  label: const Text('ÙˆØ¯ÙŠØ©'),
+                  label: const Text('ودية'),
                   selected: _productTone == 'friendly',
                   onSelected: (_) => setState(() => _productTone = 'friendly'),
                 ),
@@ -1993,7 +1993,7 @@ class _AiToolsTestTabState extends State<_AiToolsTestTab> {
             ),
             SizedBox(height: 8),
             Text(
-              'ØªÙˆÙ„ÙŠØ¯ ØµÙˆØ± Ø¨Ø§Ù„Ø°ÙƒØ§Ø¡ Ø§Ù„Ø§ØµØ·Ù†Ø§Ø¹ÙŠ Ø¹Ø¨Ø± OpenRouter',
+              'ØªÙˆÙ„ÙŠØ¯ ØµÙˆØ± Ø¨الØ°ÙƒØ§Ø¡ الØ§ØµØ·Ù†Ø§Ø¹ÙŠ Ø¹Ø¨Ø± OpenRouter',
               style: TextStyle(
                 fontSize: AppDimensions.fontLabel,
                 color: Colors.grey,
