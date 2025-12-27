@@ -9,7 +9,9 @@ import '../../data/revenue_models.dart';
 /// صفحة المشاريع الرئيسية
 /// جميع البيانات من Worker API
 class ProjectsScreen extends ConsumerStatefulWidget {
-  const ProjectsScreen({super.key});
+  final VoidCallback? onClose;
+
+  const ProjectsScreen({super.key, this.onClose});
 
   @override
   ConsumerState<ProjectsScreen> createState() => _ProjectsScreenState();
@@ -49,7 +51,13 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen>
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            if (widget.onClose != null) {
+              widget.onClose!();
+            } else {
+              Navigator.of(context).pop();
+            }
+          },
         ),
         bottom: TabBar(
           controller: _tabController,

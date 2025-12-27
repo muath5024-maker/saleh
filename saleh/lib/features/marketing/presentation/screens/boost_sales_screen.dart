@@ -8,7 +8,9 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../merchant/data/merchant_store_provider.dart';
 
 class BoostSalesScreen extends ConsumerWidget {
-  const BoostSalesScreen({super.key});
+  final VoidCallback? onClose;
+
+  const BoostSalesScreen({super.key, this.onClose});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,7 +42,13 @@ class BoostSalesScreen extends ConsumerWidget {
                 BlendMode.srcIn,
               ),
             ),
-            onPressed: () => context.pop(),
+            onPressed: () {
+              if (onClose != null) {
+                onClose!();
+              } else {
+                context.pop();
+              }
+            },
           ),
         ),
         body: Center(
@@ -101,7 +109,13 @@ class BoostSalesScreen extends ConsumerWidget {
               BlendMode.srcIn,
             ),
           ),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (onClose != null) {
+              onClose!();
+            } else {
+              context.pop();
+            }
+          },
         ),
       ),
       body: SafeArea(

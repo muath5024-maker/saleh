@@ -5,7 +5,9 @@ import '../../../../core/theme/app_theme.dart';
 /// شاشة محفظة التاجر
 /// ملاحظة: مطلوب ربطها بالبيانات الحقيقية من API مستقبلاً
 class WalletScreen extends StatelessWidget {
-  const WalletScreen({super.key});
+  final VoidCallback? onClose;
+
+  const WalletScreen({super.key, this.onClose});
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +172,13 @@ class WalletScreen extends StatelessWidget {
         children: [
           // Back Button
           GestureDetector(
-            onTap: () => context.canPop() ? context.pop() : null,
+            onTap: () {
+              if (onClose != null) {
+                onClose!();
+              } else if (context.canPop()) {
+                context.pop();
+              }
+            },
             child: Container(
               width: 40,
               height: 40,

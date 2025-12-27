@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/config/api_config.dart';
+import '../../../core/services/auth_token_storage.dart';
 import 'revenue_models.dart';
 
 // =====================================================
@@ -30,7 +31,7 @@ class RevenueApiClient {
   /// Get pricing quote for a project configuration
   Future<PricingQuote> getPricingQuote(PricingQuoteRequest request) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/api/pricing/pricing/quote'),
+      Uri.parse('$baseUrl/api/pricing/quote'),
       headers: _headers,
       body: jsonEncode(request.toJson()),
     );
@@ -242,9 +243,10 @@ class RevenueApiException implements Exception {
 // Provider
 // =====================================================
 
-final revenueApiClientProvider = Provider<RevenueApiClient>((ref) {
-  // TODO: Get auth token from auth provider
-  const authToken = null;
+final revenueApiClientProvider = FutureProvider<RevenueApiClient>((ref) async {
+  // استخدام authTokenStorageProvider حسب دليل المطور
+  final tokenStorage = ref.read(authTokenStorageProvider);
+  final authToken = await tokenStorage.getAccessToken();
 
   return RevenueApiClient(baseUrl: ApiConfig.baseUrl, authToken: authToken);
 });
@@ -255,13 +257,13 @@ final pricingQuoteProvider =
       ref,
       request,
     ) async {
-      final client = ref.watch(revenueApiClientProvider);
+      final client = await ref.watch(revenueApiClientProvider.future);
       return client.getPricingQuote(request);
     });
 
 // Templates provider
 final templatesProvider = FutureProvider<List<ProjectTemplate>>((ref) async {
-  final client = ref.watch(revenueApiClientProvider);
+  final client = await ref.watch(revenueApiClientProvider.future);
   return client.getTemplates();
 });
 
@@ -270,13 +272,13 @@ final templatesByTypeProvider =
       ref,
       projectType,
     ) async {
-      final client = ref.watch(revenueApiClientProvider);
+      final client = await ref.watch(revenueApiClientProvider.future);
       return client.getTemplates(projectType: projectType);
     });
 
 // Projects provider
 final userProjectsProvider = FutureProvider<List<Project>>((ref) async {
-  final client = ref.watch(revenueApiClientProvider);
+  final client = await ref.watch(revenueApiClientProvider.future);
   return client.getProjects();
 });
 
@@ -284,6 +286,6 @@ final projectByIdProvider = FutureProvider.family<Project, String>((
   ref,
   projectId,
 ) async {
-  final client = ref.watch(revenueApiClientProvider);
+  final client = await ref.watch(revenueApiClientProvider.future);
   return client.getProject(projectId);
 });

@@ -276,9 +276,9 @@ class ProductsRepository {
     }
   }
 
-  /// جلب منتجات الدروب شوبينق المتاحة
-  /// المسار: GET /secure/dropshipping/products
-  /// TODO: استبدال هذا بـ endpoint حقيقي عند توفر Worker endpoint
+  /// جلب كتالوج منتجات الدروب شوبينق المتاحة للموزعين
+  /// المسار: GET /api/dropshipping/catalog
+  /// يرجع قائمة المنتجات المتاحة من الموردين
   Future<List<Map<String, dynamic>>> getDropshippingProducts() async {
     try {
       final token = await _tokenStorage.getAccessToken();
@@ -287,7 +287,7 @@ class ProductsRepository {
       }
 
       final response = await _apiService.get(
-        '/secure/dropshipping/products',
+        '/api/dropshipping/catalog',
         headers: {'Authorization': 'Bearer $token'},
       );
 
@@ -299,16 +299,81 @@ class ProductsRepository {
               .map((json) => json as Map<String, dynamic>)
               .toList();
         }
-      } else if (response.statusCode == 404) {
-        // Endpoint غير موجود - نرجع قائمة فارغة
-        return [];
+      }
+
+      // أي حالة أخرى ترجع قائمة فارغة
+      return [];
+    } catch (e) {
+      debugPrint('⚠️ [getDropshippingProducts] Error: $e');
+      return [];
+    }
+  }
+
+  /// جلب قوائم الموزع (المنتجات التي أضافها من الكتالوج)
+  /// المسار: GET /api/dropshipping/reseller/listings
+  Future<List<Map<String, dynamic>>> getResellerListings() async {
+    try {
+      final token = await _tokenStorage.getAccessToken();
+      if (token == null) {
+        throw Exception('لا يوجد رمز وصول - يجب تسجيل الدخول');
+      }
+
+      final response = await _apiService.get(
+        '/api/dropshipping/reseller/listings',
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['ok'] == true && data['data'] != null) {
+          final List listings = data['data'] as List;
+          return listings.map((json) => json as Map<String, dynamic>).toList();
+        }
       }
 
       return [];
     } catch (e) {
-      debugPrint('⚠️ [getDropshippingProducts] Error: $e');
-      // TODO: عند توفر endpoint، استخدمه هنا
+      debugPrint('⚠️ [getResellerListings] Error: $e');
       return [];
+    }
+  }
+
+  /// إضافة منتج من الكتالوج إلى قائمة الموزع
+  /// المسار: POST /api/dropshipping/reseller/listings
+  Future<Map<String, dynamic>?> createResellerListing({
+    required String dropshipProductId,
+    required double sellingPrice,
+    String? customName,
+    String? customDescription,
+  }) async {
+    try {
+      final token = await _tokenStorage.getAccessToken();
+      if (token == null) {
+        throw Exception('لا يوجد رمز وصول - يجب تسجيل الدخول');
+      }
+
+      final response = await _apiService.post(
+        '/api/dropshipping/reseller/listings',
+        headers: {'Authorization': 'Bearer $token'},
+        body: {
+          'dropship_product_id': dropshipProductId,
+          'selling_price': sellingPrice,
+          if (customName != null) 'custom_name': customName,
+          if (customDescription != null)
+            'custom_description': customDescription,
+        },
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 201 && data['ok'] == true) {
+        return data['data'] as Map<String, dynamic>;
+      }
+
+      throw Exception(data['error'] ?? 'فشل إضافة المنتج');
+    } catch (e) {
+      debugPrint('⚠️ [createResellerListing] Error: $e');
+      rethrow;
     }
   }
 }

@@ -11,7 +11,9 @@ import '../../../../core/constants/app_icons.dart';
 
 /// شاشة معاينة متجر التاجر - محسّنة
 class ViewMyStoreScreen extends ConsumerStatefulWidget {
-  const ViewMyStoreScreen({super.key});
+  final VoidCallback? onClose;
+
+  const ViewMyStoreScreen({super.key, this.onClose});
 
   @override
   ConsumerState<ViewMyStoreScreen> createState() => _ViewMyStoreScreenState();
@@ -361,7 +363,13 @@ class _ViewMyStoreScreenState extends ConsumerState<ViewMyStoreScreen>
                 ),
               ),
             ),
-            onPressed: () => context.pop(),
+            onPressed: () {
+              if (widget.onClose != null) {
+                widget.onClose!();
+              } else {
+                context.pop();
+              }
+            },
           ),
           actions: [
             _buildHeaderAction(Icons.qr_code, 'QR', _showQRCode),

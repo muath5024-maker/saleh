@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../../core/theme/app_theme.dart';
 
 /// صفحة المساعد الشخصي AI - صفحة كاملة مع زر إغلاق
 class AIAssistantPanel extends StatefulWidget {
-  const AIAssistantPanel({super.key});
+  final VoidCallback? onClose;
+
+  const AIAssistantPanel({super.key, this.onClose});
 
   @override
   State<AIAssistantPanel> createState() => _AIAssistantPanelState();
@@ -17,6 +20,14 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
   void dispose() {
     _messageController.dispose();
     super.dispose();
+  }
+
+  void _close() {
+    if (widget.onClose != null) {
+      widget.onClose!();
+    } else {
+      Navigator.of(context).pop();
+    }
   }
 
   void _sendMessage() {
@@ -50,57 +61,107 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Material(
+      color: AppTheme.background(isDark),
+      child: SafeArea(
+        child: Column(
           children: [
-            const Icon(Icons.smart_toy, color: Colors.white, size: 24),
-            const SizedBox(width: 8),
-            const Text(
-              'المساعد الشخصي',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            // Header
+            _buildHeader(isDark),
+            // قائمة الرسائل
+            Expanded(
+              child: _messages.isEmpty
+                  ? _buildEmptyState(isDark)
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      reverse: true,
+                      itemCount: _messages.length,
+                      itemBuilder: (context, index) {
+                        final message = _messages[_messages.length - 1 - index];
+                        return _buildMessageBubble(message, isDark);
+                      },
+                    ),
             ),
+            // حقل الإدخال
+            _buildInputField(isDark),
           ],
         ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white, size: 24),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
       ),
-      body: Column(
-        children: [
-          // قائمة الرسائل
-          Expanded(
-            child: _messages.isEmpty
-                ? _buildEmptyState()
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    reverse: true,
-                    itemCount: _messages.length,
-                    itemBuilder: (context, index) {
-                      final message = _messages[_messages.length - 1 - index];
-                      return _buildMessageBubble(message);
-                    },
-                  ),
+    );
+  }
+
+  Widget _buildHeader(bool isDark) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppTheme.surface(isDark),
+        border: Border(
+          bottom: BorderSide(
+            color: AppTheme.border(isDark).withValues(alpha: 0.2),
           ),
-          // حقل الإدخال
-          _buildInputField(),
+        ),
+      ),
+      child: Row(
+        textDirection: TextDirection.rtl,
+        children: [
+          // العنوان والأيقونة
+          Expanded(
+            child: Row(
+              textDirection: TextDirection.rtl,
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.smart_toy,
+                    color: AppTheme.primaryColor,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'المساعد الشخصي',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.textPrimary(isDark),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // زر الإغلاق
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              _close();
+            },
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: AppTheme.border(isDark).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                Icons.close,
+                size: 22,
+                color: AppTheme.textSecondary(isDark),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(bool isDark) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -119,27 +180,30 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
             ),
           ),
           const SizedBox(height: 24),
-          const Text(
+          Text(
             'مرحباً! أنا مساعدك الشخصي',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: AppTheme.textPrimaryColor,
+              color: AppTheme.textPrimary(isDark),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'كيف يمكنني مساعدتك اليوم؟',
-            style: TextStyle(fontSize: 14, color: AppTheme.textSecondaryColor),
+            style: TextStyle(
+              fontSize: 14,
+              color: AppTheme.textSecondary(isDark),
+            ),
           ),
           const SizedBox(height: 24),
-          _buildQuickActions(),
+          _buildQuickActions(isDark),
         ],
       ),
     );
   }
 
-  Widget _buildQuickActions() {
+  Widget _buildQuickActions(bool isDark) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
@@ -148,18 +212,21 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
             'إنشاء منتج جديد',
             Icons.add_box_outlined,
             () {},
+            isDark,
           ),
           const SizedBox(height: 8),
           _buildQuickActionButton(
             'تحليل المبيعات',
             Icons.analytics_outlined,
             () {},
+            isDark,
           ),
           const SizedBox(height: 8),
           _buildQuickActionButton(
             'اقتراحات التسويق',
             Icons.campaign_outlined,
             () {},
+            isDark,
           ),
         ],
       ),
@@ -170,6 +237,7 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
     String text,
     IconData icon,
     VoidCallback onTap,
+    bool isDark,
   ) {
     return InkWell(
       onTap: onTap,
@@ -177,11 +245,10 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.card(isDark),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: AppTheme.primaryColor.withValues(alpha: 0.3),
-            width: 1,
           ),
         ),
         child: Row(
@@ -191,9 +258,9 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
               child: Text(
                 text,
                 textAlign: TextAlign.right,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: AppTheme.textPrimaryColor,
+                  color: AppTheme.textPrimary(isDark),
                 ),
               ),
             ),
@@ -205,7 +272,7 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
     );
   }
 
-  Widget _buildMessageBubble(_ChatMessage message) {
+  Widget _buildMessageBubble(_ChatMessage message, bool isDark) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -221,7 +288,7 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
               decoration: BoxDecoration(
                 color: message.isUser
                     ? AppTheme.primaryColor
-                    : Colors.grey.shade200,
+                    : AppTheme.surface(isDark),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
@@ -231,7 +298,7 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
                   fontSize: 14,
                   color: message.isUser
                       ? Colors.white
-                      : AppTheme.textPrimaryColor,
+                      : AppTheme.textPrimary(isDark),
                 ),
               ),
             ),
@@ -242,14 +309,14 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
     );
   }
 
-  Widget _buildInputField() {
+  Widget _buildInputField(bool isDark) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.surface(isDark),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: AppTheme.shadow(isDark),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -262,11 +329,13 @@ class _AIAssistantPanelState extends State<AIAssistantPanel> {
             child: TextField(
               controller: _messageController,
               textAlign: TextAlign.right,
+              style: TextStyle(color: AppTheme.textPrimary(isDark)),
               decoration: InputDecoration(
                 hintText: 'اكتب رسالتك هنا...',
+                hintStyle: TextStyle(color: AppTheme.textHint(isDark)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                  borderSide: BorderSide(color: AppTheme.border(isDark)),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,

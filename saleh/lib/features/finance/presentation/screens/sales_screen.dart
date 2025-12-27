@@ -7,7 +7,9 @@ import '../../../../core/theme/app_theme.dart';
 /// شاشة تقارير المبيعات
 /// ملاحظة: مطلوب ربطها بالبيانات الحقيقية من API مستقبلاً
 class SalesScreen extends StatefulWidget {
-  const SalesScreen({super.key});
+  final VoidCallback? onClose;
+
+  const SalesScreen({super.key, this.onClose});
 
   @override
   State<SalesScreen> createState() => _SalesScreenState();
@@ -76,7 +78,13 @@ class _SalesScreenState extends State<SalesScreen> {
         children: [
           // زر الرجوع
           GestureDetector(
-            onTap: () => context.pop(),
+            onTap: () {
+              if (widget.onClose != null) {
+                widget.onClose!();
+              } else {
+                context.pop();
+              }
+            },
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(

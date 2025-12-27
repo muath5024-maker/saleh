@@ -5,84 +5,144 @@ import '../../../../core/theme/app_theme.dart';
 
 /// صفحة إضافة منتج - صفحة كاملة مع زر إغلاق
 class AddProductPanel extends StatefulWidget {
-  const AddProductPanel({super.key});
+  final VoidCallback? onClose;
+
+  const AddProductPanel({super.key, this.onClose});
 
   @override
   State<AddProductPanel> createState() => _AddProductPanelState();
 }
 
 class _AddProductPanelState extends State<AddProductPanel> {
+  void _close() {
+    if (widget.onClose != null) {
+      widget.onClose!();
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'إضافة منتج',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Material(
+      color: AppTheme.background(isDark),
+      child: SafeArea(
+        child: Column(
+          children: [
+            // Header
+            _buildHeader(isDark),
+            // Content
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  // إدراج سريع
+                  _buildQuickAddOption(context, isDark),
+                  const SizedBox(height: 16),
+                  Divider(color: AppTheme.border(isDark)),
+                  const SizedBox(height: 16),
+                  // أنواع المنتجات
+                  _buildSectionTitle('أو اختر نوع المنتج', isDark),
+                  const SizedBox(height: 16),
+                  _buildProductTypeOption(
+                    context,
+                    type: 'physical',
+                    title: 'منتج مادي 📦',
+                    description: 'ملابس، إلكترونيات، أثاث، إلخ',
+                    icon: Icons.inventory_2,
+                    color: Colors.blue,
+                    isDark: isDark,
+                  ),
+                  _buildProductTypeOption(
+                    context,
+                    type: 'digital',
+                    title: 'منتج رقمي 💾',
+                    description: 'كتب، دورات، برامج، ملفات',
+                    icon: Icons.download,
+                    color: Colors.purple,
+                    isDark: isDark,
+                  ),
+                  _buildProductTypeOption(
+                    context,
+                    type: 'service',
+                    title: 'خدمة 🛠',
+                    description: 'استشارات، تصميم، صيانة',
+                    icon: Icons.construction,
+                    color: Colors.orange,
+                    isDark: isDark,
+                  ),
+                  _buildProductTypeOption(
+                    context,
+                    type: 'subscription',
+                    title: 'اشتراك 🔄',
+                    description: 'عضويات، باقات شهرية/سنوية',
+                    icon: Icons.repeat,
+                    color: Colors.green,
+                    isDark: isDark,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(bool isDark) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppTheme.surface(isDark),
+        border: Border(
+          bottom: BorderSide(
+            color: AppTheme.border(isDark).withValues(alpha: 0.2),
           ),
         ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white, size: 24),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      child: Row(
+        textDirection: TextDirection.rtl,
         children: [
-          // إدراج سريع
-          _buildQuickAddOption(context),
-          const SizedBox(height: 16),
-          const Divider(),
-          const SizedBox(height: 16),
-          // أنواع المنتجات
-          _buildSectionTitle('أو اختر نوع المنتج'),
-          const SizedBox(height: 16),
-          _buildProductTypeOption(
-            context,
-            type: 'physical',
-            title: 'منتج مادي 📦',
-            description: 'ملابس، إلكترونيات، أثاث، إلخ',
-            icon: Icons.inventory_2,
-            color: Colors.blue,
+          // العنوان
+          Expanded(
+            child: Text(
+              'إضافة منتج',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary(isDark),
+              ),
+              textAlign: TextAlign.right,
+            ),
           ),
-          _buildProductTypeOption(
-            context,
-            type: 'digital',
-            title: 'منتج رقمي 💾',
-            description: 'كتب، دورات، برامج، ملفات',
-            icon: Icons.download,
-            color: Colors.purple,
-          ),
-          _buildProductTypeOption(
-            context,
-            type: 'service',
-            title: 'خدمة 🛠',
-            description: 'استشارات، تصميم، صيانة',
-            icon: Icons.construction,
-            color: Colors.orange,
-          ),
-          _buildProductTypeOption(
-            context,
-            type: 'subscription',
-            title: 'اشتراك 🔄',
-            description: 'عضويات، باقات شهرية/سنوية',
-            icon: Icons.repeat,
-            color: Colors.green,
+          // زر الإغلاق
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              _close();
+            },
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: AppTheme.border(isDark).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                Icons.close,
+                size: 22,
+                color: AppTheme.textSecondary(isDark),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildQuickAddOption(BuildContext context) {
+  Widget _buildQuickAddOption(BuildContext context, bool isDark) {
     return InkWell(
       onTap: () {
         HapticFeedback.lightImpact();
@@ -151,14 +211,14 @@ class _AddProductPanelState extends State<AddProductPanel> {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, bool isDark) {
     return Text(
       title,
       textAlign: TextAlign.right,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
-        color: AppTheme.textPrimaryColor,
+        color: AppTheme.textPrimary(isDark),
       ),
     );
   }
@@ -170,23 +230,24 @@ class _AddProductPanelState extends State<AddProductPanel> {
     required String description,
     required IconData icon,
     required Color color,
+    required bool isDark,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
         onTap: () {
           HapticFeedback.lightImpact();
+          _close();
           context.push('/dashboard/products/add', extra: {'productType': type});
         },
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppTheme.card(isDark),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.grey.withValues(alpha: 0.2),
-              width: 1,
+              color: AppTheme.border(isDark).withValues(alpha: 0.2),
             ),
           ),
           child: Row(
@@ -198,9 +259,10 @@ class _AddProductPanelState extends State<AddProductPanel> {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
+                        color: AppTheme.textPrimary(isDark),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -208,7 +270,7 @@ class _AddProductPanelState extends State<AddProductPanel> {
                       description,
                       style: TextStyle(
                         fontSize: 13,
-                        color: AppTheme.textSecondaryColor,
+                        color: AppTheme.textSecondary(isDark),
                       ),
                     ),
                   ],

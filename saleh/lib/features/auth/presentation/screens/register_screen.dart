@@ -48,7 +48,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (!_acceptTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('ÙŠØ¬Ø¨ Ø§Ù„Ù…ÙˆØ§ÙÙ‚Ø© Ø¹Ù„Ù‰ الشروط والأحكام'),
+          content: const Text('يجب الموافقة على الشروط والأحكام'),
           backgroundColor: AppTheme.errorColor,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -90,7 +90,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         context.go('/dashboard/store/create-store');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('ØªÙ… إنشاء حسابÙƒ بنجاح! Ù‚Ù… Ø¨Ø¥Ù†Ø´Ø§Ø¡ Ù…ØªØ¬Ø±Ùƒ Ø§Ù„Ø¢Ù†'),
+            content: const Text('تم إنشاء حسابك بنجاح! قم بإنشاء متجرك الآن'),
             backgroundColor: AppTheme.successColor,
             behavior: SnackBarBehavior.floating,
           ),

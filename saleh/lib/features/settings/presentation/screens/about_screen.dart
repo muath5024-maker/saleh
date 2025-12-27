@@ -8,186 +8,223 @@ import '../../../../shared/widgets/app_icon.dart';
 
 /// شاشة عن التطبيق
 class AboutScreen extends StatelessWidget {
-  const AboutScreen({super.key});
+  final VoidCallback? onClose;
+
+  const AboutScreen({super.key, this.onClose});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: AppDimensions.paddingL,
+      backgroundColor: isDark
+          ? AppTheme.backgroundColorDark
+          : AppTheme.backgroundColor,
+      body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            // Header مع زر الإغلاق
+            _buildHeader(context, isDark),
+            // المحتوى
+            Expanded(
+              child: SingleChildScrollView(
+                padding: AppDimensions.paddingL,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
 
-            // الشعار
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                gradient: AppTheme.metallicGradient,
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppTheme.primaryColor.withValues(alpha: 0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: AppIcon(AppIcons.store, size: 48, color: Colors.white),
-              ),
-            ),
+                    // الشعار
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        gradient: AppTheme.metallicGradient,
+                        borderRadius: BorderRadius.circular(25),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: AppIcon(
+                          AppIcons.store,
+                          size: 48,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
 
-            const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-            // اسم التطبيق
-            const Text(
-              'Mbuy',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textPrimaryColor,
-              ),
-            ),
+                    // اسم التطبيق
+                    const Text(
+                      'Mbuy',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.textPrimaryColor,
+                      ),
+                    ),
 
-            const SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-            // الوصف القصير
-            Text(
-              'منصة التجارة الإلكترونية الذكية',
-              style: TextStyle(fontSize: 16, color: AppTheme.mutedSlate),
-            ),
+                    // الوصف القصير
+                    Text(
+                      'منصة التجارة الإلكترونية الذكية',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: AppTheme.mutedSlate,
+                      ),
+                    ),
 
-            const SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-            // الإصدار
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Text(
-                'الإصدار 1.0.0',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppTheme.primaryColor,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
+                    // الإصدار
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Text(
+                        'الإصدار 1.0.0',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppTheme.primaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
 
-            const SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
-            // قصتنا
-            _buildSection(
-              title: 'قصتنا',
-              content: '''
+                    // قصتنا
+                    _buildSection(
+                      title: 'قصتنا',
+                      content: '''
 بدأت Mbuy من فكرة بسيطة: تمكين كل شخص من امتلاك متجره الإلكتروني بسهولة.
 
 نؤمن بأن التجارة الإلكترونية يجب أن تكون متاحة للجميع، وليس فقط للشركات الكبيرة. لذلك أنشأنا منصة تجمع بين السهولة والقوة، مع أدوات ذكاء اصطناعي متقدمة لمساعدة التجار على النجاح.
 
 اليوم، يستخدم آلاف التجار Mbuy لإدارة متاجرهم وتنمية أعمالهم.
 ''',
-            ),
+                    ),
 
-            // رؤيتنا
-            _buildSection(
-              title: 'رؤيتنا',
-              content: '''
+                    // رؤيتنا
+                    _buildSection(
+                      title: 'رؤيتنا',
+                      content: '''
 أن نكون المنصة الأولى للتجارة الإلكترونية في المنطقة العربية، ونمكّن مليون تاجر من تحقيق أحلامهم التجارية بحلول 2030.
 ''',
-            ),
+                    ),
 
-            // مميزاتنا
-            const Text(
-              'لماذا Mbuy؟',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textPrimaryColor,
+                    // مميزاتنا
+                    const Text(
+                      'لماذا Mbuy؟',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.textPrimaryColor,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    _buildFeatureCard(
+                      icon: AppIcons.bot,
+                      title: 'ذكاء اصطناعي متقدم',
+                      description:
+                          'أدوات AI لتوليد الصور والمحتوى وتحسين المبيعات',
+                      color: const Color(0xFF8B5CF6),
+                    ),
+                    _buildFeatureCard(
+                      icon: AppIcons.chart,
+                      title: 'تحليلات شاملة',
+                      description: 'رؤى عميقة لفهم عملائك وتحسين أدائك',
+                      color: const Color(0xFF10B981),
+                    ),
+                    _buildFeatureCard(
+                      icon: AppIcons.shield,
+                      title: 'أمان عالي',
+                      description: 'حماية بياناتك ومعاملاتك بأعلى المعايير',
+                      color: const Color(0xFFEF4444),
+                    ),
+                    _buildFeatureCard(
+                      icon: AppIcons.supportAgent,
+                      title: 'دعم متواصل',
+                      description: 'فريق دعم متاح 24/7 لمساعدتك',
+                      color: const Color(0xFF3B82F6),
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    // تواصل معنا
+                    const Text(
+                      'تواصل معنا',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.textPrimaryColor,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildSocialButton(
+                          icon: AppIcons.globe,
+                          label: 'الموقع',
+                          onTap: () => _launchUrl('https://mbuy.app'),
+                        ),
+                        const SizedBox(width: 16),
+                        _buildSocialButton(
+                          icon: AppIcons.chat,
+                          label: 'تويتر',
+                          onTap: () =>
+                              _launchUrl('https://twitter.com/mbuyapp'),
+                        ),
+                        const SizedBox(width: 16),
+                        _buildSocialButton(
+                          icon: AppIcons.camera,
+                          label: 'انستقرام',
+                          onTap: () =>
+                              _launchUrl('https://instagram.com/mbuyapp'),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    // حقوق النشر
+                    Text(
+                      '© 2025 Mbuy. جميع الحقوق محفوظة.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppTheme.mutedSlate,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Text(
+                      'صنع بـ ❤️ في المملكة العربية السعودية',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppTheme.mutedSlate,
+                      ),
+                    ),
+
+                    const SizedBox(height: 40),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 16),
-
-            _buildFeatureCard(
-              icon: AppIcons.bot,
-              title: 'ذكاء اصطناعي متقدم',
-              description: 'أدوات AI لتوليد الصور والمحتوى وتحسين المبيعات',
-              color: const Color(0xFF8B5CF6),
-            ),
-            _buildFeatureCard(
-              icon: AppIcons.chart,
-              title: 'تحليلات شاملة',
-              description: 'رؤى عميقة لفهم عملائك وتحسين أدائك',
-              color: const Color(0xFF10B981),
-            ),
-            _buildFeatureCard(
-              icon: AppIcons.shield,
-              title: 'أمان عالي',
-              description: 'حماية بياناتك ومعاملاتك بأعلى المعايير',
-              color: const Color(0xFFEF4444),
-            ),
-            _buildFeatureCard(
-              icon: AppIcons.supportAgent,
-              title: 'دعم متواصل',
-              description: 'فريق دعم متاح 24/7 لمساعدتك',
-              color: const Color(0xFF3B82F6),
-            ),
-
-            const SizedBox(height: 32),
-
-            // تواصل معنا
-            const Text(
-              'تواصل معنا',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textPrimaryColor,
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildSocialButton(
-                  icon: AppIcons.globe,
-                  label: 'الموقع',
-                  onTap: () => _launchUrl('https://mbuy.app'),
-                ),
-                const SizedBox(width: 16),
-                _buildSocialButton(
-                  icon: AppIcons.chat,
-                  label: 'تويتر',
-                  onTap: () => _launchUrl('https://twitter.com/mbuyapp'),
-                ),
-                const SizedBox(width: 16),
-                _buildSocialButton(
-                  icon: AppIcons.camera,
-                  label: 'انستقرام',
-                  onTap: () => _launchUrl('https://instagram.com/mbuyapp'),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 40),
-
-            // حقوق النشر
-            Text(
-              '© 2025 Mbuy. جميع الحقوق محفوظة.',
-              style: TextStyle(fontSize: 12, color: AppTheme.mutedSlate),
-            ),
-
-            const SizedBox(height: 8),
-
-            Text(
-              'صنع بـ ❤️ في المملكة العربية السعودية',
-              style: TextStyle(fontSize: 12, color: AppTheme.mutedSlate),
-            ),
-
-            const SizedBox(height: 40),
           ],
         ),
       ),
@@ -273,6 +310,67 @@ class AboutScreen extends StatelessWidget {
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, bool isDark) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: isDark ? AppTheme.backgroundColorDark : AppTheme.backgroundColor,
+        border: Border(
+          bottom: BorderSide(
+            color: isDark
+                ? AppTheme.textHintColorDark.withValues(alpha: 0.2)
+                : AppTheme.textHintColor.withValues(alpha: 0.2),
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          // زر الرجوع
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              if (onClose != null) {
+                onClose!();
+              } else {
+                Navigator.of(context).pop();
+              }
+            },
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.1)
+                    : AppTheme.primaryColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                Icons.arrow_forward,
+                color: isDark ? Colors.white : AppTheme.primaryColor,
+                size: 22,
+              ),
+            ),
+          ),
+          // العنوان
+          Expanded(
+            child: Text(
+              'عن التطبيق',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: isDark
+                    ? AppTheme.textPrimaryColorDark
+                    : AppTheme.textPrimaryColor,
+              ),
+            ),
+          ),
+          const SizedBox(width: 40),
         ],
       ),
     );

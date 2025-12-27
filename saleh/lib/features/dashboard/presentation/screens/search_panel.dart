@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../../core/theme/app_theme.dart';
 
 /// صفحة البحث - صفحة كاملة مع زر إغلاق
 class SearchPanel extends StatefulWidget {
-  const SearchPanel({super.key});
+  final VoidCallback? onClose;
+
+  const SearchPanel({super.key, this.onClose});
 
   @override
   State<SearchPanel> createState() => _SearchPanelState();
@@ -29,47 +32,131 @@ class _SearchPanelState extends State<SearchPanel> {
     super.dispose();
   }
 
+  void _close() {
+    if (widget.onClose != null) {
+      widget.onClose!();
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
-        automaticallyImplyLeading: false,
-        title: TextField(
-          controller: _searchController,
-          focusNode: _searchFocusNode,
-          style: const TextStyle(color: Colors.white, fontSize: 16),
-          decoration: InputDecoration(
-            hintText: 'ابحث عن منتجات، طلبات، عملاء...',
-            hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
-            border: InputBorder.none,
-            prefixIcon: const Icon(Icons.search, color: Colors.white),
-            suffixIcon: _searchController.text.isNotEmpty
-                ? IconButton(
-                    icon: const Icon(Icons.clear, color: Colors.white),
-                    onPressed: () {
-                      _searchController.clear();
-                      setState(() {});
-                    },
-                  )
-                : null,
-          ),
-          onChanged: (value) => setState(() {}),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Material(
+      color: AppTheme.background(isDark),
+      child: SafeArea(
+        child: Column(
+          children: [
+            // Header مع حقل البحث وزر إغلاق
+            _buildHeader(isDark),
+            // النتائج
+            Expanded(
+              child: _searchController.text.isEmpty
+                  ? _buildEmptyState(isDark)
+                  : _buildSearchResults(isDark),
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white, size: 24),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
       ),
-      body: _searchController.text.isEmpty
-          ? _buildEmptyState()
-          : _buildSearchResults(),
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildHeader(bool isDark) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppTheme.surface(isDark),
+        border: Border(
+          bottom: BorderSide(
+            color: AppTheme.border(isDark).withValues(alpha: 0.2),
+          ),
+        ),
+      ),
+      child: Row(
+        textDirection: TextDirection.rtl,
+        children: [
+          // حقل البحث
+          Expanded(
+            child: Container(
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppTheme.background(isDark),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppTheme.border(isDark).withValues(alpha: 0.3),
+                ),
+              ),
+              child: TextField(
+                controller: _searchController,
+                focusNode: _searchFocusNode,
+                textDirection: TextDirection.rtl,
+                style: TextStyle(
+                  color: AppTheme.textPrimary(isDark),
+                  fontSize: 15,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'ابحث عن منتجات، طلبات، عملاء...',
+                  hintStyle: TextStyle(
+                    color: AppTheme.textHint(isDark),
+                    fontSize: 14,
+                  ),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: AppTheme.textHint(isDark),
+                    size: 22,
+                  ),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.clear,
+                            color: AppTheme.textHint(isDark),
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {});
+                          },
+                        )
+                      : null,
+                ),
+                onChanged: (value) => setState(() {}),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // زر الإغلاق
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              _close();
+            },
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: AppTheme.border(isDark).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                Icons.close,
+                size: 22,
+                color: AppTheme.textSecondary(isDark),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(bool isDark) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -77,62 +164,65 @@ class _SearchPanelState extends State<SearchPanel> {
           Icon(
             Icons.search,
             size: 80,
-            color: Colors.grey.withValues(alpha: 0.3),
+            color: AppTheme.textHint(isDark).withValues(alpha: 0.3),
           ),
           const SizedBox(height: 16),
           Text(
             'ابحث عن أي شيء',
             style: TextStyle(
               fontSize: 18,
-              color: AppTheme.textSecondaryColor,
+              color: AppTheme.textSecondary(isDark),
               fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'منتجات، طلبات، عملاء، إحصائيات...',
-            style: TextStyle(fontSize: 14, color: AppTheme.textHintColor),
+            style: TextStyle(fontSize: 14, color: AppTheme.textHint(isDark)),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSearchResults() {
+  Widget _buildSearchResults(bool isDark) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        _buildSectionTitle('نتائج البحث'),
+        _buildSectionTitle('نتائج البحث', isDark),
         const SizedBox(height: 16),
         _buildResultItem(
           icon: Icons.inventory_2,
           title: 'منتج: ${_searchController.text}',
           subtitle: 'المنتجات',
           onTap: () {},
+          isDark: isDark,
         ),
         _buildResultItem(
           icon: Icons.receipt_long,
           title: 'طلب: ${_searchController.text}',
           subtitle: 'الطلبات',
           onTap: () {},
+          isDark: isDark,
         ),
         _buildResultItem(
           icon: Icons.person,
           title: 'عميل: ${_searchController.text}',
           subtitle: 'العملاء',
           onTap: () {},
+          isDark: isDark,
         ),
       ],
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, bool isDark) {
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
-        color: AppTheme.textPrimaryColor,
+        color: AppTheme.textPrimary(isDark),
       ),
     );
   }
@@ -142,19 +232,19 @@ class _SearchPanelState extends State<SearchPanel> {
     required String title,
     required String subtitle,
     required VoidCallback onTap,
+    required bool isDark,
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
+          color: AppTheme.card(isDark),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Colors.grey.withValues(alpha: 0.2),
-            width: 1,
+            color: AppTheme.border(isDark).withValues(alpha: 0.2),
           ),
         ),
         child: Row(
@@ -167,10 +257,10 @@ class _SearchPanelState extends State<SearchPanel> {
                   Text(
                     title,
                     textAlign: TextAlign.right,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: AppTheme.textPrimaryColor,
+                      color: AppTheme.textPrimary(isDark),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -179,7 +269,7 @@ class _SearchPanelState extends State<SearchPanel> {
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppTheme.textHintColor,
+                      color: AppTheme.textHint(isDark),
                     ),
                   ),
                 ],

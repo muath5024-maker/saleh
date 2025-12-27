@@ -10,7 +10,9 @@ import '../../../../core/l10n/app_strings.dart';
 
 /// شاشة السجلات والتقارير - تقارير شاملة عن نشاط المتجر
 class ReportsScreen extends ConsumerStatefulWidget {
-  const ReportsScreen({super.key});
+  final VoidCallback? onClose;
+
+  const ReportsScreen({super.key, this.onClose});
 
   @override
   ConsumerState<ReportsScreen> createState() => _ReportsScreenState();
@@ -105,7 +107,13 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen>
               BlendMode.srcIn,
             ),
           ),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (widget.onClose != null) {
+              widget.onClose!();
+            } else {
+              context.pop();
+            }
+          },
         ),
         title: const Text(
           'التقارير',

@@ -27,7 +27,7 @@ class ApiConfig {
   // Revenue Engine Endpoints
   // =====================================================
 
-  static String get pricingQuoteUrl => '$baseUrl/api/pricing/pricing/quote';
+  static String get pricingQuoteUrl => '$baseUrl/api/pricing/quote';
   static String get templatesUrl => '$baseUrl/secure/revenue/templates';
   static String get projectsUrl => '$baseUrl/secure/revenue/projects';
 

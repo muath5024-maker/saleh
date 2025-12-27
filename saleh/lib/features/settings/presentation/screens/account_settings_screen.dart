@@ -86,7 +86,8 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                     _buildSwitchTile(
                       icon: AppIcons.notifications,
                       title: 'Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„ØªØ·Ø¨ÙŠÙ‚',
-                      subtitle: 'Ø§Ø³ØªÙ„Ø§Ù… Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„طلبØ§Øª ÙˆØ§Ù„تحديثØ§Øª',
+                      subtitle:
+                          'Ø§Ø³ØªÙ„Ø§Ù… Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„طلبØ§Øª ÙˆØ§Ù„تحديثØ§Øª',
                       value: _notificationsEnabled,
                       onChanged: (value) {
                         HapticFeedback.selectionClick();
@@ -97,7 +98,8 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                     _buildSwitchTile(
                       icon: AppIcons.email,
                       title: 'Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ø¨Ø±ÙŠØ¯',
-                      subtitle: 'Ø§Ø³ØªÙ„Ø§Ù… تحديثØ§Øª Ø¹Ø¨Ø± البريد الإلكتروني',
+                      subtitle:
+                          'Ø§Ø³ØªÙ„Ø§Ù… تحديثØ§Øª Ø¹Ø¨Ø± البريد الإلكتروني',
                       value: _emailNotifications,
                       onChanged: (value) {
                         HapticFeedback.selectionClick();
@@ -130,10 +132,10 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                     const Divider(height: 1),
                     _buildDropdownTile(
                       icon: AppIcons.globe,
-                      title: 'Ø§Ù„Ù„ØºØ©',
+                      title: 'اللغة',
                       value: _selectedLanguage,
                       items: const [
-                        DropdownMenuItem(value: 'ar', child: Text('Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©')),
+                        DropdownMenuItem(value: 'ar', child: Text('العربية')),
                         DropdownMenuItem(value: 'en', child: Text('English')),
                       ],
                       onChanged: (value) {
@@ -143,7 +145,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: const Text(
-                                'Ø³ÙŠØªÙ… ØªØ·Ø¨ÙŠÙ‚ Ø§Ù„Ù„ØºØ© Ø¹Ù†Ø¯ Ø¥Ø¹Ø§Ø¯Ø© ØªØ´ØºÙŠÙ„ Ø§Ù„ØªØ·Ø¨ÙŠÙ‚',
+                                'سيتم تطبيق اللغة عند إعادة تشغيل التطبيق',
                               ),
                               backgroundColor: AppTheme.infoColor,
                               behavior: SnackBarBehavior.floating,
@@ -416,7 +418,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('ØªØºÙŠÙŠØ± كلمة المرور'),
+        title: const Text('تغيير كلمة المرور'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -424,7 +426,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
               controller: currentPasswordController,
               obscureText: true,
               decoration: const InputDecoration(
-                labelText: 'كلمة المرور Ø§Ù„Ø­Ø§Ù„ÙŠØ©',
+                labelText: 'كلمة المرور الحالية',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -433,7 +435,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
               controller: newPasswordController,
               obscureText: true,
               decoration: const InputDecoration(
-                labelText: 'كلمة المرور Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø©',
+                labelText: 'كلمة المرور الجديدة',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -459,7 +461,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                   confirmPasswordController.text) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('كلمة المرور ØºÙŠØ± Ù…ØªØ·Ø§Ø¨Ù‚Ø©'),
+                    content: Text('كلمة المرور غير متطابقة'),
                     backgroundColor: AppTheme.errorColor,
                   ),
                 );
@@ -468,7 +470,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('ØªÙ… ØªØºÙŠÙŠØ± كلمة المرور بنجاح'),
+                  content: Text('تم تغيير كلمة المرور بنجاح'),
                   backgroundColor: AppTheme.successColor,
                 ),
               );
@@ -476,7 +478,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.primaryColor,
             ),
-            child: const Text('ØªØºÙŠÙŠØ±'),
+            child: const Text('تغيير'),
           ),
         ],
       ),
@@ -487,8 +489,8 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬'),
-        content: const Text('Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬ØŸ'),
+        title: const Text('تسجيل الخروج'),
+        content: const Text('هل أنت متأكد من تسجيل الخروج؟'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -504,7 +506,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.warningColor,
             ),
-            child: const Text('ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬'),
+            child: const Text('تسجيل الخروج'),
           ),
         ],
       ),
@@ -515,10 +517,10 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Ø­Ø°Ù Ø§Ù„Ø­Ø³Ø§Ø¨'),
+        title: const Text('حذف الحساب'),
         content: const Text(
-          'Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø­Ø°Ù Ø­Ø³Ø§Ø¨ÙƒØŸ\n\n'
-          'Ù‡Ø°Ø§ Ø§Ù„Ø¥Ø¬Ø±Ø§Ø¡ Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø§Ù„ØªØ±Ø§Ø¬Ø¹ Ø¹Ù†Ù‡ ÙˆØ³ÙŠØªÙ… Ø­Ø°Ù Ø¬Ù…ÙŠØ¹ Ø¨ÙŠØ§Ù†Ø§ØªÙƒ Ø¨Ø´ÙƒÙ„ Ù†Ù‡Ø§Ø¦ÙŠ.',
+          'هل أنت متأكد من حذف حسابك؟\n\n'
+          'هذا الإجراء لا يمكن التراجع عنه وسيتم حذف جميع بياناتك بشكل نهائي.',
         ),
         actions: [
           TextButton(
@@ -531,7 +533,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text(
-                    'ØªÙ… Ø¥Ø±Ø³Ø§Ù„ طلب Ø­Ø°Ù Ø§Ù„Ø­Ø³Ø§Ø¨. Ø³ÙŠØªÙ… Ø§Ù„ØªÙˆØ§ØµÙ„ Ù…Ø¹Ùƒ Ø®Ù„Ø§Ù„ 24 ساعة.',
+                    'تم إرسال طلب حذف الحساب. سيتم التواصل معك خلال 24 ساعة.',
                   ),
                   backgroundColor: AppTheme.infoColor,
                 ),
@@ -540,7 +542,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.errorColor,
             ),
-            child: const Text('Ø­Ø°Ù Ø§Ù„Ø­Ø³Ø§Ø¨'),
+            child: const Text('حذف الحساب'),
           ),
         ],
       ),

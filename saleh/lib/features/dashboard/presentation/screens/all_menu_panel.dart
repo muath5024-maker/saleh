@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../auth/data/auth_controller.dart';
 
 /// قائمة "الكل" - صفحة كاملة مع تبويبات على اليمين وخيارات على اليسار
 class AllMenuPanel extends ConsumerStatefulWidget {
@@ -16,109 +15,127 @@ class AllMenuPanel extends ConsumerStatefulWidget {
 }
 
 class _AllMenuPanelState extends ConsumerState<AllMenuPanel> {
-  String _selectedTab = 'المتجر الإلكتروني';
+  String _selectedTab = 'الطلبات';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'القائمة الرئيسية',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+    return Material(
+      color: Colors.white,
+      child: SafeArea(
+        child: Column(
+          children: [
+            // Header: عنوان "الكل" على اليمين + زر X على اليسار
+            _buildHeader(),
+            // المحتوى: عمودين
+            Expanded(
+              child: Row(
+                textDirection: TextDirection.rtl,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // العمود الأيمن: العناصر الرئيسية مع أيقونات
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.48,
+                    child: _buildMainItemsColumn(),
+                  ),
+                  // خط فاصل عمودي
+                  Container(
+                    width: 1,
+                    color: Colors.grey.withValues(alpha: 0.15),
+                  ),
+                  // العمود الأيسر: العناصر الفرعية
+                  Expanded(child: _buildSubItemsColumn()),
+                ],
+              ),
+            ),
+          ],
         ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white, size: 24),
-            onPressed: () {
+      ),
+    );
+  }
+
+  /// Header مع عنوان "الكل" وزر الإغلاق
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        textDirection: TextDirection.rtl,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // عنوان "الكل" على اليمين
+          const Text(
+            'الكل',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.textPrimaryColor,
+            ),
+          ),
+          // زر الإغلاق على اليسار
+          GestureDetector(
+            onTap: () {
               widget.onClose?.call();
               Navigator.of(context).pop();
             },
-            padding: EdgeInsets.zero,
+            child: const Icon(
+              Icons.close,
+              size: 24,
+              color: AppTheme.textSecondaryColor,
+            ),
           ),
-        ],
-      ),
-      body: Row(
-        textDirection: TextDirection.rtl,
-        children: [
-          // التبويبات على اليمين (البداية في RTL)
-          SizedBox(width: 180, child: _buildTabsSection()),
-          // خط فاصل
-          Container(width: 1, color: Colors.grey.withValues(alpha: 0.2)),
-          // الخيارات على اليسار (النهاية في RTL)
-          Expanded(child: _buildOptionsSection()),
         ],
       ),
     );
   }
 
-  /// قسم التبويبات على اليمين
-  Widget _buildTabsSection() {
-    final tabs = _getAllSections();
+  /// العمود الأيمن: العناصر الرئيسية مع أيقونات
+  Widget _buildMainItemsColumn() {
+    final mainItems = _getMainItems();
 
     return ListView.builder(
-      itemCount: tabs.length + 1, // +1 لزر تسجيل الخروج
+      padding: const EdgeInsets.only(top: 8),
+      itemCount: mainItems.length,
       itemBuilder: (context, index) {
-        if (index == tabs.length) {
-          // زر تسجيل الخروج في الأسفل
-          return _buildLogoutTab();
-        }
-
-        final tab = tabs[index];
-        final isSelected = _selectedTab == tab.title;
+        final item = mainItems[index];
+        final isSelected = _selectedTab == item.title;
 
         return InkWell(
           onTap: () {
+            HapticFeedback.selectionClick();
             setState(() {
-              _selectedTab = tab.title;
+              _selectedTab = item.title;
             });
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppTheme.primaryColor.withValues(alpha: 0.1)
+                  ? AppTheme.primaryColor.withValues(alpha: 0.05)
                   : Colors.transparent,
-              border: Border(
-                right: BorderSide(
-                  color: isSelected
-                      ? AppTheme.primaryColor
-                      : Colors.transparent,
-                  width: 3,
-                ),
-              ),
             ),
             child: Row(
               textDirection: TextDirection.rtl,
               children: [
-                Expanded(
-                  child: Text(
-                    tab.title,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: isSelected
-                          ? AppTheme.primaryColor
-                          : AppTheme.textPrimaryColor,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
+                // الأيقونة
                 Icon(
-                  tab.icon,
-                  size: 20,
+                  item.icon,
+                  size: 22,
                   color: isSelected
                       ? AppTheme.primaryColor
                       : AppTheme.textSecondaryColor,
+                ),
+                const SizedBox(width: 12),
+                // النص
+                Text(
+                  item.title,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: isSelected
+                        ? FontWeight.w600
+                        : FontWeight.normal,
+                    color: isSelected
+                        ? AppTheme.primaryColor
+                        : AppTheme.textPrimaryColor,
+                  ),
                 ),
               ],
             ),
@@ -128,80 +145,15 @@ class _AllMenuPanelState extends ConsumerState<AllMenuPanel> {
     );
   }
 
-  /// زر تسجيل الخروج في التبويبات
-  Widget _buildLogoutTab() {
-    return InkWell(
-      onTap: () async {
-        HapticFeedback.mediumImpact();
-        final confirm = await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('تسجيل الخروج'),
-            content: const Text('هل أنت متأكد من تسجيل الخروج؟'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('إلغاء'),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context, true),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.errorColor,
-                ),
-                child: const Text('تسجيل الخروج'),
-              ),
-            ],
-          ),
-        );
-
-        if (confirm == true && mounted) {
-          widget.onClose?.call();
-          await ref.read(authControllerProvider.notifier).logout();
-          if (mounted) {
-            context.go('/login');
-          }
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        margin: const EdgeInsets.only(top: 8),
-        decoration: BoxDecoration(
-          color: AppTheme.errorColor.withValues(alpha: 0.1),
-          border: const Border(
-            right: BorderSide(color: AppTheme.errorColor, width: 3),
-          ),
-        ),
-        child: const Row(
-          textDirection: TextDirection.rtl,
-          children: [
-            Expanded(
-              child: Text(
-                'تسجيل الخروج',
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.errorColor,
-                ),
-              ),
-            ),
-            SizedBox(width: 12),
-            Icon(Icons.logout, size: 20, color: AppTheme.errorColor),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// قسم الخيارات على اليسار (حسب التبويب المحدد)
-  Widget _buildOptionsSection() {
+  /// العمود الأيسر: العناصر الفرعية للتبويب المحدد
+  Widget _buildSubItemsColumn() {
     final section = _getAllSections().firstWhere(
       (s) => s.title == _selectedTab,
       orElse: () => _getAllSections().first,
     );
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(top: 8, right: 8),
       itemCount: section.items.length,
       itemBuilder: (context, index) {
         final item = section.items[index];
@@ -212,38 +164,15 @@ class _AllMenuPanelState extends ConsumerState<AllMenuPanel> {
             widget.onClose?.call();
             context.push(item.route);
           },
-          borderRadius: BorderRadius.circular(8),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            margin: const EdgeInsets.only(bottom: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: Colors.grey.withValues(alpha: 0.2),
-                width: 1,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            child: Text(
+              item.title,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppTheme.textSecondaryColor,
               ),
-            ),
-            child: Row(
-              textDirection: TextDirection.rtl,
-              children: [
-                Expanded(
-                  child: Text(
-                    item.title,
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: AppTheme.textPrimaryColor,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                const Icon(
-                  Icons.chevron_left,
-                  size: 18,
-                  color: AppTheme.textHintColor,
-                ),
-              ],
             ),
           ),
         );
@@ -251,38 +180,43 @@ class _AllMenuPanelState extends ConsumerState<AllMenuPanel> {
     );
   }
 
+  /// العناصر الرئيسية مع أيقوناتها (العمود الأيمن)
+  List<_MainItem> _getMainItems() {
+    return [
+      _MainItem('الطلبات', Icons.receipt_long_outlined),
+      _MainItem('المنتجات', Icons.inventory_2_outlined),
+      _MainItem('التسويق', Icons.campaign_outlined),
+      _MainItem('المتجر الإلكتروني', Icons.store_outlined),
+      _MainItem('العملاء', Icons.people_outline),
+      _MainItem('التقارير', Icons.insert_chart_outlined),
+      _MainItem('مركز الدعم', Icons.support_agent_outlined),
+      _MainItem('الشحن والتوصيل', Icons.local_shipping_outlined),
+      _MainItem('الدفع', Icons.payment_outlined),
+      _MainItem('الأدوات المساعدة', Icons.apps_outlined),
+      _MainItem('السجلات', Icons.history_outlined),
+    ];
+  }
+
   /// الحصول على جميع الأقسام مع بياناتها
   List<_TabSection> _getAllSections() {
     return [
-      _TabSection(
-        title: 'المتجر الإلكتروني',
-        icon: Icons.store,
-        items: [
-          _MenuItem('معلومات المتجر', '/dashboard/store-management'),
-          _MenuItem('تصميم المتجر', '/dashboard/webstore'),
-          _MenuItem('الثيم', '/dashboard/feature/الثيم'),
-          _MenuItem('دومين المتجر', '/dashboard/feature/دومين المتجر'),
-          _MenuItem(
-            'الصفحات التعريفية',
-            '/dashboard/feature/الصفحات التعريفية',
-          ),
-          _MenuItem('SEO', '/dashboard/feature/SEO'),
-          _MenuItem('المشاريع', '/dashboard/projects'),
-          _MenuItem('الإشعارات', '/dashboard/inbox'),
-          _MenuItem('إعدادات الإشعارات', '/notification-settings'),
-          _MenuItem('إعدادات المظهر', '/appearance-settings'),
-          _MenuItem('إعدادات الحساب', '/settings'),
-        ],
-      ),
       _TabSection(
         title: 'الطلبات',
         icon: Icons.receipt_long,
         items: [
           _MenuItem('إدارة الطلبات', '/dashboard/orders'),
           _MenuItem('إعدادات الطلبات', '/dashboard/feature/إعدادات الطلبات'),
-          _MenuItem('حالات الطلبات', '/dashboard/feature/حالات الطلبات'),
-          _MenuItem('تخصيص الفاتورة', '/dashboard/feature/تخصيص الفاتورة'),
-          _MenuItem('الطلبات المحذوفة', '/dashboard/feature/الطلبات المحذوفة'),
+          _MenuItem('حالات الطلب', '/dashboard/feature/حالات الطلبات'),
+          _MenuItem(
+            'تحديث حالة مجموعة طلبات',
+            '/dashboard/feature/تحديث حالة مجموعة طلبات',
+          ),
+          _MenuItem('الإسناد التلقائي', '/dashboard/feature/الإسناد التلقائي'),
+          _MenuItem('تخصيص الفواتير', '/dashboard/feature/تخصيص الفاتورة'),
+          _MenuItem('الحجوزات', '/dashboard/feature/الحجوزات'),
+          _MenuItem('الحقول المخصصة', '/dashboard/feature/الحقول المخصصة'),
+          _MenuItem('خيارات الطلب', '/dashboard/feature/خيارات الطلب'),
+          _MenuItem('قوالب التصدير', '/dashboard/feature/قوالب التصدير'),
         ],
       ),
       _TabSection(
@@ -319,6 +253,26 @@ class _AllMenuPanelState extends ConsumerState<AllMenuPanel> {
         ],
       ),
       _TabSection(
+        title: 'المتجر الإلكتروني',
+        icon: Icons.store,
+        items: [
+          _MenuItem('معلومات المتجر', '/dashboard/store-management'),
+          _MenuItem('تصميم المتجر', '/dashboard/webstore'),
+          _MenuItem('الثيم', '/dashboard/feature/الثيم'),
+          _MenuItem('دومين المتجر', '/dashboard/feature/دومين المتجر'),
+          _MenuItem(
+            'الصفحات التعريفية',
+            '/dashboard/feature/الصفحات التعريفية',
+          ),
+          _MenuItem('SEO', '/dashboard/feature/SEO'),
+          _MenuItem('المشاريع', '/dashboard/projects'),
+          _MenuItem('الإشعارات', '/dashboard/inbox'),
+          _MenuItem('إعدادات الإشعارات', '/notification-settings'),
+          _MenuItem('إعدادات المظهر', '/appearance-settings'),
+          _MenuItem('إعدادات الحساب', '/settings'),
+        ],
+      ),
+      _TabSection(
         title: 'العملاء',
         icon: Icons.people,
         items: [
@@ -335,12 +289,29 @@ class _AllMenuPanelState extends ConsumerState<AllMenuPanel> {
           _MenuItem('أداء المتجر', '/dashboard/sales'),
           _MenuItem('التحليلات الذكية', '/dashboard/smart-analytics'),
           _MenuItem('التقارير', '/dashboard/reports'),
-          _MenuItem('السجلات', '/dashboard/audit-logs'),
         ],
       ),
       _TabSection(
-        title: 'الدفع والشحن',
+        title: 'مركز الدعم',
+        icon: Icons.support_agent,
+        items: [
+          _MenuItem('الدعم الفني', '/support'),
+          _MenuItem('سياسة الخصوصية', '/privacy-policy'),
+          _MenuItem('الشروط والأحكام', '/terms'),
+          _MenuItem('عن التطبيق', '/dashboard/about'),
+        ],
+      ),
+      _TabSection(
+        title: 'الشحن والتوصيل',
         icon: Icons.local_shipping,
+        items: [
+          _MenuItem('الشحن والتوصيل', '/dashboard/shipping'),
+          _MenuItem('إعدادات الشحن', '/dashboard/feature/إعدادات الشحن'),
+        ],
+      ),
+      _TabSection(
+        title: 'الدفع',
+        icon: Icons.payment,
         items: [
           _MenuItem('طرق الدفع', '/dashboard/payment-methods'),
           _MenuItem('المحفظة والفواتير', '/dashboard/wallet'),
@@ -350,13 +321,11 @@ class _AllMenuPanelState extends ConsumerState<AllMenuPanel> {
             '/dashboard/feature/ضريبة القيمة المضافة',
           ),
           _MenuItem('العمليات', '/dashboard/feature/العمليات'),
-          _MenuItem('الشحن والتوصيل', '/dashboard/shipping'),
-          _MenuItem('إعدادات الشحن', '/dashboard/feature/إعدادات الشحن'),
         ],
       ),
       _TabSection(
-        title: 'الأدوات الذكية',
-        icon: Icons.auto_awesome,
+        title: 'الأدوات المساعدة',
+        icon: Icons.apps,
         items: [
           _MenuItem('الأدوات الذكية', '/dashboard/tools'),
           _MenuItem('المساعد الذكي', '/dashboard/ai-assistant'),
@@ -364,12 +333,6 @@ class _AllMenuPanelState extends ConsumerState<AllMenuPanel> {
           _MenuItem('التسعير الذكي', '/dashboard/smart-pricing'),
           _MenuItem('الخرائط الحرارية', '/dashboard/heatmap'),
           _MenuItem('التقارير التلقائية', '/dashboard/auto-reports'),
-        ],
-      ),
-      _TabSection(
-        title: 'الاستديو',
-        icon: Icons.video_library,
-        items: [
           _MenuItem('استديو المحتوى', '/dashboard/studio'),
           _MenuItem('مولد السكريبت', '/dashboard/studio/script-generator'),
           _MenuItem('محرر المشاهد', '/dashboard/studio/editor'),
@@ -378,17 +341,20 @@ class _AllMenuPanelState extends ConsumerState<AllMenuPanel> {
         ],
       ),
       _TabSection(
-        title: 'الدعم',
-        icon: Icons.support_agent,
-        items: [
-          _MenuItem('الدعم الفني', '/support'),
-          _MenuItem('سياسة الخصوصية', '/privacy-policy'),
-          _MenuItem('الشروط والأحكام', '/terms'),
-          _MenuItem('عن التطبيق', '/dashboard/about'),
-        ],
+        title: 'السجلات',
+        icon: Icons.history,
+        items: [_MenuItem('السجلات', '/dashboard/audit-logs')],
       ),
     ];
   }
+}
+
+/// عنصر رئيسي في العمود الأيمن
+class _MainItem {
+  final String title;
+  final IconData icon;
+
+  _MainItem(this.title, this.icon);
 }
 
 /// قسم في التبويبات مع عنوان وأيقونة وعناصر

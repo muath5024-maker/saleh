@@ -4,7 +4,9 @@ import '../../../../core/theme/app_theme.dart';
 
 /// صفحة الإشعارات - صفحة كاملة مع زر إغلاق
 class NotificationsPanel extends StatefulWidget {
-  const NotificationsPanel({super.key});
+  final VoidCallback? onClose;
+
+  const NotificationsPanel({super.key, this.onClose});
 
   @override
   State<NotificationsPanel> createState() => _NotificationsPanelState();
@@ -26,49 +28,114 @@ class _NotificationsPanelState extends State<NotificationsPanel>
     super.dispose();
   }
 
+  void _close() {
+    if (widget.onClose != null) {
+      widget.onClose!();
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'الإشعارات',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white, size: 24),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white.withValues(alpha: 0.7),
-          tabs: const [
-            Tab(text: 'الكل'),
-            Tab(text: 'غير مقروءة'),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Material(
+      color: AppTheme.background(isDark),
+      child: SafeArea(
+        child: Column(
+          children: [
+            // Header
+            _buildHeader(isDark),
+            // Tabs
+            _buildTabs(isDark),
+            // Content
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildNotificationsList(showAll: true, isDark: isDark),
+                  _buildNotificationsList(showAll: false, isDark: isDark),
+                ],
+              ),
+            ),
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
+    );
+  }
+
+  Widget _buildHeader(bool isDark) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppTheme.surface(isDark),
+        border: Border(
+          bottom: BorderSide(
+            color: AppTheme.border(isDark).withValues(alpha: 0.2),
+          ),
+        ),
+      ),
+      child: Row(
+        textDirection: TextDirection.rtl,
         children: [
-          _buildNotificationsList(showAll: true),
-          _buildNotificationsList(showAll: false),
+          // العنوان
+          Expanded(
+            child: Text(
+              'الإشعارات',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary(isDark),
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ),
+          // زر الإغلاق
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              _close();
+            },
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: AppTheme.border(isDark).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                Icons.close,
+                size: 22,
+                color: AppTheme.textSecondary(isDark),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildNotificationsList({required bool showAll}) {
+  Widget _buildTabs(bool isDark) {
+    return Container(
+      color: AppTheme.surface(isDark),
+      child: TabBar(
+        controller: _tabController,
+        indicatorColor: AppTheme.primaryColor,
+        labelColor: AppTheme.primaryColor,
+        unselectedLabelColor: AppTheme.textSecondary(isDark),
+        tabs: const [
+          Tab(text: 'الكل'),
+          Tab(text: 'غير مقروءة'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNotificationsList({
+    required bool showAll,
+    required bool isDark,
+  }) {
     final notifications = _getDummyNotifications();
 
     if (notifications.isEmpty) {
@@ -79,14 +146,14 @@ class _NotificationsPanelState extends State<NotificationsPanel>
             Icon(
               Icons.notifications_outlined,
               size: 80,
-              color: Colors.grey.withValues(alpha: 0.3),
+              color: AppTheme.textHint(isDark).withValues(alpha: 0.3),
             ),
             const SizedBox(height: 16),
             Text(
               'لا توجد إشعارات',
               style: TextStyle(
                 fontSize: 18,
-                color: AppTheme.textSecondaryColor,
+                color: AppTheme.textSecondary(isDark),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -100,12 +167,12 @@ class _NotificationsPanelState extends State<NotificationsPanel>
       itemCount: notifications.length,
       itemBuilder: (context, index) {
         final notification = notifications[index];
-        return _buildNotificationItem(notification);
+        return _buildNotificationItem(notification, isDark);
       },
     );
   }
 
-  Widget _buildNotificationItem(_NotificationItem notification) {
+  Widget _buildNotificationItem(_NotificationItem notification, bool isDark) {
     return InkWell(
       onTap: () {
         HapticFeedback.lightImpact();
@@ -117,12 +184,11 @@ class _NotificationsPanelState extends State<NotificationsPanel>
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
           color: notification.isRead
-              ? Colors.white
+              ? AppTheme.card(isDark)
               : AppTheme.primaryColor.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Colors.grey.withValues(alpha: 0.2),
-            width: 1,
+            color: AppTheme.border(isDark).withValues(alpha: 0.2),
           ),
         ),
         child: Row(
@@ -141,7 +207,7 @@ class _NotificationsPanelState extends State<NotificationsPanel>
                       fontWeight: notification.isRead
                           ? FontWeight.normal
                           : FontWeight.bold,
-                      color: AppTheme.textPrimaryColor,
+                      color: AppTheme.textPrimary(isDark),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -150,7 +216,7 @@ class _NotificationsPanelState extends State<NotificationsPanel>
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       fontSize: 13,
-                      color: AppTheme.textSecondaryColor,
+                      color: AppTheme.textSecondary(isDark),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -159,7 +225,7 @@ class _NotificationsPanelState extends State<NotificationsPanel>
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppTheme.textHintColor,
+                      color: AppTheme.textHint(isDark),
                     ),
                   ),
                 ],

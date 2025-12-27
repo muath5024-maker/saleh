@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/skeleton_loading.dart';
 import '../../../merchant/data/merchant_store_provider.dart';
 import '../../../merchant/domain/models/store.dart';
+import '../providers/overlay_provider.dart' as overlay;
 
 // ╔═══════════════════════════════════════════════════════════════════════════╗
 // ║                    🎨 Design System - Brand Primary #215950               ║
@@ -30,7 +30,8 @@ class HomeTab extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppTheme.background(isDark),
       body: RefreshIndicator(
-        onRefresh: () => ref.read(merchantStoreControllerProvider.notifier).refresh(),
+        onRefresh: () =>
+            ref.read(merchantStoreControllerProvider.notifier).refresh(),
         color: AppTheme.primaryColor,
         child: storeAsync.when(
           loading: () => const SkeletonHomeDashboard(),
@@ -42,7 +43,12 @@ class HomeTab extends ConsumerWidget {
   }
 
   /// عرض الخطأ
-  Widget _buildErrorView(BuildContext context, WidgetRef ref, Object error, bool isDark) {
+  Widget _buildErrorView(
+    BuildContext context,
+    WidgetRef ref,
+    Object error,
+    bool isDark,
+  ) {
     return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
@@ -66,7 +72,9 @@ class HomeTab extends ConsumerWidget {
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton.icon(
-                  onPressed: () => ref.read(merchantStoreControllerProvider.notifier).refresh(),
+                  onPressed: () => ref
+                      .read(merchantStoreControllerProvider.notifier)
+                      .refresh(),
                   icon: const Icon(Icons.refresh),
                   label: const Text('إعادة المحاولة'),
                 ),
@@ -79,7 +87,12 @@ class HomeTab extends ConsumerWidget {
   }
 
   /// المحتوى الرئيسي
-  Widget _buildContent(BuildContext context, WidgetRef ref, Store? store, bool isDark) {
+  Widget _buildContent(
+    BuildContext context,
+    WidgetRef ref,
+    Store? store,
+    bool isDark,
+  ) {
     return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
@@ -92,10 +105,10 @@ class HomeTab extends ConsumerWidget {
               _buildStoreLinkCard(context, store?.name ?? 'mbuy', isDark),
               const SizedBox(height: 16),
               // شبكة الإحصائيات 2×2
-              _buildStatsGrid(context, store, isDark),
+              _buildStatsGrid(context, ref, store, isDark),
               const SizedBox(height: 16),
               // شبكة الأيقونات المربعة
-              _buildFeaturesGrid(context, isDark),
+              _buildFeaturesGrid(context, ref, isDark),
               const SizedBox(height: 100),
             ]),
           ),
@@ -105,7 +118,11 @@ class HomeTab extends ConsumerWidget {
   }
 
   /// بطاقة رابط المتجر
-  Widget _buildStoreLinkCard(BuildContext context, String storeName, bool isDark) {
+  Widget _buildStoreLinkCard(
+    BuildContext context,
+    String storeName,
+    bool isDark,
+  ) {
     final storeSlug = storeName.replaceAll(' ', '-').toLowerCase();
     final storeUrl = 'tabayu.com/$storeSlug';
 
@@ -222,7 +239,12 @@ class HomeTab extends ConsumerWidget {
   }
 
   /// شبكة الإحصائيات 2×2 - Minimal Design
-  Widget _buildStatsGrid(BuildContext context, Store? store, bool isDark) {
+  Widget _buildStatsGrid(
+    BuildContext context,
+    WidgetRef ref,
+    Store? store,
+    bool isDark,
+  ) {
     return Column(
       children: [
         Row(
@@ -230,11 +252,13 @@ class HomeTab extends ConsumerWidget {
             Expanded(
               child: _buildStatCard(
                 context: context,
+                ref: ref,
                 icon: Icons.account_balance_wallet_outlined,
                 value: '0.00',
                 suffix: 'ر.س',
                 label: 'المحفظة',
-                onTap: () => context.push('/dashboard/wallet'),
+                onTap: () =>
+                    ref.read(overlay.overlayProvider.notifier).openWallet(),
                 isDark: isDark,
               ),
             ),
@@ -242,11 +266,13 @@ class HomeTab extends ConsumerWidget {
             Expanded(
               child: _buildStatCard(
                 context: context,
+                ref: ref,
                 icon: Icons.stars_outlined,
                 value: '0',
                 suffix: 'نقطة',
                 label: 'نقاط الولاء',
-                onTap: () => context.push('/dashboard/points'),
+                onTap: () =>
+                    ref.read(overlay.overlayProvider.notifier).openPoints(),
                 isDark: isDark,
               ),
             ),
@@ -258,11 +284,13 @@ class HomeTab extends ConsumerWidget {
             Expanded(
               child: _buildStatCard(
                 context: context,
+                ref: ref,
                 icon: Icons.people_outline,
                 value: '${store?.followersCount ?? 0}',
                 suffix: '',
                 label: 'العملاء',
-                onTap: () => context.push('/dashboard/customers'),
+                onTap: () =>
+                    ref.read(overlay.overlayProvider.notifier).openCustomers(),
                 isDark: isDark,
               ),
             ),
@@ -270,11 +298,13 @@ class HomeTab extends ConsumerWidget {
             Expanded(
               child: _buildStatCard(
                 context: context,
+                ref: ref,
                 icon: Icons.shopping_bag_outlined,
                 value: '0',
                 suffix: '',
                 label: 'المبيعات',
-                onTap: () => context.push('/dashboard/sales'),
+                onTap: () =>
+                    ref.read(overlay.overlayProvider.notifier).openSales(),
                 isDark: isDark,
               ),
             ),
@@ -287,6 +317,7 @@ class HomeTab extends ConsumerWidget {
   /// كارت إحصائية - Minimal مع أيقونة مربعة
   Widget _buildStatCard({
     required BuildContext context,
+    required WidgetRef ref,
     required IconData icon,
     required String value,
     required String suffix,
@@ -372,7 +403,7 @@ class HomeTab extends ConsumerWidget {
   }
 
   /// شبكة الميزات - أيقونات مربعة Minimal
-  Widget _buildFeaturesGrid(BuildContext context, bool isDark) {
+  Widget _buildFeaturesGrid(BuildContext context, WidgetRef ref, bool isDark) {
     return Column(
       children: [
         Row(
@@ -380,9 +411,11 @@ class HomeTab extends ConsumerWidget {
             Expanded(
               child: _buildFeatureCard(
                 context: context,
+                ref: ref,
                 icon: Icons.info_outline,
                 label: 'عن التطبيق',
-                onTap: () => context.push('/dashboard/about'),
+                onTap: () =>
+                    ref.read(overlay.overlayProvider.notifier).openAbout(),
                 isDark: isDark,
               ),
             ),
@@ -390,9 +423,11 @@ class HomeTab extends ConsumerWidget {
             Expanded(
               child: _buildFeatureCard(
                 context: context,
+                ref: ref,
                 icon: Icons.receipt_long_outlined,
                 label: 'التقارير',
-                onTap: () => context.push('/dashboard/reports'),
+                onTap: () =>
+                    ref.read(overlay.overlayProvider.notifier).openReports(),
                 isDark: isDark,
               ),
             ),
@@ -400,9 +435,11 @@ class HomeTab extends ConsumerWidget {
             Expanded(
               child: _buildFeatureCard(
                 context: context,
+                ref: ref,
                 icon: Icons.campaign_outlined,
                 label: 'الحملات',
-                onTap: () => context.push('/dashboard/marketing'),
+                onTap: () =>
+                    ref.read(overlay.overlayProvider.notifier).openMarketing(),
                 isDark: isDark,
               ),
             ),
@@ -414,9 +451,11 @@ class HomeTab extends ConsumerWidget {
             Expanded(
               child: _buildFeatureCard(
                 context: context,
+                ref: ref,
                 icon: Icons.store_outlined,
                 label: 'التطبيقات',
-                onTap: () => context.push('/dashboard/store'),
+                onTap: () =>
+                    ref.read(overlay.overlayProvider.notifier).openStore(),
                 isDark: isDark,
               ),
             ),
@@ -424,9 +463,11 @@ class HomeTab extends ConsumerWidget {
             Expanded(
               child: _buildFeatureCard(
                 context: context,
+                ref: ref,
                 icon: Icons.trending_up_outlined,
                 label: 'ضاعف ظهورك',
-                onTap: () => context.push('/dashboard/boost-sales'),
+                onTap: () =>
+                    ref.read(overlay.overlayProvider.notifier).openBoostSales(),
                 isDark: isDark,
                 showBadge: true,
               ),
@@ -435,9 +476,11 @@ class HomeTab extends ConsumerWidget {
             Expanded(
               child: _buildFeatureCard(
                 context: context,
+                ref: ref,
                 icon: Icons.card_giftcard_outlined,
                 label: 'المشاريع',
-                onTap: () => context.push('/dashboard/projects'),
+                onTap: () =>
+                    ref.read(overlay.overlayProvider.notifier).openProjects(),
                 isDark: isDark,
               ),
             ),
@@ -450,6 +493,7 @@ class HomeTab extends ConsumerWidget {
   /// كارت ميزة - أيقونة مربعة Minimal
   Widget _buildFeatureCard({
     required BuildContext context,
+    required WidgetRef ref,
     required IconData icon,
     required String label,
     required VoidCallback onTap,

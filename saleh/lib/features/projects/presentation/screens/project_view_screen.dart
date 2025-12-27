@@ -99,42 +99,6 @@ class _ProjectViewScreenState extends ConsumerState<ProjectViewScreen> {
     );
   }
 
-  Widget _buildNotFoundScreen(bool isDark) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
-        title: const Text(
-          'تفاصيل المشروع',
-          style: TextStyle(color: Colors.white),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.error_outline,
-              size: 64,
-              color: isDark ? Colors.white38 : Colors.grey[400],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'المشروع غير موجود',
-              style: TextStyle(
-                fontSize: 18,
-                color: isDark ? Colors.white70 : Colors.grey[700],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildErrorScreen(bool isDark, String error) {
     return Scaffold(
       appBar: AppBar(
@@ -762,7 +726,7 @@ class _ProjectViewScreenState extends ConsumerState<ProjectViewScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final client = ref.read(revenueApiClientProvider);
+      final client = await ref.read(revenueApiClientProvider.future);
       final response = await client.confirmPayment(project.id);
 
       if (!mounted) return;
@@ -797,7 +761,7 @@ class _ProjectViewScreenState extends ConsumerState<ProjectViewScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final client = ref.read(revenueApiClientProvider);
+      final client = await ref.read(revenueApiClientProvider.future);
       final response = await client.executeStep(
         project.id,
         stepIndex: project.currentStepIndex,
@@ -857,7 +821,7 @@ class _ProjectViewScreenState extends ConsumerState<ProjectViewScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final client = ref.read(revenueApiClientProvider);
+      final client = await ref.read(revenueApiClientProvider.future);
       final response = await client.approveProject(
         project.id,
         finalApproval: true,
@@ -935,7 +899,7 @@ class _ProjectViewScreenState extends ConsumerState<ProjectViewScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final client = ref.read(revenueApiClientProvider);
+      final client = await ref.read(revenueApiClientProvider.future);
       final response = await client.requestRevision(
         project.id,
         notes: notes,

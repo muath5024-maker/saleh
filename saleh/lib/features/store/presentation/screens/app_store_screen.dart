@@ -35,7 +35,9 @@ class AppModel {
 
 /// صفحة متجر التطبيقات - App Store Screen
 class AppStoreScreen extends ConsumerStatefulWidget {
-  const AppStoreScreen({super.key});
+  final VoidCallback? onClose;
+
+  const AppStoreScreen({super.key, this.onClose});
 
   @override
   ConsumerState<AppStoreScreen> createState() => _AppStoreScreenState();
@@ -216,7 +218,11 @@ class _AppStoreScreenState extends ConsumerState<AppStoreScreen> {
           GestureDetector(
             onTap: () {
               HapticFeedback.lightImpact();
-              context.pop();
+              if (widget.onClose != null) {
+                widget.onClose!();
+              } else {
+                context.pop();
+              }
             },
             child: Container(
               width: 44,

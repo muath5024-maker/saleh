@@ -384,7 +384,7 @@ class UserPreferences {
     this.quickActions = const [],
     this.notificationSettings = const NotificationSettings(),
     this.homeLayout = const [],
-    this.themeMode = ThemeMode.dark, // ✅ Dark Mode as default
+    this.themeMode = ThemeMode.light, // ✅ Light Mode as default
     this.language = 'ar',
     this.onboardingComplete = false,
   });
@@ -415,36 +415,46 @@ class UserPreferences {
 /// مدير حالة التفضيلات
 class PreferencesNotifier extends Notifier<UserPreferences> {
   late UserPreferencesService _service;
+  bool _isInitialized = false;
 
   @override
   UserPreferences build() {
     _service = ref.watch(userPreferencesProvider);
-    _loadAllAsync();
+    // تأجيل التحميل لتجنب circular dependency
+    if (!_isInitialized) {
+      _isInitialized = true;
+      Future.microtask(() => _loadAllAsync());
+    }
     return const UserPreferences();
   }
 
   /// تحميل جميع التفضيلات
   Future<void> _loadAllAsync() async {
-    state = state.copyWith(isLoading: true);
+    try {
+      state = state.copyWith(isLoading: true);
 
-    final shortcuts = await _service.getShortcuts();
-    final quickActions = await _service.getQuickActions();
-    final notificationSettings = await _service.getNotificationSettings();
-    final homeLayout = await _service.getHomeLayout();
-    final themeMode = await _service.getThemeMode();
-    final language = await _service.getLanguage();
-    final onboardingComplete = await _service.isOnboardingComplete();
+      final shortcuts = await _service.getShortcuts();
+      final quickActions = await _service.getQuickActions();
+      final notificationSettings = await _service.getNotificationSettings();
+      final homeLayout = await _service.getHomeLayout();
+      final themeMode = await _service.getThemeMode();
+      final language = await _service.getLanguage();
+      final onboardingComplete = await _service.isOnboardingComplete();
 
-    state = UserPreferences(
-      isLoading: false,
-      shortcuts: shortcuts,
-      quickActions: quickActions,
-      notificationSettings: notificationSettings,
-      homeLayout: homeLayout,
-      themeMode: themeMode,
-      language: language,
-      onboardingComplete: onboardingComplete,
-    );
+      state = UserPreferences(
+        isLoading: false,
+        shortcuts: shortcuts,
+        quickActions: quickActions,
+        notificationSettings: notificationSettings,
+        homeLayout: homeLayout,
+        themeMode: themeMode,
+        language: language,
+        onboardingComplete: onboardingComplete,
+      );
+    } catch (e) {
+      // في حالة حدوث خطأ، نضع قيم افتراضية
+      state = const UserPreferences(isLoading: false);
+    }
   }
 
   /// تحميل جميع التفضيلات

@@ -69,7 +69,9 @@ class CustomerItem {
 
 /// شاشة العملاء - التصميم الجديد
 class CustomersScreen extends ConsumerStatefulWidget {
-  const CustomersScreen({super.key});
+  final VoidCallback? onClose;
+
+  const CustomersScreen({super.key, this.onClose});
 
   @override
   ConsumerState<CustomersScreen> createState() => _CustomersScreenState();
@@ -287,7 +289,13 @@ class _CustomersScreenState extends ConsumerState<CustomersScreen> {
               children: [
                 // Back Button
                 GestureDetector(
-                  onTap: () => context.canPop() ? context.pop() : null,
+                  onTap: () {
+                    if (widget.onClose != null) {
+                      widget.onClose!();
+                    } else if (context.canPop()) {
+                      context.pop();
+                    }
+                  },
                   child: Container(
                     width: 40,
                     height: 40,
@@ -345,7 +353,9 @@ class _CustomersScreenState extends ConsumerState<CustomersScreen> {
             child: Container(
               height: 48,
               decoration: BoxDecoration(
-                color: isDark ? AppTheme.cardColorDark : AppTheme.textHintColorDark,
+                color: isDark
+                    ? AppTheme.cardColorDark
+                    : AppTheme.textHintColorDark,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.transparent),
               ),
@@ -942,5 +952,3 @@ class _CustomersScreenState extends ConsumerState<CustomersScreen> {
     );
   }
 }
-
-

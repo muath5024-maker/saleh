@@ -5,90 +5,154 @@ import '../../../../core/theme/app_theme.dart';
 
 /// صفحة اختصاراتي - صفحة كاملة مع زر إغلاق
 class ShortcutsPanel extends StatelessWidget {
-  const ShortcutsPanel({super.key});
+  final VoidCallback? onClose;
+
+  const ShortcutsPanel({super.key, this.onClose});
+
+  void _close(BuildContext context) {
+    if (onClose != null) {
+      onClose!();
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'اختصاراتي',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Material(
+      color: AppTheme.background(isDark),
+      child: SafeArea(
+        child: Column(
+          children: [
+            // Header
+            _buildHeader(context, isDark),
+            // Grid
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 2,
+                padding: const EdgeInsets.all(16),
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 1.2,
+                children: [
+                  _buildShortcutCard(
+                    context,
+                    icon: Icons.add_box,
+                    title: 'منتج جديد',
+                    color: AppTheme.primaryColor,
+                    onTap: () {
+                      _close(context);
+                      context.push('/dashboard/products/add');
+                    },
+                    isDark: isDark,
+                  ),
+                  _buildShortcutCard(
+                    context,
+                    icon: Icons.receipt_long,
+                    title: 'طلب جديد',
+                    color: AppTheme.successColor,
+                    onTap: () {
+                      _close(context);
+                      context.push('/dashboard/orders');
+                    },
+                    isDark: isDark,
+                  ),
+                  _buildShortcutCard(
+                    context,
+                    icon: Icons.person_add,
+                    title: 'عميل جديد',
+                    color: AppTheme.secondaryColor,
+                    onTap: () {},
+                    isDark: isDark,
+                  ),
+                  _buildShortcutCard(
+                    context,
+                    icon: Icons.analytics,
+                    title: 'التقارير',
+                    color: AppTheme.accentColor,
+                    onTap: () {
+                      _close(context);
+                      context.push('/dashboard/reports');
+                    },
+                    isDark: isDark,
+                  ),
+                  _buildShortcutCard(
+                    context,
+                    icon: Icons.settings,
+                    title: 'الإعدادات',
+                    color: AppTheme.slate600,
+                    onTap: () {
+                      _close(context);
+                      context.push('/settings');
+                    },
+                    isDark: isDark,
+                  ),
+                  _buildShortcutCard(
+                    context,
+                    icon: Icons.campaign,
+                    title: 'حملة تسويقية',
+                    color: AppTheme.infoColor,
+                    onTap: () {},
+                    isDark: isDark,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, bool isDark) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppTheme.surface(isDark),
+        border: Border(
+          bottom: BorderSide(
+            color: AppTheme.border(isDark).withValues(alpha: 0.2),
           ),
         ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white, size: 24),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        padding: const EdgeInsets.all(16),
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 1.2,
+      child: Row(
+        textDirection: TextDirection.rtl,
         children: [
-          _buildShortcutCard(
-            context,
-            icon: Icons.add_box,
-            title: 'منتج جديد',
-            color: AppTheme.primaryColor,
-            onTap: () => context.push('/dashboard/products/add'),
+          // العنوان
+          Expanded(
+            child: Text(
+              'اختصاراتي',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary(isDark),
+              ),
+              textAlign: TextAlign.right,
+            ),
           ),
-          _buildShortcutCard(
-            context,
-            icon: Icons.receipt_long,
-            title: 'طلب جديد',
-            color: AppTheme.successColor,
-            onTap: () => context.push('/dashboard/orders'),
-          ),
-          _buildShortcutCard(
-            context,
-            icon: Icons.person_add,
-            title: 'عميل جديد',
-            color: AppTheme.secondaryColor,
-            onTap: () {},
-          ),
-          _buildShortcutCard(
-            context,
-            icon: Icons.analytics,
-            title: 'التقارير',
-            color: AppTheme.accentColor,
-            onTap: () => context.push('/dashboard/reports'),
-          ),
-          _buildShortcutCard(
-            context,
-            icon: Icons.settings,
-            title: 'الإعدادات',
-            color: AppTheme.slate600,
-            onTap: () => context.push('/settings'),
-          ),
-          _buildShortcutCard(
-            context,
-            icon: Icons.campaign,
-            title: 'حملة تسويقية',
-            color: AppTheme.infoColor,
-            onTap: () {},
+          // زر الإغلاق
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              _close(context);
+            },
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: AppTheme.border(isDark).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                Icons.close,
+                size: 22,
+                color: AppTheme.textSecondary(isDark),
+              ),
+            ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('تخصيص الاختصارات قريباً')),
-          );
-        },
-        backgroundColor: AppTheme.primaryColor,
-        label: const Text('تخصيص', style: TextStyle(color: Colors.white)),
-        icon: const Icon(Icons.edit, color: Colors.white),
       ),
     );
   }
@@ -99,6 +163,7 @@ class ShortcutsPanel extends StatelessWidget {
     required String title,
     required Color color,
     required VoidCallback onTap,
+    required bool isDark,
   }) {
     return InkWell(
       onTap: () {
@@ -108,11 +173,10 @@ class ShortcutsPanel extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.card(isDark),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: Colors.grey.withValues(alpha: 0.2),
-            width: 1,
+            color: AppTheme.border(isDark).withValues(alpha: 0.2),
           ),
           boxShadow: [
             BoxShadow(
@@ -137,10 +201,10 @@ class ShortcutsPanel extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textPrimaryColor,
+                color: AppTheme.textPrimary(isDark),
               ),
             ),
           ],

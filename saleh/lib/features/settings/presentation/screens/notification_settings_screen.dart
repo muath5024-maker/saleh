@@ -57,7 +57,7 @@ class _NotificationSettingsScreenState
             children: [
               AppIcon(AppIcons.checkCircle, color: AppTheme.surfaceColor),
               SizedBox(width: 12),
-              Text('تم Ø­ÙØ¸ الØ¥Ø¹Ø¯Ø§Ø¯Ø§Øª'),
+              Text('تم حفظ الإعدادات'),
             ],
           ),
           backgroundColor: AppTheme.successColor,

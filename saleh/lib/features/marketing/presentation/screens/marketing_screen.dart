@@ -30,7 +30,9 @@ class MarketingTool {
 
 /// شاشة التسويق المحسنة
 class MarketingScreen extends StatefulWidget {
-  const MarketingScreen({super.key});
+  final VoidCallback? onClose;
+
+  const MarketingScreen({super.key, this.onClose});
 
   @override
   State<MarketingScreen> createState() => _MarketingScreenState();
@@ -231,7 +233,11 @@ class _MarketingScreenState extends State<MarketingScreen>
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
-        context.pop();
+        if (widget.onClose != null) {
+          widget.onClose!();
+        } else {
+          context.pop();
+        }
       },
       child: Container(
         padding: AppDimensions.paddingS,

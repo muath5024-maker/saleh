@@ -81,7 +81,7 @@ class _CustomerSegmentsScreenState extends State<CustomerSegmentsScreen>
   Future<void> _recalculateAll() async {
     try {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ø¬Ø§Ø±ÙŠ Ø¥Ø¹Ø§Ø¯Ø© Ø­Ø³Ø§Ø¨ Ø§Ù„ØªØµÙ†ÙŠÙØ§Øª...')),
+        const SnackBar(content: Text('جاري إعادة حساب التصنيفات...')),
       );
 
       await _api.post('/secure/segments/analytics/calculate-all', body: {});
@@ -89,13 +89,13 @@ class _CustomerSegmentsScreenState extends State<CustomerSegmentsScreen>
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('ØªÙ… Ø¥Ø¹Ø§Ø¯Ø© Ø­Ø³Ø§Ø¨ Ø§Ù„ØªØµÙ†ÙŠÙØ§Øª')));
+      ).showSnackBar(const SnackBar(content: Text('تم إعادة حساب التصنيفات')));
       _loadData();
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Ø®Ø·Ø£: $e')));
+      ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
     }
   }
 
@@ -162,7 +162,10 @@ class _CustomerSegmentsScreenState extends State<CustomerSegmentsScreen>
                     tabs: const [
                       Tab(text: 'Ø§Ù„Ø´Ø±Ø§Ø¦Ø­', icon: Icon(Icons.pie_chart)),
                       Tab(text: 'Ø§Ù„ÙˆØ³ÙˆÙ…', icon: Icon(Icons.label)),
-                      Tab(text: 'Ø§Ù„ØªØ­Ù„ÙŠÙ„Ø§Øª', icon: Icon(Icons.analytics)),
+                      Tab(
+                        text: 'Ø§Ù„ØªØ­Ù„ÙŠÙ„Ø§Øª',
+                        icon: Icon(Icons.analytics),
+                      ),
                     ],
                   ),
                 ],
@@ -190,7 +193,7 @@ class _CustomerSegmentsScreenState extends State<CustomerSegmentsScreen>
                           const SizedBox(height: AppDimensions.spacing16),
                           ElevatedButton(
                             onPressed: _loadData,
-                            child: const Text('Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø©'),
+                            child: const Text('إعادة المحاولة'),
                           ),
                         ],
                       ),
@@ -219,10 +222,10 @@ class _CustomerSegmentsScreenState extends State<CustomerSegmentsScreen>
                 children: [
                   Icon(Icons.pie_chart_outline, size: 64, color: Colors.grey),
                   SizedBox(height: AppDimensions.spacing16),
-                  Text('Ù„Ø§ ØªÙˆØ¬Ø¯ Ø´Ø±Ø§Ø¦Ø­ Ø¹Ù…Ù„Ø§Ø¡'),
+                  Text('لا توجد شرائح عملاء'),
                   SizedBox(height: AppDimensions.spacing8),
                   Text(
-                    'Ø£Ù†Ø´Ø¦ Ø´Ø±ÙŠØ­Ø© Ù„ØªØµÙ†ÙŠÙ Ø¹Ù…Ù„Ø§Ø¦Ùƒ',
+                    'أنشئ شريحة لتصنيف عملائك',
                     style: TextStyle(color: Colors.grey),
                   ),
                 ],
@@ -531,7 +534,11 @@ class _CustomerSegmentsScreenState extends State<CustomerSegmentsScreen>
       {'key': 'loyal', 'label': 'Ù…Ø®Ù„ØµÙŠÙ†', 'color': Colors.green},
       {'key': 'regular', 'label': 'Ø¹Ø§Ø¯ÙŠÙŠÙ†', 'color': Colors.blue},
       {'key': 'new', 'label': 'Ø¬Ø¯Ø¯', 'color': Colors.teal},
-      {'key': 'at_risk', 'label': 'Ù…Ø¹Ø±Ø¶ÙŠÙ† Ù„Ù„Ø®Ø³Ø§Ø±Ø©', 'color': Colors.orange},
+      {
+        'key': 'at_risk',
+        'label': 'Ù…Ø¹Ø±Ø¶ÙŠÙ† Ù„Ù„Ø®Ø³Ø§Ø±Ø©',
+        'color': Colors.orange,
+      },
       {'key': 'lost', 'label': 'Ù…ÙÙ‚ÙˆØ¯ÙŠÙ†', 'color': Colors.red},
     ];
 
@@ -667,8 +674,14 @@ class _CustomerSegmentsScreenState extends State<CustomerSegmentsScreen>
               ],
             ),
             const SizedBox(height: AppDimensions.spacing12),
-            _buildRfmItem('R - Recency', 'Ù…ØªÙ‰ Ø¢Ø®Ø± Ù…Ø±Ø© Ø§Ø´ØªØ±Ù‰ ÙÙŠÙ‡Ø§ Ø§Ù„Ø¹Ù…ÙŠÙ„'),
-            _buildRfmItem('F - Frequency', 'ÙƒÙ… Ù…Ø±Ø© ÙŠØ´ØªØ±ÙŠ Ø§Ù„Ø¹Ù…ÙŠÙ„'),
+            _buildRfmItem(
+              'R - Recency',
+              'Ù…ØªÙ‰ Ø¢Ø®Ø± Ù…Ø±Ø© Ø§Ø´ØªØ±Ù‰ ÙÙŠÙ‡Ø§ Ø§Ù„Ø¹Ù…ÙŠÙ„',
+            ),
+            _buildRfmItem(
+              'F - Frequency',
+              'ÙƒÙ… Ù…Ø±Ø© ÙŠØ´ØªØ±ÙŠ Ø§Ù„Ø¹Ù…ÙŠÙ„',
+            ),
             _buildRfmItem('M - Monetary', 'ÙƒÙ… ÙŠÙ†ÙÙ‚ Ø§Ù„Ø¹Ù…ÙŠÙ„'),
           ],
         ),
@@ -955,7 +968,9 @@ class _CustomerSegmentsScreenState extends State<CustomerSegmentsScreen>
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Ø­Ø°Ù Ø§Ù„ÙˆØ³Ù…'),
-        content: const Text('Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø­Ø°Ù Ù‡Ø°Ø§ Ø§Ù„ÙˆØ³Ù…ØŸ'),
+        content: const Text(
+          'Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø­Ø°Ù Ù‡Ø°Ø§ Ø§Ù„ÙˆØ³Ù…ØŸ',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),

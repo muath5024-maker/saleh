@@ -347,7 +347,7 @@ class SupportScreen extends StatelessWidget {
 
   Future<void> _launchWhatsApp(BuildContext context) async {
     final url = Uri.parse(
-      'https://wa.me/966500000000?text=مرحباًØŒ Ø£Ø­ØªØ§Ø¬ Ù…Ø³Ø§Ø¹Ø¯Ø©',
+      'https://wa.me/966500000000?text=مرحباً، أحتاج مساعدة',
     );
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
@@ -355,7 +355,7 @@ class SupportScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('لا ÙŠÙ…ÙƒÙ† ÙØªØ­ ÙˆØ§ØªØ³Ø§Ø¨'),
+            content: Text('لا يمكن فتح واتساب'),
             backgroundColor: AppTheme.errorColor,
           ),
         );
@@ -364,14 +364,14 @@ class SupportScreen extends StatelessWidget {
   }
 
   Future<void> _launchEmail(BuildContext context) async {
-    final url = Uri.parse('mailto:support@mbuy.app?subject=طلب Ø¯Ø¹Ù…');
+    final url = Uri.parse('mailto:support@mbuy.app?subject=طلب دعم');
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('لا ÙŠÙ…ÙƒÙ† ÙØªØ­ الØ¨Ø±ÙŠØ¯ الØ¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ'),
+            content: Text('لا يمكن فتح البريد الإلكتروني'),
             backgroundColor: AppTheme.errorColor,
           ),
         );
@@ -387,7 +387,7 @@ class SupportScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('لا ÙŠÙ…ÙƒÙ† ÙØªØ­ ØªØ·Ø¨ÙŠÙ‚ الÙ‡Ø§ØªÙ'),
+            content: Text('لا يمكن فتح تطبيق الهاتف'),
             backgroundColor: AppTheme.errorColor,
           ),
         );

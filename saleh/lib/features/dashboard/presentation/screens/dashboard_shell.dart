@@ -7,6 +7,24 @@ import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_icon.dart';
 import '../../../merchant/data/merchant_store_provider.dart';
+import '../providers/overlay_provider.dart' as overlay;
+import 'all_menu_panel.dart';
+import 'search_panel.dart';
+import 'ai_assistant_panel.dart';
+import 'notifications_panel.dart';
+import 'shortcuts_panel.dart';
+import 'add_product_panel.dart';
+import 'customers_screen.dart';
+import 'reports_screen.dart';
+import '../../../store/presentation/screens/view_my_store_screen.dart';
+import '../../../store/presentation/screens/app_store_screen.dart';
+import '../../../finance/presentation/screens/wallet_screen.dart';
+import '../../../finance/presentation/screens/points_screen.dart';
+import '../../../finance/presentation/screens/sales_screen.dart';
+import '../../../marketing/presentation/screens/marketing_screen.dart';
+import '../../../marketing/presentation/screens/boost_sales_screen.dart';
+import '../../../settings/presentation/screens/about_screen.dart';
+import '../../../projects/presentation/screens/projects_screen.dart';
 
 // ╔═══════════════════════════════════════════════════════════════════════════╗
 // ║                    ⚠️ تحذير مهم - DESIGN FROZEN ⚠️                        ║
@@ -117,7 +135,36 @@ class _DashboardShellState extends ConsumerState<DashboardShell> {
 
   void _openAllMenu() {
     HapticFeedback.lightImpact();
-    context.push('/dashboard/all-menu');
+    ref.read(overlay.overlayProvider.notifier).openMenu();
+  }
+
+  void _closeOverlay() {
+    ref.read(overlay.overlayProvider.notifier).close();
+  }
+
+  void _openSearch() {
+    HapticFeedback.lightImpact();
+    ref.read(overlay.overlayProvider.notifier).openSearch();
+  }
+
+  void _openAI() {
+    HapticFeedback.lightImpact();
+    ref.read(overlay.overlayProvider.notifier).openAI();
+  }
+
+  void _openNotifications() {
+    HapticFeedback.lightImpact();
+    ref.read(overlay.overlayProvider.notifier).openNotifications();
+  }
+
+  void _openShortcuts() {
+    HapticFeedback.lightImpact();
+    ref.read(overlay.overlayProvider.notifier).openShortcuts();
+  }
+
+  void _openAddProduct() {
+    HapticFeedback.lightImpact();
+    ref.read(overlay.overlayProvider.notifier).openAddProduct();
   }
 
   /// الحصول على الـ index الحالي بناءً على المسار
@@ -157,22 +204,12 @@ class _DashboardShellState extends ConsumerState<DashboardShell> {
     }
   }
 
-  void _openSearch(BuildContext context) {
-    HapticFeedback.lightImpact();
-    context.push('/dashboard/search');
-  }
-
-  /// عرض صفحة إضافة منتج
-  void _showProductTypeSelection(BuildContext context) {
-    HapticFeedback.lightImpact();
-    context.push('/dashboard/add-product');
-  }
-
   @override
   Widget build(BuildContext context) {
     final currentIndex = _calculateSelectedIndex(context);
     final storeAsync = ref.watch(merchantStoreControllerProvider);
     final store = storeAsync.hasValue ? storeAsync.value : null;
+    final overlayState = ref.watch(overlay.overlayProvider);
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenSize = _getScreenSize(screenWidth);
@@ -182,25 +219,42 @@ class _DashboardShellState extends ConsumerState<DashboardShell> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         key: _scaffoldKey,
-        body: Row(
-          textDirection: TextDirection.rtl,
+        body: Stack(
           children: [
-            // NavigationRail للديسكتوب والتابلت
-            if (useSideNav)
-              _buildNavigationRail(context, currentIndex, screenSize),
             // المحتوى الرئيسي
-            Expanded(
-              child: Column(
-                children: [
-                  _buildPersistentHeader(
-                    context,
-                    store?.name ?? 'mbuy',
-                    screenSize,
+            Row(
+              textDirection: TextDirection.rtl,
+              children: [
+                // NavigationRail للديسكتوب والتابلت
+                if (useSideNav)
+                  _buildNavigationRail(context, currentIndex, screenSize),
+                // المحتوى الرئيسي
+                Expanded(
+                  child: Column(
+                    children: [
+                      _buildPersistentHeader(
+                        context,
+                        store?.name ?? 'mbuy',
+                        screenSize,
+                      ),
+                      Expanded(child: widget.child),
+                    ],
                   ),
-                  Expanded(child: widget.child),
-                ],
-              ),
+                ),
+              ],
             ),
+            // Overlay (فوق المحتوى)
+            if (overlayState.isOpen) ...[
+              // الخلفية الشفافة
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: _closeOverlay,
+                  child: Container(color: Colors.black26),
+                ),
+              ),
+              // المحتوى
+              Positioned.fill(child: _buildOverlayContent(overlayState)),
+            ],
           ],
         ),
         // BottomNavigationBar للموبايل فقط
@@ -209,6 +263,49 @@ class _DashboardShellState extends ConsumerState<DashboardShell> {
             : null,
       ),
     );
+  }
+
+  /// بناء محتوى الـ Overlay حسب النوع
+  Widget _buildOverlayContent(overlay.OverlayState state) {
+    switch (state.type) {
+      case overlay.OverlayType.menu:
+        return AllMenuPanel(onClose: _closeOverlay);
+      case overlay.OverlayType.search:
+        return SearchPanel(onClose: _closeOverlay);
+      case overlay.OverlayType.ai:
+        return AIAssistantPanel(onClose: _closeOverlay);
+      case overlay.OverlayType.notifications:
+        return NotificationsPanel(onClose: _closeOverlay);
+      case overlay.OverlayType.shortcuts:
+        return ShortcutsPanel(onClose: _closeOverlay);
+      case overlay.OverlayType.addProduct:
+        return AddProductPanel(onClose: _closeOverlay);
+      case overlay.OverlayType.viewStore:
+        return ViewMyStoreScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.wallet:
+        return WalletScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.points:
+        return PointsScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.customers:
+        return CustomersScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.sales:
+        return SalesScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.reports:
+        return ReportsScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.marketing:
+        return MarketingScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.about:
+        return AboutScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.store:
+        return AppStoreScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.boostSales:
+        return BoostSalesScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.projects:
+        return ProjectsScreen(onClose: _closeOverlay);
+      case overlay.OverlayType.custom:
+      case overlay.OverlayType.none:
+        return const SizedBox.shrink();
+    }
   }
 
   /// الهيدر العلوي الثابت - اللون الأساسي
@@ -240,31 +337,15 @@ class _DashboardShellState extends ConsumerState<DashboardShell> {
           // الجانب الأيسر - أزرار الإجراءات
           Row(
             children: [
-              _buildHeaderButton(
-                Icons.search,
-                () => _openSearch(context),
-                iconSize,
-              ),
-              _buildHeaderButton(
-                Icons.smart_toy_outlined,
-                () => context.push('/dashboard/ai-assistant'),
-                iconSize,
-              ),
+              _buildHeaderButton(Icons.search, _openSearch, iconSize),
+              _buildHeaderButton(Icons.smart_toy_outlined, _openAI, iconSize),
               _buildHeaderButton(
                 Icons.notifications_outlined,
-                () => context.push('/dashboard/notifications'),
+                _openNotifications,
                 iconSize,
               ),
-              _buildHeaderButton(
-                Icons.bolt,
-                () => context.push('/dashboard/shortcuts'),
-                iconSize,
-              ),
-              _buildHeaderButton(
-                Icons.add,
-                () => _showProductTypeSelection(context),
-                iconSize,
-              ),
+              _buildHeaderButton(Icons.bolt, _openShortcuts, iconSize),
+              _buildHeaderButton(Icons.add, _openAddProduct, iconSize),
             ],
           ),
           // الجانب الأيمن - اسم المتجر والشعار
@@ -283,7 +364,12 @@ class _DashboardShellState extends ConsumerState<DashboardShell> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => context.push('/dashboard/view-store'),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      ref
+                          .read(overlay.overlayProvider.notifier)
+                          .openViewStore();
+                    },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

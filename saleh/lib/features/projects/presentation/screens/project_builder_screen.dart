@@ -861,7 +861,7 @@ class _ProjectBuilderScreenState extends ConsumerState<ProjectBuilderScreen> {
     });
 
     try {
-      final client = ref.read(revenueApiClientProvider);
+      final client = await ref.read(revenueApiClientProvider.future);
       final quote = await client.getPricingQuote(
         PricingQuoteRequest(
           projectType: _projectType,
@@ -1013,18 +1013,18 @@ class _ProjectBuilderScreenState extends ConsumerState<ProjectBuilderScreen> {
   void _confirmExit() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('إلغاء الطلب'),
         content: const Text('هل تريد إلغاء إنشاء المشروع؟'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('لا'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pop(dialogContext); // إغلاق الـ Dialog
+              context.pop(); // الخروج من الشاشة باستخدام go_router
             },
             child: const Text('نعم', style: TextStyle(color: Colors.red)),
           ),
@@ -1040,7 +1040,7 @@ class _ProjectBuilderScreenState extends ConsumerState<ProjectBuilderScreen> {
     setState(() => _isCreatingProject = true);
 
     try {
-      final client = ref.read(revenueApiClientProvider);
+      final client = await ref.read(revenueApiClientProvider.future);
       final response = await client.createProject(
         CreateProjectRequest(
           projectType: _projectType,

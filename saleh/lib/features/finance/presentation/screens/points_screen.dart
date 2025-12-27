@@ -10,7 +10,9 @@ import '../../../payments/data/payment_repository.dart';
 
 /// شاشة نقاط التاجر - نظام المكافآت والنقاط
 class PointsScreen extends ConsumerStatefulWidget {
-  const PointsScreen({super.key});
+  final VoidCallback? onClose;
+
+  const PointsScreen({super.key, this.onClose});
 
   @override
   ConsumerState<PointsScreen> createState() => _PointsScreenState();
@@ -193,7 +195,7 @@ class _PointsScreenState extends ConsumerState<PointsScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('ØªÙ… استبدال ${reward.title} بنجاح!'),
+          content: Text('تم استبدال ${reward.title} بنجاح!'),
           backgroundColor: AppTheme.successColor,
         ),
       );
@@ -251,7 +253,13 @@ class _PointsScreenState extends ConsumerState<PointsScreen> {
     return Row(
       children: [
         GestureDetector(
-          onTap: () => context.pop(),
+          onTap: () {
+            if (widget.onClose != null) {
+              widget.onClose!();
+            } else {
+              context.pop();
+            }
+          },
           child: Container(
             padding: const EdgeInsets.all(AppDimensions.spacing8),
             decoration: BoxDecoration(
