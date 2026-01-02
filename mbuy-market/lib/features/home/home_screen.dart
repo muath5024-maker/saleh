@@ -287,11 +287,11 @@ class _HomeScreenState extends State<HomeScreen> {
       'ملابس علوية',
       'تيشيرتات',
       'ملابس سفلية',
-      'جاكيتات ومعاطف',
+      'جاكيتات',
       // Row 2
-      'قمصان', 'أطقم منسقة', 'دينيم', 'مقاسات كبيرة', 'أطقم بدلات',
+      'قمصان', 'أطقم منسقة', 'دينيم', 'مقاسات كبيرة', 'بدلات',
       // Row 3
-      'بناطيل ثقيلة', 'هوديز وبلايز', 'قمصان بولو', 'منسوجة', 'أزياء خاصة',
+      'بناطيل', 'هوديز', 'بولو', 'منسوجة', 'أزياء خاصة',
     ];
 
     final images = [
@@ -323,9 +323,9 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 5,
-          childAspectRatio: 0.7,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 16,
+          childAspectRatio: 0.65,
+          crossAxisSpacing: 4,
+          mainAxisSpacing: 12,
         ),
         itemCount: categories.length,
         itemBuilder: (_, i) {
@@ -349,14 +349,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 4),
               // Category Name
-              Text(
-                categories[i],
-                style: TextStyle(fontSize: 9, color: Colors.grey.shade700),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              Flexible(
+                child: Text(
+                  categories[i],
+                  style: TextStyle(fontSize: 10, color: Colors.grey.shade700),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           );

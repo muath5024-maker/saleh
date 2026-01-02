@@ -187,11 +187,13 @@ class _MediaScreenState extends State<MediaScreen>
         padding: const EdgeInsets.all(8),
         alignment: Alignment.bottomRight,
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.play_arrow, color: Colors.white, size: 16),
+            const Icon(Icons.play_arrow, color: Colors.white, size: 14),
+            const SizedBox(width: 2),
             Text(
-              '${(index + 1) * 5.3}K',
-              style: const TextStyle(color: Colors.white, fontSize: 12),
+              '${((index % 9) + 1) * 1.2}K',
+              style: const TextStyle(color: Colors.white, fontSize: 11),
             ),
           ],
         ),

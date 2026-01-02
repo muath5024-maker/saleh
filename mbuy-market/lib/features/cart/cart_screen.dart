@@ -186,8 +186,9 @@ class _CartScreenState extends State<CartScreen> {
                       child: Row(
                         children: [
                           _quantityButton(Icons.remove, () {
-                            if (item['quantity'] > 1)
+                            if (item['quantity'] > 1) {
                               setState(() => item['quantity']--);
+                            }
                           }),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 12),
